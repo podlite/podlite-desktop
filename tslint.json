@@ -1,0 +1,14 @@
+{
+  "defaultSeverity": "error",
+  "extends": ["tslint:recommended", "tslint-react"],
+  "rules": {
+    "quotemark": [true, "single"],
+    "trailing-comma": [true, "never"],
+    "semicolon": [true, "never"],
+    "no-var-requires": false,
+    "object-literal-sort-keys": false,
+    "ordered-imports": false,
+    "jsx-boolean-value": false,
+    "jsx-no-lambda": false
+  }
+}

@@ -1,0 +1,129 @@
+{
+  "name": "rakudoc",
+  "version": "0.0.1",
+  "description": "pod6 editor",
+  "main": "build/main.js",
+  "scripts": {
+    "start": "run-s main:build watch",
+    "clean": "rm -rf build release .cache",
+    "release": "run-s clean parcel:build \"electron:build {@}\" --",
+    "watch": "run-p -r parcel:watch electron:start",
+    "electron:start": "nodemon --watch build/main.js --exec \"electron .\"",
+    "electron:build": "electron-builder build -m --x64 --publish=never",
+    "parcel:watch": "run-p -r main:watch renderer:watch",
+    "main:watch": "parcel watch app/main/main.ts --out-dir build --out-file main --target electron",
+    "renderer:watch": "mkdir -p build ; cp app/renderer/client-api.js  build/client-api.js  && parcel app/renderer/index.html --port 1124 --out-dir build",
+    "renderer:watch2": "parcel watch app/renderer/client-api.js --out-dir build --out-file client-api.js  && parcel app/renderer/index.html --port 1124 --out-dir build",
+    "parcel:build": "run-s main:build renderer:build",
+    "main:build": "parcel build app/main/main.ts --out-dir build --out-file main --target electron",
+    "renderer:build": "mkdir -p build; cp app/renderer/client-api.js  build/client-api.js  && parcel build app/renderer/index.html --public-url ./ --out-dir build",
+    "test": "run-s parcel:build \"test:jest {@}\" --",
+    "test:jest": "jest",
+    "lint": "tslint app/**/*.ts{,x}"
+  },
+  "author": "zag",
+  "license": "MIT",
+  "build": {
+    "productName": "rakudoc",
+    "appId": "rakudoc.desktop",
+    "fileAssociations": [
+      {
+        "ext": [
+          "pod6"
+        ],
+        "name": "Pod6 Text",
+        "role": "Editor"
+      }
+    ],
+    "files": [
+      "app/**",
+      "!app/main/main.ts",
+      "!app/main/tests/**",
+      "!app/renderer/**",
+      "!app/**/*.map",
+      "build/**",
+      "!build/**/*.map"
+    ],
+    "mac": {
+      "target": [
+        "zip",
+        "dmg"
+      ],
+      "artifactName": "${productName}-mac.${ext}"
+    },
+    "win": {
+      "target": [
+        "zip"
+      ],
+      "artifactName": "${productName}-win.${ext}"
+    },
+    "linux": {
+      "target": [
+        "zip"
+      ],
+      "category": "Development",
+      "artifactName": "${productName}-linux.${ext}"
+    },
+    "directories": {
+      "output": "release"
+    }
+  },
+  "jest": {
+    "verbose": true,
+    "collectCoverageFrom": [
+      "app/renderer/**",
+      "!app/renderer/index.tsx",
+      "!app/renderer/tests/**",
+      "!app/renderer/.parcel/**"
+    ],
+    "transform": {
+      "^.+\\.tsx?$": "babel-jest"
+    },
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ]
+  },
+  "devDependencies": {
+    "@babel/core": "^7.4.5",
+    "@babel/preset-env": "^7.4.5",
+    "@babel/preset-react": "^7.0.0",
+    "@babel/preset-typescript": "^7.3.3",
+    "@types/jest": "^24.0.15",
+    "@types/node": "^13.7.0",
+    "@types/react": "^16.8.22",
+    "@types/react-codemirror": "^1.0.3",
+    "@types/react-dom": "^16.8.4",
+    "babel-core": "^7.0.0-bridge.0",
+    "babel-jest": "^24.8.0",
+    "electron": "8.0.0",
+    "electron-builder": "22.2.0",
+    "fs-extra": "^8.1.0",
+    "jest": "^24.8.0",
+    "mousetrap": "^1.6.0",
+    "nodemon": "^1.19.1",
+    "npm-run-all": "^4.1.5",
+    "parcel-bundler": "^1.12.3",
+    "pod6": "0.0.21",
+    "react": "^16.12.0",
+    "react-codemirror": "^1.0.0",
+    "react-codemirror2": "^7.2.1",
+    "react-dom": "^16.12.0",
+    "react-router-dom": "^5.0.1",
+    "react-test-renderer": "^16.8.6",
+    "spectron": "^7.0.0",
+    "tslint": "^5.18.0",
+    "tslint-react": "^4.0.0",
+    "typescript": "^3.5.2"
+  },
+  "dependencies": {
+    "app-root-path": "^2.2.1",
+    "electron-is-dev": "^1.1.0",
+    "mousetrap-global-bind": "^1.1.0"
+  }
+}
