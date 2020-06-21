@@ -1,0 +1,227 @@
+.App {
+  text-align: center;
+  font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+.layout {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+.Editor {
+  text-align: left;
+  white-space: pre-wrap;
+    word-break: break-word;
+    word-wrap: break-word;
+}
+
+[contenteditable]:focus {
+  outline: 0px solid transparent;
+}
+.layout__panel {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  flex: none;
+  overflow: hidden;
+}
+
+.flex--row {
+  flex-direction: row;
+}
+.flex {
+  display: flex;
+}
+
+.CodeMirror {
+  height: auto;
+  font-family: inherit;
+}
+
+pre {
+  overflow-x: auto;
+  white-space: pre-wrap;
+  white-space: -moz-pre-wrap;
+  white-space: -pre-wrap;
+  white-space: -o-pre-wrap;
+  word-wrap: break-word;
+}
+.title {
+  margin:0em;
+}
+.left {
+border-right: 1px dotted lightgrey;
+white-space: pre-wrap;
+word-break: break-word;
+word-wrap: break-word;
+width: 50%;
+font-size: 15px;
+overflow: scroll;
+text-align: left;
+}
+
+.right {
+  text-align: left;
+    word-break: break-word;
+    word-wrap: break-word;
+    margin : 0 1em;
+  width: 47%;
+  font-size: 15px;
+  overflow: scroll;
+}
+
+/* Start pod6 */ 
+body {
+  margin: 0;
+  font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+
+pre {
+  padding: 9.5px;
+  display: block;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color:  #f8f8f8;
+  /* border: 1px solid  #ccc; */
+  border-radius:  4px;
+}
+
+code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit;
+  white-space: pre-wrap;
+  background-color: transparent;
+  border-radius: 0;
+}
+
+img {
+  max-width: 1024px;
+}
+
+table {
+  word-break: normal;
+  min-width: 70%;
+  max-width: 100%;
+  margin: 0 auto;
+  border-spacing: 0;
+  border-collapse: collapse;
+  text-align: center;
+  margin-top: 2em;
+}
+table caption {
+  margin-bottom: 0.8em;
+}
+
+table tbody tr:hover {
+  background-color:  #eee;
+  -webkit-transition: .5s;
+  transition: .5s
+}
+
+tr th {
+  vertical-align: bottom;
+  border-bottom: 2px solid #eee;
+}
+
+td {
+  padding: 8px;
+  border: 1px solid #eee;
+}
+
+
+
+
+
+.footnote a {
+  text-decoration: none;
+}
+.footnotes {
+border-top-style: solid;
+border-top-width: 1px;
+border-top-color: #eee;
+}
+
+/* End of pod6 */ 
+
+
+.CodeMirror {
+  height: auto;
+  font-family: inherit;
+}
+.CodeMirror-scroll{
+  scroll-behavior: smooth;
+}
+.title {
+  margin:0em;
+}
+.left {
+border-right: 1px dotted lightgrey;
+white-space: pre-wrap;
+word-break: break-word;
+word-wrap: break-word;
+width: 50%;
+font-size: 15px;
+text-align: left;
+float: left;
+height: 100%;
+}
+
+.editor,.CodeMirror {
+  height: 100%;
+}
+.right {
+  text-align: left;
+  word-break: break-word;
+  word-wrap: break-word;
+  margin : 0 0.5em;
+  height: 100%;
+  font-size: 15px;
+  padding-left: 10px;
+  overflow-y: scroll;
+  position: relative;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
