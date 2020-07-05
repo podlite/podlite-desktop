@@ -177,6 +177,12 @@ border-top-width: 1px;
 border-top-color: #eee;
 }
 
+img {
+  display: block;
+  margin: 0 auto;
+  max-width: 100%;
+}
+
 /* End of pod6 */ 
 
 
@@ -190,6 +196,40 @@ border-top-color: #eee;
 .title {
   margin:0em;
 }
+.layoutPreview .left {
+  visibility: visible;
+  width: 10%;
+  animation: 0.5s fadeIn;
+  animation-fill-mode: forwards;
+}
+.layoutPreview .right {
+/* padding-right: 10%; */
+margin: 0 auto;
+width: 60%;
+}
+
+@keyframes fadeOut {
+  20% {
+    visibility: hidden;
+    opacity: 0
+  }
+  100% {
+    visibility: visible;
+    opacity: 1
+  }
+}
+
+@keyframes fadeIn {
+  20% {
+    opacity: 1
+  }
+ 
+  100% {
+    visibility: hidden;
+    opacity: 0
+  }
+}
+
 .left {
 border-right: 1px dotted lightgrey;
 white-space: pre-wrap;
@@ -200,6 +240,10 @@ font-size: 15px;
 text-align: left;
 float: left;
 height: 100%;
+padding-left: 10px;
+visibility: hidden;
+animation: 1s fadeOut;
+animation-fill-mode: forwards;
 }
 
 .editor,.CodeMirror {
