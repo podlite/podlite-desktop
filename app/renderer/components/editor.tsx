@@ -8,8 +8,6 @@ import Mousetrap from 'mousetrap'
 import 'mousetrap-global-bind';
 import '../../../node_modules/codemirror/lib/codemirror.css';
 import './App.css';
-import * as path from 'path'
-import { Link } from 'react-router-dom'
 //@ts-ignore
 import { toHtml , version } from 'pod6'
 
@@ -34,7 +32,7 @@ function useDebouncedEffect(fn, deps, time) {
 
 /* set window title */ 
 // @ts-ignore
-const setWindowTitle = (title: string) { vmd.setWindowTitle(title) }
+const setWindowTitle = (title: string) => { vmd.setWindowTitle(title) }
 
 let instanceCM:CodeMirror.Editor 
 
@@ -43,6 +41,8 @@ export default () => {
   const [text, updateText] = useState('')
   const [marks, updateMarks] = useState([])
   const [, updateScrollMap] = useState([])
+  
+  const [isPreviewMode, setPreviewMode] = useState(false)
 
   const [isPreviewScroll, setPreviewScrolling] = useState(false);
   const refValue = useRef(isPreviewScroll);
@@ -132,7 +132,7 @@ useEffect(()=>{
 useEffect(() =>{ setChanged(true) },[text])
   // desktop section - start
   useEffect(() => {
-  const handlerContent = (_, {content, filePath }) => { console.log({content2: content})
+  const handlerContent = (_, {content, filePath }) => { 
                                                         updateText(content)
                                                         setFilePath(filePath)
                                                         setChanged(false)
@@ -142,15 +142,32 @@ useEffect(() =>{ setChanged(true) },[text])
 })
 // hot keys
   useEffect( () => {
-  const action  =  (e) => {
+  const saveFileAction  =  (e) => {
     e.preventDefault()
-    vmd.fs.writeFileSync('/tmp/app.json', JSON.stringify({1: 2}, null, 2))
     if (isChanged)  vmd.saveFile({content:text, filePath})
   }
-  Mousetrap.reset()
-  Mousetrap.bindGlobal(['ctrl+s', 'command+s'], action )
 
-  return () => Mousetrap.unbind(['ctrl+s', 'command+s'])
+  const togglePreviewMode  =  (e) => {
+    e.preventDefault()
+    setPreviewMode(!isPreviewMode)
+    if (!isPreviewMode) {
+      const el = previewEl.current
+      console.log({el})
+      el.focus()
+    }
+    if (isPreviewMode) {
+      if (instanceCM) {
+        console.log({instanceCM})
+        instanceCM.focus()
+      }
+    }
+  }
+
+  Mousetrap.reset()
+  Mousetrap.bindGlobal(['ctrl+s', 'command+s'], saveFileAction )
+  Mousetrap.bindGlobal(['command+/'], togglePreviewMode )
+
+  return () => Mousetrap.unbind(['ctrl+s', 'command+s', 'command+/'])
 })
 
 
@@ -253,10 +270,10 @@ updateMarks(cmMrks)
 
 },[text])
 // const previewCode = <div  className=" right"><pre><code className="right" style={{textAlign:"left"}}>{JSON.stringify(parse(text), null, 2)}</code></pre></div>
-// console.log(result.toString())
+
 //@ts-ignore
 const previewHtml =  <div onMouseEnter={()=>setPreviewScrolling(true)} 
-                        onMouseMove={()=>setPreviewScrolling(true)} ref={previewEl} className=" right"
+                        onMouseMove={()=>setPreviewScrolling(true)} ref={previewEl} className="right"
 dangerouslySetInnerHTML={{__html: result}} ></div>
 //@ts-ignore
 const scrollEditorHandler = (editor) => {
@@ -283,7 +300,7 @@ if (previewEl) {
 }
 return (
   <div className="App">
-    <div className="layout">
+    <div className={ isPreviewMode ? "layoutPreview": "layout"}>
         <div className="left" onMouseEnter={()=>setPreviewScrolling(false)}
                                onMouseMove={()=>setPreviewScrolling(false)}
         >
