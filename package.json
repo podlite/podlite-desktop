@@ -1,15 +1,24 @@
 {
   "name": "rakudoc",
+  "productName": "Rakudoc Desktop",
   "version": "0.0.1",
   "description": "pod6 editor",
   "main": "build/main.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zag/rakudoc-desktop.git"
+  },
+  "homepage": "https://github.com/zag/rakudoc-desktop#readme",
+  "bugs": {
+    "url": "https://github.com/zag/rakudoc-desktop/issues"
+  },
   "scripts": {
     "start": "run-s main:build watch",
     "clean": "rm -rf build release .cache",
     "release": "run-s clean parcel:build \"electron:build {@}\" --",
     "watch": "run-p -r parcel:watch electron:start",
     "electron:start": "nodemon --watch build/main.js --exec \"electron .\"",
-    "electron:build": "electron-builder build -m --x64 --publish=never",
+    "electron:build": "electron-builder build -mlw --x64 --publish=never",
     "parcel:watch": "run-p -r main:watch renderer:watch",
     "main:watch": "parcel watch app/main/main.ts --out-dir build --out-file main --target electron",
     "renderer:watch": "mkdir -p build ; cp app/renderer/client-api.js  build/client-api.js  && parcel app/renderer/index.html --port 1124 --out-dir build",
@@ -21,16 +30,19 @@
     "test:jest": "jest",
     "lint": "tslint app/**/*.ts{,x}"
   },
-  "author": "zag",
+  "author": "Aliaksandr Zahatski",
   "license": "MIT",
   "build": {
-    "productName": "rakudoc",
+    "productName": "Rakudoc Desktop",
     "appId": "rakudoc.desktop",
     "fileAssociations": [
       {
-        "ext": [
-          "pod6"
-        ],
+        "ext": "pod6",
+        "name": "Pod6 Text",
+        "role": "Editor"
+      },
+      {
+        "ext": "rakudoc",
         "name": "Pod6 Text",
         "role": "Editor"
       }
@@ -49,23 +61,65 @@
         "zip",
         "dmg"
       ],
-      "artifactName": "${productName}-mac.${ext}"
+      "category": "public.app-category.productivity"
+    },
+    "dmg": {
+      "icon": "dist-assets/dmg-icon.icns",
+      "title": "${productName} ${version}",
+      "window": {
+        "x": 200,
+        "y": 160,
+        "width": 550,
+        "height": 400
+      },
+      "contents": [
+        {
+          "x": 160,
+          "y": 250
+        },
+        {
+          "x": 300,
+          "y": 250,
+          "type": "link",
+          "path": "/Applications"
+        }
+      ]
     },
     "win": {
+      "publisherName": "Aliaksandr Zahatski",
       "target": [
-        "zip"
-      ],
-      "artifactName": "${productName}-win.${ext}"
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "zip",
+          "arch": ["x64"]
+        }
+      ]
+    },  
+    "nsis": {
+      "installerIcon": "dist-assets/win-installer.ico",
+      "differentialPackage": false,
+      "packElevateHelper": false
     },
     "linux": {
-      "target": [
-        "zip"
-      ],
       "category": "Development",
-      "artifactName": "${productName}-linux.${ext}"
+      "icon": "dist-assets/linux-icon",
+      "target": [
+        {
+          "target": "AppImage",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
     },
     "directories": {
-      "output": "release"
+      "output": "release",
+      "buildResources": "dist-assets"
     }
   },
   "jest": {
