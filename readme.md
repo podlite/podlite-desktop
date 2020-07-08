@@ -1,6 +1,6 @@
 
-
 ![Rakudoc Desktop](./doc/rakudoc-desktop.png)
+
 
 <h1 align="center">
   Rakudoc Desktop
