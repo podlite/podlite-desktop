@@ -1,9 +1,10 @@
 
-![Rakudoc Desktop](./doc/rakudoc-desktop.png)
-
-
-<h1 align="center">
+ <h1 align="center">
+<img src="https://github.com/zag/rakudoc-desktop/raw/master/doc/rakudoc-desktop.png" alt="Rakudoc Desktop" width="530">
+<br/> 
   Rakudoc Desktop
+<br/>
+<br/>
 </h1>
 <h4 align="center">The editor of pod6 files for Windows, Linux and Mac.</h4>
 
