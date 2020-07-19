@@ -50,6 +50,9 @@ This is an open source program. Feel free to fork and contribute.
 
 In order to keep the match between this documentation and the last release, please contribute and pull requests on the dedicated develop branch.
 
+## linux note
+![Rakudoc Desktop Screenshot](./doc/linuxAppImage-permissions.png)
+
 ## AUTHOR
 
 Copyright (c) 2020 Aliaksandr Zahatski
