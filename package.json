@@ -18,7 +18,7 @@
     "release": "run-s clean parcel:build \"electron:build {@}\" --",
     "watch": "run-p -r parcel:watch electron:start",
     "electron:start": "nodemon --watch build/main.js --exec \"electron .\"",
-    "electron:build": "electron-builder build -mlw --x64 --publish=never",
+    "electron:build": "electron-builder build -lw --x64 --publish=always",
     "parcel:watch": "run-p -r main:watch renderer:watch",
     "main:watch": "parcel watch app/main/main.ts --out-dir build --out-file main --target electron",
     "renderer:watch": "mkdir -p build ; cp app/renderer/client-api.js  build/client-api.js  && parcel app/renderer/index.html --port 1124 --out-dir build",
@@ -93,10 +93,11 @@
           "arch": [
             "x64"
           ]
-        },
+        }
       ]
     },  
     "nsis": {
+      "artifactName": "Rakudoc-Desktop-Setup-${version}.${ext}",
       "installerIcon": "dist-assets/win-installer.ico",
       "differentialPackage": false,
       "packElevateHelper": false
@@ -112,6 +113,9 @@
           ]
         }
       ]
+    },
+    "appImage": {
+      "artifactName": "Rakudoc-Desktop-${version}.${ext}"
     },
     "directories": {
       "output": "release",
