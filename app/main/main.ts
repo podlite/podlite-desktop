@@ -3,6 +3,15 @@ const fs = require('fs')
 const { BrowserWindow, app,  ipcMain, dialog } = require('electron')
 const setMainMenu = require('./menu').default 
 
+// // Handle creating/removing shortcuts on Windows when installing/uninstalling.
+// if (squirrelStartup) {
+//   app.quit();
+// }
+
+app.commandLine.appendArgument("enable-transparent-visuals");
+app.commandLine.appendArgument("disable-gpu");
+app.disableHardwareAcceleration();
+
 ipcMain.on('save-file', async (event, {content, filePath}) => {
   const win = BrowserWindow.fromWebContents(event.sender)
   if ( filePath ) {
