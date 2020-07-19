@@ -2,7 +2,7 @@ name: Build/release
 
 on:
   release:
-    types: [created]
+    types: [published, created, edited]
 jobs:
   release:
     runs-on: ${{ matrix.os }}
