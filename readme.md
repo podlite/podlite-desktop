@@ -27,7 +27,7 @@ Download the [latest release](https://github.com/zag/rakudoc-desktop/releases/la
 
 * Write in pod6 markup language 
 * Preview text elements (such as headers, images, math, embedded videos, todo lists...) while you type
-* Preview mode cmd-/ ( ctrl-/)
+* Preview mode cmd-/ ( win-/ )
 * And more features to come...
 
 ## pod6 extensions
