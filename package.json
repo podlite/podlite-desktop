@@ -155,7 +155,7 @@
     "@types/react-dom": "^16.8.4",
     "babel-core": "^7.0.0-bridge.0",
     "babel-jest": "^24.8.0",
-    "electron": "8.0.0",
+    "electron": "8.2.4",
     "electron-builder": "22.2.0",
     "fs-extra": "^8.1.0",
     "jest": "^24.8.0",
