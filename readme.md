@@ -20,7 +20,7 @@
 
 Download the [latest release](https://github.com/zag/podlite-desktop/releases/latest) of Podlite editor here:
 
-### [✨ Download Podlite Desktop ✨](https://github.com/zag/podlite-desktop/releases/latest)
+### [✨ Download Podlite ✨](https://github.com/zag/podlite-desktop/releases/latest)
 
 
 ## Features
