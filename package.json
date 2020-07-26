@@ -167,7 +167,7 @@
     "nodemon": "^1.19.1",
     "npm-run-all": "^4.1.5",
     "parcel-bundler": "^1.12.3",
-    "pod6": "0.0.22",
+    "pod6": "0.0.23",
     "react": "^16.12.0",
     "react-codemirror": "^1.0.0",
     "react-codemirror2": "^7.2.1",
