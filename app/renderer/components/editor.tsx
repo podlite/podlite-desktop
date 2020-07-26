@@ -9,7 +9,7 @@ import 'mousetrap-global-bind';
 import '../../../node_modules/codemirror/lib/codemirror.css';
 import './App.css';
 //@ts-ignore
-import { toHtml , version } from 'pod6'
+import { toHtml , version, parse } from 'pod6'
 
 const styles: React.CSSProperties = {
   marginTop: 100,
@@ -48,9 +48,9 @@ export default () => {
   const refValue = useRef(isPreviewScroll);
   const [showTree, setShowTree] = useState(false)
 
-  // const [text, updateTextValue] = useState('')
   const [filePath, setFilePath] = useState('')
   const [fileName, setFileName] = useState('')
+  const [fileExt, setFileExt] = useState('')
   const [isChanged, setChanged] = useState(false)
   // const [marks, updateMarks] = useState([])
   const makeHtml = (text:string) => {
@@ -104,7 +104,10 @@ export default () => {
         }
     }
     try {
-     return toHtml().use(addons).use(exportRule).run(text)
+     // for files with ext  '.pod6' and '.rakudoc' 
+     // parse as pod without =begin pod blocks
+     const isDefaultInPodMode = ['.pod6','.rakudoc'].includes(fileExt)
+     return toHtml({processor:( src ) => parse( src, { podMode: isDefaultInPodMode }) }).use(addons).use(exportRule).run(text)
     } catch(e) {
       return `<p>There may have been an error.
   Check pod6 syntax at <a target="_blank" href="https://raw.githubusercontent.com/zag/js-pod6/master/doc/S26-documentation.pod6">Synopsis 26</a>
@@ -121,7 +124,8 @@ export default () => {
   const inputEl = useRef(null)
 
 useEffect(()=>{
-  setFileName(  filePath ? vmd.path.parse(filePath)['name'] : filePath )
+  setFileName( filePath ? vmd.path.parse(filePath)['name'] : filePath )
+  setFileExt( filePath ? vmd.path.parse(filePath)['ext'] : filePath )
 },[filePath])
 
 useEffect(()=>{
