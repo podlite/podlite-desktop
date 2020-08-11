@@ -1,7 +1,9 @@
 {
   "name": "podlite",
   "productName": "podlite",
-  "version": "0.0.1",
+  "author": "Aliaksandr Zahatski",
+  "license": "MIT",
+  "version": "0.0.2",
   "description": "pod6 editor",
   "main": "build/main.js",
   "repository": {
@@ -15,14 +17,16 @@
   "scripts": {
     "start": "run-s main:build watch",
     "clean": "rm -rf build release .cache",
-    "release": "run-s clean parcel:build \"electron:build {@}\" --",
+    "release": "run-s build \"electron:build {@}\" --",
+    "build": "run-s build:*",
+    "build:clean": "run-s clean",
+    "build:ts": "run-s parcel:build",
     "watch": "run-p -r parcel:watch electron:start",
     "electron:start": "nodemon --watch build/main.js --exec \"electron .\"",
-    "electron:build": "electron-builder build -wl --x64 --publish=always",
+    "electron:build": "CSC_IDENTITY_AUTO_DISCOVERY=false electron-builder build -mlw --x64 --publish=never",
     "parcel:watch": "run-p -r main:watch renderer:watch",
     "main:watch": "parcel watch app/main/main.ts --out-dir build --out-file main --target electron",
     "renderer:watch": "mkdir -p build ; cp app/renderer/client-api.js  build/client-api.js  && parcel app/renderer/index.html --port 1124 --out-dir build",
-    "renderer:watch2": "parcel watch app/renderer/client-api.js --out-dir build --out-file client-api.js  && parcel app/renderer/index.html --port 1124 --out-dir build",
     "parcel:build": "run-s main:build renderer:build",
     "main:build": "parcel build app/main/main.ts --out-dir build --out-file main --target electron",
     "renderer:build": "mkdir -p build; cp app/renderer/client-api.js  build/client-api.js  && parcel build app/renderer/index.html --public-url ./ --out-dir build",
@@ -30,8 +34,6 @@
     "test:jest": "jest",
     "lint": "tslint app/**/*.ts{,x}"
   },
-  "author": "Aliaksandr Zahatski",
-  "license": "MIT",
   "build": {
     "productName": "podlite",
     "appId": "podlite",
@@ -56,12 +58,18 @@
       "build/**",
       "!build/**/*.map"
     ],
+    "afterPack": "./assets/after-pack.js",
+    "afterSign": "electron-builder-notarize",
     "mac": {
       "target": [
         "zip",
+        "mas",
         "dmg"
       ],
-      "category": "public.app-category.productivity"
+      "category": "public.app-category.productivity",
+      "entitlements": "./assets/entitlements.mac.plist",
+      "entitlementsInherit": "./assets/entitlements.mac.plist",
+      "hardenedRuntime": true
     },
     "dmg": {
       "icon": "dist-assets/dmg-icon.icns",
@@ -85,6 +93,11 @@
         }
       ]
     },
+    "mas": {
+      "entitlements": "./assets/entitlements.mas.plist",
+      "entitlementsInherit": "./assets/entitlements.mas.inherit.plist",
+      "hardenedRuntime": false
+    },
     "win": {
       "publisherName": "Aliaksandr Zahatski",
       "target": [
@@ -96,10 +109,12 @@
         },
         {
           "target": "zip",
-          "arch": ["x64"]
+          "arch": [
+            "x64"
+          ]
         }
       ]
-    },  
+    },
     "nsis": {
       "artifactName": "Podlite-Setup-${version}.${ext}",
       "installerIcon": "dist-assets/win-installer.ico",
@@ -161,13 +176,15 @@
     "babel-jest": "^24.8.0",
     "electron": "8.0.0",
     "electron-builder": "22.2.0",
+    "electron-builder-notarize": "^1.2.0",
+    "electron-util": "^0.14.2",
     "fs-extra": "^8.1.0",
     "jest": "^24.8.0",
     "mousetrap": "^1.6.0",
     "nodemon": "^1.19.1",
     "npm-run-all": "^4.1.5",
     "parcel-bundler": "^1.12.3",
-    "pod6": "0.0.23",
+    "pod6": "^0.0.22",
     "react": "^16.12.0",
     "react-codemirror": "^1.0.0",
     "react-codemirror2": "^7.2.1",
@@ -182,6 +199,7 @@
   "dependencies": {
     "app-root-path": "^2.2.1",
     "electron-is-dev": "^1.1.0",
+    "electron-updater": "^4.3.4",
     "mousetrap-global-bind": "^1.1.0"
   }
 }
