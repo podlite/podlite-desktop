@@ -18,13 +18,15 @@ function menuLabel(label) {
         {
           label: menuLabel('&File'),
           submenu: [
+            { role: 'about' },
             {
               label: menuLabel('&Open'),
               accelerator: 'CmdOrCtrl+O',
               click(model, item, win) {
                 mainApp.openFileDialog(win)
               },
-              {
+            },
+            {
                 label: menuLabel('&OpenDev'),
                 accelerator: 'CmdOrCtrl+D',
                 click(model, item, win) {
