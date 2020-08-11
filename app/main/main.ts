@@ -1,4 +1,5 @@
 import { App } from './app'
+import update from './update'
 const fs = require('fs')
 const { BrowserWindow, app,  ipcMain, dialog } = require('electron')
 const setMainMenu = require('./menu').default 
@@ -72,4 +73,5 @@ if (initOpenFileQueue.length) {
   //  openFileInReader(undefined, undefined, true)
    // openFileDialog(undefined, true)
   }
+  update();
 })
