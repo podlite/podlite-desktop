@@ -52,6 +52,8 @@ export default () => {
   const [fileName, setFileName] = useState('')
   const [fileExt, setFileExt] = useState('')
   const [isChanged, setChanged] = useState(false)
+
+  const [fileLoading, setFileLoading] = useState(true)
   // const [marks, updateMarks] = useState([])
   const makeHtml = (text:string) => {
     const addons = {
@@ -116,7 +118,7 @@ export default () => {
 
   }
   const [result, updateResult] = useState(makeHtml(''))
-  
+
   useDebouncedEffect(() => {
     updateResult(makeHtml(text));
   }, [text], 100)
@@ -124,21 +126,20 @@ export default () => {
   const inputEl = useRef(null)
 
 useEffect(()=>{
-  setFileName( filePath ? vmd.path.parse(filePath)['name'] : filePath )
-  setFileExt( filePath ? vmd.path.parse(filePath)['ext'] : filePath )
-},[filePath])
-
-useEffect(()=>{
+  console.log(`setWindowTitle ${isChanged}`)
   setWindowTitle (`${fileName}${isChanged ? ' *' : '' }`)
-},[isChanged])
+},[isChanged, filePath])
 
-
-useEffect(() =>{ setChanged(true) },[text])
+// useEffect(() =>{ if (text)  console.log(`setChanged(true) ${text}`);if (text) setChanged(true) },[text])
   // desktop section - start
   useEffect(() => {
   const handlerContent = (_, {content, filePath }) => { 
-                                                        updateText(content)
+                                                        setFileName( filePath ? vmd.path.parse(filePath)['name'] : filePath )
+                                                        setFileExt( filePath ? vmd.path.parse(filePath)['ext'] : filePath )
                                                         setFilePath(filePath)
+                                                        console.log(updateText(content))
+                                                        console.log('update content on file load')
+                                                        console.log('setChanged(false)');
                                                         setChanged(false)
  }
   vmd.on('file', handlerContent)
@@ -185,9 +186,9 @@ useEffect(() =>{ setChanged(true) },[text])
 })
 // const pathId = vmd.windowid
 // desktop section - end
-useDebouncedEffect(() => {
-  updateResult(makeHtml(text));
-}, [text], 100)
+// useDebouncedEffect(() => {
+//   updateResult(makeHtml(text));
+// }, [text], 100)
 
 useEffect(() => {
     refValue.current = isPreviewScroll;
@@ -275,6 +276,7 @@ updateMarks(cmMrks)
 },[text])
 // const previewCode = <div  className=" right"><pre><code className="right" style={{textAlign:"left"}}>{JSON.stringify(parse(text), null, 2)}</code></pre></div>
 
+console.log({result})
 //@ts-ignore
 const previewHtml =  <div onMouseEnter={()=>setPreviewScrolling(true)} 
                         onMouseMove={()=>setPreviewScrolling(true)} ref={previewEl} className="right"
@@ -311,7 +313,7 @@ return (
         <CodeMirror 
             value={text}
             editorDidMount={ editor => { instanceCM = editor } }
-            onBeforeChange={ (editor, data, value) => { updateText(value) } }
+            onBeforeChange={ (editor, data, value) => { setChanged(true); updateText(value) } }
             onScroll={scrollEditorHandler}
             options={options} 
             className="editor"
