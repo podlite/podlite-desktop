@@ -23,7 +23,7 @@
     "build:ts": "run-s parcel:build",
     "watch": "run-p -r parcel:watch electron:start",
     "electron:start": "nodemon --watch build/main.js --exec \"electron .\"",
-    "electron:build": "CSC_IDENTITY_AUTO_DISCOVERY=false electron-builder build -mlw --x64 --publish=never",
+    "electron:build": "CSC_IDENTITY_AUTO_DISCOVERY=false electron-builder build -m --x64 --publish=never",
     "parcel:watch": "run-p -r main:watch renderer:watch",
     "main:watch": "parcel watch app/main/main.ts --out-dir build --out-file main --target electron",
     "renderer:watch": "mkdir -p build ; cp app/renderer/client-api.js  build/client-api.js  && parcel app/renderer/index.html --port 1124 --out-dir build",
@@ -67,8 +67,6 @@
         "dmg"
       ],
       "category": "public.app-category.productivity",
-      "entitlements": "./assets/entitlements.mac.plist",
-      "entitlementsInherit": "./assets/entitlements.mac.plist",
       "hardenedRuntime": true
     },
     "dmg": {
@@ -94,8 +92,6 @@
       ]
     },
     "mas": {
-      "entitlements": "./assets/entitlements.mas.plist",
-      "entitlementsInherit": "./assets/entitlements.mas.inherit.plist",
       "hardenedRuntime": false
     },
     "win": {
