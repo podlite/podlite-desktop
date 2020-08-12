@@ -12,7 +12,7 @@ jobs:
     # Platforms to build on.
     strategy:
       matrix:
-        os: [macos-latest, ubuntu-latest]
+        os: [macos-latest]
 
     steps:
       - name: Check out Git repository
