@@ -31,7 +31,7 @@ jobs:
           echo '${{ secrets.api_key }}' > ~/private_keys/AuthKey_${{ secrets.api_key_id }}.p8
 
       - name: Build/release Electron app
-        uses: zag/action-electron-builder@v1
+        uses: zag/action-electron-builder
         with:
           # GitHub token, automatically provided to the action
           # (No need to define this secret in the repo settings)
