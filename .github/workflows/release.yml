@@ -31,7 +31,7 @@ jobs:
           echo '${{ secrets.api_key }}' > ~/private_keys/AuthKey_${{ secrets.api_key_id }}.p8
 
       - name: Build/release Electron app
-        uses: zag/action-electron-builder@v1.6.1
+        uses: zag/action-electron-builder@v2
         with:
           # GitHub token, automatically provided to the action
           # (No need to define this secret in the repo settings)
@@ -40,6 +40,10 @@ jobs:
           # macOS code signing certificate
           mac_certs: ${{ secrets.mac_certs }}
           mac_certs_password: ${{ secrets.mac_certs_password }}
+          
+          # Windows code signing certificate
+          windows_certs: ${{ secrets.windows_certs }}
+          windows_certs_password: ${{ secrets.windows_certs_password }}
 
           # If the commit is tagged with a version (e.g. "v1.0.0"),
           # release the app after building
