@@ -67,7 +67,8 @@
         "dmg"
       ],
       "category": "public.app-category.productivity",
-      "hardenedRuntime": true
+      "hardenedRuntime": true,
+			"entitlements": "./node_modules/electron-builder-notarize/entitlements.mac.inherit.plist"
     },
     "dmg": {
       "icon": "dist-assets/dmg-icon.icns",
