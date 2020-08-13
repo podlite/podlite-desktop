@@ -63,7 +63,6 @@
     "mac": {
       "target": [
         "zip",
-        "mas",
         "dmg"
       ],
       "category": "public.app-category.productivity",
