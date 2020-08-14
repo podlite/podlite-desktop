@@ -67,7 +67,7 @@
       ],
       "category": "public.app-category.productivity",
       "hardenedRuntime": true,
-			"entitlements": "./node_modules/electron-builder-notarize/entitlements.mac.inherit.plist"
+      "entitlements": "./node_modules/electron-builder-notarize/entitlements.mac.inherit.plist"
     },
     "dmg": {
       "icon": "dist-assets/dmg-icon.icns",
@@ -171,9 +171,8 @@
     "babel-core": "^7.0.0-bridge.0",
     "babel-jest": "^24.8.0",
     "electron": "8.0.0",
-    "electron-builder": "22.2.0",
+    "electron-builder": "22.8.0",
     "electron-builder-notarize": "^1.2.0",
-    "electron-util": "^0.14.2",
     "fs-extra": "^8.1.0",
     "jest": "^24.8.0",
     "mousetrap": "^1.6.0",
@@ -196,6 +195,7 @@
     "app-root-path": "^2.2.1",
     "electron-is-dev": "^1.1.0",
     "electron-updater": "^4.3.4",
+    "electron-util": "^0.14.2",
     "mousetrap-global-bind": "^1.1.0"
   }
 }
