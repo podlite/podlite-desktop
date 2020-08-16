@@ -23,13 +23,13 @@
     "build:ts": "run-s parcel:build",
     "watch": "run-p -r parcel:watch electron:start",
     "electron:start": "nodemon --watch build/main.js --exec \"electron .\"",
-    "electron:build": "CSC_IDENTITY_AUTO_DISCOVERY=false electron-builder build -m --x64 --publish=never",
+    "electron:build": "CSC_IDENTITY_AUTO_DISCOVERY=false electron-builder build -mlw --x64 --publish=never",
     "parcel:watch": "run-p -r main:watch renderer:watch",
     "main:watch": "parcel watch app/main/main.ts --out-dir build --out-file main --target electron",
-    "renderer:watch": "mkdir -p build ; cp app/renderer/client-api.js  build/client-api.js  && parcel app/renderer/index.html --port 1124 --out-dir build",
+    "renderer:watch": "mkdir -p build ; cp app/renderer/client-api.js  dist-assets/icon.png  build  && parcel app/renderer/index.html --port 1124 --out-dir build",
     "parcel:build": "run-s main:build renderer:build",
     "main:build": "parcel build app/main/main.ts --out-dir build --out-file main --target electron",
-    "renderer:build": "mkdir -p build; cp app/renderer/client-api.js  build/client-api.js  && parcel build app/renderer/index.html --public-url ./ --out-dir build",
+    "renderer:build": "mkdir -p build; cp app/renderer/client-api.js  dist-assets/icon.png  build  && parcel build app/renderer/index.html --public-url ./ --out-dir build",
     "test": "run-s parcel:build \"test:jest {@}\" --",
     "test:jest": "jest",
     "lint": "tslint app/**/*.ts{,x}"
@@ -58,6 +58,7 @@
       "build/**",
       "!build/**/*.map"
     ],
+
     "afterPack": "./assets/after-pack.js",
     "afterSign": "electron-builder-notarize",
     "mac": {
@@ -179,7 +180,6 @@
     "nodemon": "^1.19.1",
     "npm-run-all": "^4.1.5",
     "parcel-bundler": "^1.12.3",
-    "pod6": "^0.0.22",
     "react": "^16.12.0",
     "react-codemirror": "^1.0.0",
     "react-codemirror2": "^7.2.1",
@@ -192,10 +192,12 @@
     "typescript": "^3.5.2"
   },
   "dependencies": {
+    "pod6": "^0.0.23",
     "app-root-path": "^2.2.1",
     "electron-is-dev": "^1.1.0",
     "electron-updater": "^4.3.4",
     "electron-util": "^0.14.2",
+    "about-window": "1.13.4",
     "mousetrap-global-bind": "^1.1.0"
   }
 }
