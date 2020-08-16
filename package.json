@@ -58,7 +58,6 @@
       "build/**",
       "!build/**/*.map"
     ],
-
     "afterPack": "./assets/after-pack.js",
     "afterSign": "electron-builder-notarize",
     "mac": {
@@ -192,12 +191,13 @@
     "typescript": "^3.5.2"
   },
   "dependencies": {
-    "pod6": "^0.0.23",
+    "about-window": "1.13.4",
     "app-root-path": "^2.2.1",
     "electron-is-dev": "^1.1.0",
+    "electron-log": "^4.2.4",
     "electron-updater": "^4.3.4",
     "electron-util": "^0.14.2",
-    "about-window": "1.13.4",
-    "mousetrap-global-bind": "^1.1.0"
+    "mousetrap-global-bind": "^1.1.0",
+    "pod6": "^0.0.23"
   }
 }

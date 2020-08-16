@@ -20,7 +20,7 @@ function menuLabel(label) {
 const openAbout = () => {
   openAboutWindow({
     icon_path: join(__dirname, 'icon.png'),
-    copyright: `Copyright (c) 2020 Alexandr Zahatski <br/><p style="text-align:center">pod6: ${version}</p>`,
+    copyright: `Copyright (c) 2020 Alexandr Zahatski, https://zahatski.com <br/><p style="text-align:center">pod6: ${version}</p>`,
     package_json_dir: __dirname,
     bug_report_url: BUG_REPORT_URL,
     homepage: HOME_PAGE,
@@ -102,7 +102,7 @@ const openAbout = () => {
         { role: 'selectAll' },
       ],
     }
-    
+
     if (!is.macos) { 
       (helpMenu.submenu as MenuItemConstructorOptions[]).push({
         label: `About ${app.name}`,

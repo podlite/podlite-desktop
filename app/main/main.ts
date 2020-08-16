@@ -1,5 +1,7 @@
 import { App } from './app'
 import update from './update'
+import log from 'electron-log'
+
 const fs = require('fs')
 const { BrowserWindow, app,  ipcMain, dialog } = require('electron')
 const setMainMenu = require('./menu').default 
@@ -60,12 +62,35 @@ app.on('will-finish-launching', () => {
   })
 })
 
+
+const gotTheLock = app.requestSingleInstanceLock();
+if (!gotTheLock) {
+  app.quit();
+}
+
+if (process.platform === "win32") {
+   const filePath = process.argv[1];
+   if (filePath ) initOpenFileQueue.push(filePath)
+
+}
+
+app.on("second-instance", (event, argv) => {
+  if (argv[3]) {
+      mainApp.createWindow( {id:0,filePath: argv[3]} )
+  }
+  else {
+      log.info("no argv[3]")
+      // TODO::
+      // lastFocusedWin().focus();
+  }
+});
 app.on('ready', () => {
   setMainMenu(mainApp)
   mainApp.run()
 if (initOpenFileQueue.length) {
-    initOpenFileQueue.forEach((file) => mainApp.createWindow ({id:0,filePath: file}))
+    initOpenFileQueue.forEach( (file) => mainApp.createWindow( {id:0,filePath: file}, true ) )
   } else {
+
    console.log('openFileDialog(undefined, true)')
   //  openFileInReader(undefined, undefined, true)
    // openFileDialog(undefined, true)
