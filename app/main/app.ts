@@ -24,15 +24,13 @@ export class App extends EventEmitter {
     async run() {
         // restore windows
         const tmpstate =  await this.load('app.json') || {windows:[]} 
-        console.log({tmpstate})
-        if (tmpstate.windows.length < 1 ) { 
+        if (tmpstate.windows.length < 1 && this.windowsPull.all().length < 1 ) { 
             // create window dd
               this.createWindow({id:0})
           } else {
                 tmpstate.windows.map(async (opt) => this.createWindow(opt))
 
           }
-          console.log({'sata':this.windowsPull.getState()})
           await this.store('app.json', this.windowsPull.getState())
     }
 
@@ -46,7 +44,7 @@ export class App extends EventEmitter {
         })
       }
 
-    async createWindow( options: WindowConfig) {
+    async createWindow( options: WindowConfig, isSkipSaveState:boolean = false ) {
         let id = options.id || this.windowsPull.getNextId()
         const win = new Window( { ...options, id })
         this.windowsPull.add(win)
@@ -59,7 +57,9 @@ export class App extends EventEmitter {
               if (!this.quitting) {
               await this.closeWindow(win) }
         })
-        await this.store('app.json', this.windowsPull.getState())
+        if (!isSkipSaveState) {
+          await this.store('app.json', this.windowsPull.getState())
+        }
     }
 
     async closeWindow(win:Window) {

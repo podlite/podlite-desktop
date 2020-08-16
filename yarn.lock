@@ -1316,7 +1316,7 @@ abbrev@1:
   resolved "https://registry.yarnpkg.com/abbrev/-/abbrev-1.1.1.tgz#f8f2c887ad10bf67f634f005b6987fed3179aac8"
   integrity sha512-nne9/IiQ/hzIhY6pdDnbBtz7DjPTKrY00P/zvPSm5pOFkl6xuGrGnXn/VtTNNfNtAfZ9/1RtehkszU9qcTii0Q==
 
-about-window@^1.13.4:
+about-window@1.13.4:
   version "1.13.4"
   resolved "https://registry.yarnpkg.com/about-window/-/about-window-1.13.4.tgz#cedfd0153c4b8b54832acae6dae695e06f27f4b4"
   integrity sha512-Ge7qBRzrmPbVJ2YarUfTrZEaSfhRjeVyFhmH9NqdNDjjgP0dcWwUprH61JWlDgcM3KaDn5zUzimG4YQh6vRocw==
@@ -3208,6 +3208,11 @@ electron-is-dev@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/electron-is-dev/-/electron-is-dev-1.1.0.tgz#b15a2a600bdc48a51a857d460e05f15b19a2522c"
   integrity sha512-Z1qA/1oHNowGtSBIcWk0pcLEqYT/j+13xUw/MYOrBUOL4X7VN0i0KCTf5SqyvMPmW5pSPKbo28wkxMxzZ20YnQ==
+
+electron-log@^4.2.4:
+  version "4.2.4"
+  resolved "https://registry.yarnpkg.com/electron-log/-/electron-log-4.2.4.tgz#a13e42a9fc42ca2cc7d2603c3746352efa82112e"
+  integrity sha512-CXbDU+Iwi+TjKzugKZmTRIORIPe3uQRqgChUl19fkW/reFUn5WP7dt+cNGT3bkLV8xfPilpkPFv33HgtmLLewQ==
 
 electron-notarize@^0.2.0:
   version "0.2.1"
