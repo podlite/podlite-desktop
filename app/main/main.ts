@@ -20,7 +20,6 @@ ipcMain.on('save-file', async (event, {content, filePath}) => {
     event.returnValue = 'pong'
     win.webContents.send('file-saved', {filePath})
     } else {
-
     const saveDialogResult = await dialog.showSaveDialog(win, {})
     if (saveDialogResult.canceled) {return}
     fs.writeFileSync(saveDialogResult.filePath, content)
@@ -53,7 +52,6 @@ app.on('will-finish-launching', () => {
   // Event fired When someone drags files onto the icon while your app is running
   app.on('open-file', (event, file) => {
     if (app.isReady() === false) {
-      // dialog.showMessageBox({message: file})
       initOpenFileQueue.push(file)
     } else {
       mainApp.createWindow({id:0, filePath:file})
@@ -65,7 +63,6 @@ app.on('will-finish-launching', () => {
 app.on('ready', () => {
   setMainMenu(mainApp)
   mainApp.run()
-  console.log(app.getPath('userData') +'  ' + app.getPath('appData'))
 if (initOpenFileQueue.length) {
     initOpenFileQueue.forEach((file) => mainApp.createWindow ({id:0,filePath: file}))
   } else {
