@@ -108,7 +108,7 @@ export default () => {
     try {
      // for files with ext  '.pod6' and '.rakudoc' 
      // parse as pod without =begin pod blocks
-     const isDefaultInPodMode = ['.pod6','.rakudoc'].includes(fileExt)
+     const isDefaultInPodMode = ['.pod6','.rakudoc'].includes(fileExt) || fileExt === ""
      return toHtml({processor:( src ) => parse( src, { podMode: isDefaultInPodMode }) }).use(addons).use(exportRule).run(text)
     } catch(e) {
       return `<p>There may have been an error.
