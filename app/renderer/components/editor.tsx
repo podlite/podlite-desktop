@@ -121,7 +121,7 @@ export default () => {
 
   useDebouncedEffect(() => {
     updateResult(makeHtml(text));
-  }, [text], 100)
+  }, [text], 50)
  
   const inputEl = useRef(null)
 
