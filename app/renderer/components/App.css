@@ -77,24 +77,21 @@ pre {
   margin:0em;
 }
 .left {
-border-right: 1px dotted lightgrey;
-white-space: pre-wrap;
-word-break: break-word;
-word-wrap: break-word;
-width: 50%;
-font-size: 15px;
-overflow: scroll;
-text-align: left;
+  border-right: 1px dotted lightgrey;
+  white-space: pre-wrap;
+  word-break: break-word;
+  word-wrap: break-word;
+  width: 50%;
+  font-size: 15px;
+  text-align: left;
 }
 
 .right {
   text-align: left;
-    word-break: break-word;
-    word-wrap: break-word;
-    margin : 0 1em;
-  width: 47%;
+  word-break: break-word;
+  word-wrap: break-word;
+  margin : 0 1em;
   font-size: 15px;
-  overflow: scroll;
 }
 
 /* Start pod6 */ 
@@ -117,7 +114,6 @@ pre {
   word-break: break-all;
   word-wrap: break-word;
   background-color:  #f8f8f8;
-  /* border: 1px solid  #ccc; */
   border-radius:  4px;
 }
 
@@ -164,10 +160,6 @@ td {
   border: 1px solid #eee;
 }
 
-
-
-
-
 .footnote a {
   text-decoration: none;
 }
@@ -190,9 +182,7 @@ img {
   height: auto;
   font-family: inherit;
 }
-.CodeMirror-scroll{
-  scroll-behavior: smooth;
-}
+
 .title {
   margin:0em;
 }
@@ -203,9 +193,8 @@ img {
   animation-fill-mode: forwards;
 }
 .layoutPreview .right {
-/* padding-right: 10%; */
-margin: 0 auto;
-width: 60%;
+  margin: 0 auto;
+  width: 60%;
 }
 
 @keyframes fadeOut {
@@ -231,29 +220,30 @@ width: 60%;
 }
 
 .left {
-border-right: 1px dotted lightgrey;
-white-space: pre-wrap;
-word-break: break-word;
-word-wrap: break-word;
-width: 50%;
-font-size: 15px;
-text-align: left;
-float: left;
-height: 100%;
-padding-left: 10px;
-visibility: hidden;
-animation: 1s fadeOut;
-animation-fill-mode: forwards;
+  border-right: 1px dotted lightgrey;
+  white-space: pre-wrap;
+  word-break: break-word;
+  word-wrap: break-word;
+  width: 50%;
+  font-size: 15px;
+  text-align: left;
+  float: left;
+  height: 100%;
+  padding-left: 10px;
+  visibility: hidden;
+  animation: 1s fadeOut;
+  animation-fill-mode: forwards;
 }
 
 .editor,.CodeMirror {
   height: 100%;
 }
+
 .right {
   text-align: left;
   word-break: break-word;
   word-wrap: break-word;
-  margin : 0 0.5em;
+  margin-right : 0;
   height: 100%;
   font-size: 15px;
   padding-left: 10px;
@@ -268,4 +258,30 @@ animation-fill-mode: forwards;
   to {
     transform: rotate(360deg);
   }
+}
+
+/* scrollbars */
+
+::-webkit-scrollbar-thumb {
+  background-color:  rgba(0, 0, 0, 0.1);
+}
+::-webkit-scrollbar {
+  background-color: (0, 0, 0, 0.05);
+}
+::-webkit-scrollbar-thumb:active {
+  background-color: rgba(0, 0, 0, 0.1); 
+}
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+  -webkit-border-radius: 100px;
+}
+::-webkit-scrollbar-thumb {
+  -webkit-border-radius: 100px;
+}
+::-webkit-scrollbar-thumb:active {
+  -webkit-border-radius: 100px;
+}
+::-webkit-scrollbar-corner {
+  background: transparent;
 }
