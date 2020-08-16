@@ -2,10 +2,6 @@ import * as React from 'react'
 import {Controlled as CodeMirror} from 'react-codemirror2'
 import {EditorConfiguration} from 'codemirror'
 import { useState, useEffect, useRef } from 'react'
-// import Electron from 'electron'
-import Mousetrap from 'mousetrap'
-; // global-bind must be import after Mousetrap
-import 'mousetrap-global-bind';
 import '../../../node_modules/codemirror/lib/codemirror.css';
 import './App.css';
 //@ts-ignore
@@ -130,7 +126,6 @@ useEffect(()=>{
   setWindowTitle (`${fileName}${isChanged ? ' *' : '' }`)
 },[isChanged, filePath])
 
-// useEffect(() =>{ if (text)  console.log(`setChanged(true) ${text}`);if (text) setChanged(true) },[text])
   // desktop section - start
   useEffect(() => {
   const handlerContent = (_, {content, filePath }) => { 
@@ -147,8 +142,7 @@ useEffect(()=>{
 })
 // hot keys
   useEffect( () => {
-  const saveFileAction  =  (e) => {
-    e.preventDefault()
+  const saveFileAction  =  () => {
     if (isChanged)  vmd.saveFile({content:text, filePath})
   }
 
@@ -167,12 +161,11 @@ useEffect(()=>{
       }
     }
   }
+  // make menu command listener
+  vmd.on('menu-file-save', saveFileAction)
+ 
+  return () => vmd.off('menu-file-save', saveFileAction)
 
-  Mousetrap.reset()
-  Mousetrap.bindGlobal(['ctrl+s', 'command+s'], saveFileAction )
-  Mousetrap.bindGlobal(['command+/'], togglePreviewMode )
-
-  return () => Mousetrap.unbind(['ctrl+s', 'command+s', 'command+/'])
 })
 
 
@@ -184,11 +177,7 @@ useEffect(()=>{
   vmd.on('file-saved', handlerFileSaved)
   return function cleanup() { vmd.off('file-saved', handlerFileSaved ) }
 })
-// const pathId = vmd.windowid
-// desktop section - end
-// useDebouncedEffect(() => {
-//   updateResult(makeHtml(text));
-// }, [text], 100)
+
 
 useEffect(() => {
     refValue.current = isPreviewScroll;
@@ -201,7 +190,6 @@ var options: EditorConfiguration = {
    autofocus:true,
 };
 
-//  const result = JSON.stringify(parse(text), null, 2) ||  makeHtml(text)
 
 const previewEl = useRef(null)
 
@@ -274,6 +262,7 @@ result.errors.map((loc:any)=>{
 updateMarks(cmMrks)
 
 },[text])
+
 // const previewCode = <div  className=" right"><pre><code className="right" style={{textAlign:"left"}}>{JSON.stringify(parse(text), null, 2)}</code></pre></div>
 
 console.log({result})
