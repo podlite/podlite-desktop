@@ -195,6 +195,7 @@ img {
 .layoutPreview .right {
   margin: 0 auto;
   width: 60%;
+  padding-right: 30px;
 }
 
 @keyframes fadeOut {
