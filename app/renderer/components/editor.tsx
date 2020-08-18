@@ -2,6 +2,10 @@ import * as React from 'react'
 import {Controlled as CodeMirror} from 'react-codemirror2'
 import {EditorConfiguration} from 'codemirror'
 import { useState, useEffect, useRef } from 'react'
+// import Electron from 'electron'
+import Mousetrap from 'mousetrap'
+; // global-bind must be import after Mousetrap
+import 'mousetrap-global-bind';
 import '../../../node_modules/codemirror/lib/codemirror.css';
 import './App.css';
 //@ts-ignore
@@ -164,7 +168,11 @@ useEffect(()=>{
   // make menu command listener
   vmd.on('menu-file-save', saveFileAction)
  
-  return () => vmd.off('menu-file-save', saveFileAction)
+  Mousetrap.bindGlobal(['command+/'], togglePreviewMode )
+  return () => {
+    vmd.off('menu-file-save', saveFileAction)
+    Mousetrap.unbind(['ctrl+s', 'command+s', 'command+/'])
+  }
 
 })
 
