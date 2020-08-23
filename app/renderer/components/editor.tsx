@@ -78,7 +78,11 @@ export default () => {
         // check if file relative
         const { isRemote, path } = getPathToOpen( filename, filePath )
         const filePathToOpen = path
-        writer.writeRaw(`<img src="${filePathToOpen}"/>`)
+        if ( filePathToOpen.match(/mp4$/) ) {
+          writer.writeRaw(`<div class="video shadow"> <video controls> <source src="${filePathToOpen}" type="video/mp4" /> </video></div>`)
+        } else {
+          writer.writeRaw(`<img src="${filePathToOpen}"/>`)
+        }
         }
       }
     }
