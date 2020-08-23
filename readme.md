@@ -31,11 +31,14 @@ Download the [latest release](https://github.com/zag/podlite-desktop/releases/la
 * And more features to come...
 
 ## pod6 extensions
-### `=Image` - use images in posts
+### `=Image` - use images or video in posts
 
 Example:
 
 `=Image gatsby-astronaut.png
+`
+
+`=Image some-video.mp4
 `
 
 ## Documentation
