@@ -196,10 +196,11 @@ useEffect(() => {
 });
 var options: EditorConfiguration = {
   lineNumbers: true,
-   inputStyle: "contenteditable",
-   //@ts-ignore
-   spellcheck: true,
-   autofocus:true,
+  inputStyle: "contenteditable",
+  //@ts-ignore
+  spellcheck: true,
+  autofocus:true,
+  lineWrapping:true,
 };
 
 
@@ -279,9 +280,15 @@ updateMarks(cmMrks)
 
 console.log({result})
 //@ts-ignore
-const previewHtml =  <div onMouseEnter={()=>setPreviewScrolling(true)} 
-                        onMouseMove={()=>setPreviewScrolling(true)} ref={previewEl} className="right"
-dangerouslySetInnerHTML={{__html: result}} ></div>
+const previewHtml = <div className="right"
+onMouseEnter={()=>setPreviewScrolling(true)} 
+onMouseMove={()=>setPreviewScrolling(true)} 
+ref={previewEl} 
+>
+                     <div 
+                     dangerouslySetInnerHTML={{__html: result}} 
+                     className="content" 
+                     ></div></div>
 //@ts-ignore
 const scrollEditorHandler = (editor) => {
 if (refValue.current) { return }

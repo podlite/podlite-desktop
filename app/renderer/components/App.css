@@ -216,17 +216,7 @@ div.video video{
 .title {
   margin:0em;
 }
-.layoutPreview .left {
-  visibility: visible;
-  width: 10%;
-  animation: 0.5s fadeIn;
-  animation-fill-mode: forwards;
-}
-.layoutPreview .right {
-  margin: 0 auto;
-  width: 60%;
-  padding-right: 30px;
-}
+
 
 @keyframes fadeOut {
   20% {
@@ -279,9 +269,35 @@ div.video video{
   font-size: 15px;
   padding-left: 10px;
   overflow-y: scroll;
-  position: relative;
 }
 
+
+.content {
+  height: 100%;
+}
+
+.layoutPreview .right {
+  position: absolute;
+  width: 48%;
+  /* z-index: -999999; */
+  float: right;
+  top: 0;
+  right: 0;
+  width: 100%;
+  background-color: white;
+}
+.layoutPreview .left {
+  visibility: visible;
+  animation: 0.5s fadeIn;
+  animation-fill-mode: forwards;
+}
+
+.layoutPreview .content {
+  width: 50%;
+  margin: 0 auto;
+  height: 100%;
+  overflow-y: initial;
+}
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
@@ -292,6 +308,11 @@ div.video video{
 }
 
 /* scrollbars */
+
+.CodeMirror-vscrollbar {
+  user-select: none; 
+  outline: none !important; 
+}
 
 ::-webkit-scrollbar-thumb {
   background-color:  rgba(0, 0, 0, 0.1);
