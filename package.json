@@ -198,6 +198,6 @@
     "electron-updater": "^4.3.4",
     "electron-util": "^0.14.2",
     "mousetrap-global-bind": "^1.1.0",
-    "pod6": "^0.0.23"
+    "pod6": "^0.0.28"
   }
 }

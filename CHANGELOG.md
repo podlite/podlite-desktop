@@ -1,5 +1,6 @@
 # upcoming
  - add support local video ( i.e. .mp4 files) for =Image
+ - update pod6 lib to ver 0.28
 # 0.0.2
 - use pod mode by default for .pod6, .rakudoc (#3)
 - enhance user interface

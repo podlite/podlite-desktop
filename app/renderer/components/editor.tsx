@@ -57,7 +57,7 @@ export default () => {
   // const [marks, updateMarks] = useState([])
   const makeHtml = (text:string) => {
     const addons = {
-      'Image:namedBlock': ( writer, processor ) => ( node, ctx, interator ) =>{
+      'Image': ( writer, processor ) => ( node, ctx, interator ) =>{
         const getPathToOpen = ( filepath, parentDocPath ) => {
           const isRemoteReg = new RegExp(/^(https?|ftp):/)
           const isRemote =  isRemoteReg.test(filepath)
