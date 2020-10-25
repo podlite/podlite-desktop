@@ -62,6 +62,9 @@ export class Window extends EventEmitter {
       console.log('send ' + filePath)
       this.browserWindow.webContents.send('file', { content: fs.readFileSync(filePath, { encoding: 'utf8' }), filePath})
     }
+    const importMarkdownFile = (filePath) => {
+      this.browserWindow.webContents.send('importMarkdown', { content: fs.readFileSync(filePath, { encoding: 'utf8' })})
+    }
     this.browserWindow.webContents.on('before-input-event', (event, input) => {
       if (
           input.control &&
@@ -73,8 +76,21 @@ export class Window extends EventEmitter {
       }
     })
     this.browserWindow.webContents.on('did-finish-load', () => { 
-        console.log('did-finish-load'); if (this.filePath) { sendFile(this.filePath) } }
-       )
+        console.log('did-finish-load'); 
+        switch (this.type) {
+          case 'open':
+            if (this.filePath) { sendFile(this.filePath) } ;
+            break;
+          case 'importMarkdown':
+              console.log('importMarkdown ' + this.filePath);
+              importMarkdownFile(this.filePath);
+              break;
+              break;
+          default:
+            break;
+        }
+      }
+    )
     this.browserWindow.webContents.on('save-file', () => {console.log('webContents.save-file')})
 
     }
