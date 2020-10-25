@@ -2,12 +2,13 @@ import * as React from 'react'
 import {Controlled as CodeMirror} from 'react-codemirror2'
 import {EditorConfiguration} from 'codemirror'
 import { useState, useEffect, useRef } from 'react'
-// import Electron from 'electron'
+const { ipcRenderer, remote } = window.require('electron');
 import Mousetrap from 'mousetrap'
 ; // global-bind must be import after Mousetrap
 import 'mousetrap-global-bind';
 import '../../../node_modules/codemirror/lib/codemirror.css';
 import './App.css';
+import {PODLITE_CSS} from '../utils/export-html'
 import { mdToPod6 } from 'podlite';
 //@ts-ignore
 import { toHtml , version, parse } from 'pod6'
@@ -187,10 +188,31 @@ useEffect(()=>{
   }
   // make menu command listener
   vmd.on('menu-file-save', saveFileAction)
- 
+  // handle export to html
+  const exportToHtml = async (): Promise<void> => {
+    const { canceled, filePath } = await remote.dialog.showSaveDialog({
+      defaultPath: `*/${fileName}.html`,
+      buttonLabel: "Export",
+    });
+    if (!canceled && filePath) {
+      const html = `<html>
+<head>
+<style>
+${PODLITE_CSS}
+</style>
+</head>
+<body class="right">
+${result}
+</body>
+</html>`
+      vmd.fs.writeFileSync(filePath, html)
+    }
+  }
+  ipcRenderer.on("exportHtml", exportToHtml)
   Mousetrap.bindGlobal(['command+/'], togglePreviewMode )
   return () => {
     vmd.off('menu-file-save', saveFileAction)
+    ipcRenderer.removeListener("exportHtml", exportToHtml)
     Mousetrap.unbind(['ctrl+s', 'command+s', 'command+/'])
   }
 
@@ -292,9 +314,6 @@ updateMarks(cmMrks)
 
 },[text])
 
-// const previewCode = <div  className=" right"><pre><code className="right" style={{textAlign:"left"}}>{JSON.stringify(parse(text), null, 2)}</code></pre></div>
-
-console.log({result})
 //@ts-ignore
 const previewHtml = <div className="right"
 onMouseEnter={()=>setPreviewScrolling(true)} 

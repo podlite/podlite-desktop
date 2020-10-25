@@ -73,7 +73,20 @@ const openAbout = () => {
           },
         ]
         },
-],
+        {
+          label: menuLabel('&Export to...'),
+          submenu: [
+            {
+              label: menuLabel('&Html'),
+              click(model, item, win) {
+                if (item) item.webContents.send("exportHtml");
+              },
+            }
+  
+          ]
+          }
+  
+    ],
     }
 
     const helpMenu:MenuItemConstructorOptions = {

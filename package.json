@@ -3,7 +3,7 @@
   "productName": "podlite",
   "author": "Aliaksandr Zahatski",
   "license": "MIT",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "pod6 editor",
   "main": "build/main.js",
   "repository": {
@@ -92,7 +92,9 @@
       ]
     },
     "mas": {
-      "hardenedRuntime": false
+      "hardenedRuntime": false,
+      "entitlements": "./build/entitlements.mas.plist",
+      "entitlementsInherit": "./build/entitlements.mas.inherit.plist"
     },
     "win": {
       "publisherName": "Aliaksandr Zahatski",
@@ -116,6 +118,14 @@
       "installerIcon": "dist-assets/win-installer.ico",
       "differentialPackage": false,
       "packElevateHelper": false
+    },
+    "appx": {
+      "applicationId": "Podliteeditor",
+      "displayName": "Podlite editor",
+      "identityName": "47729AliaksandrZahatski.Podliteeditor",
+      "publisher": "CN=5968156C-353D-4283-B776-80E86403C833",
+      "showNameOnTiles": false,
+      "backgroundColor": "#6b479c"
     },
     "linux": {
       "category": "Development",
@@ -160,6 +170,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.4.5",
+    "@babel/plugin-transform-runtime": "^7.12.1",
     "@babel/preset-env": "^7.4.5",
     "@babel/preset-react": "^7.0.0",
     "@babel/preset-typescript": "^7.3.3",
@@ -179,6 +190,7 @@
     "nodemon": "^1.19.1",
     "npm-run-all": "^4.1.5",
     "parcel-bundler": "^1.12.3",
+    "podlite": "^0.0.2",
     "react": "^16.12.0",
     "react-codemirror": "^1.0.0",
     "react-codemirror2": "^7.2.1",
@@ -191,6 +203,7 @@
     "typescript": "^3.5.2"
   },
   "dependencies": {
+    "@babel/runtime": "^7.12.1",
     "about-window": "1.13.4",
     "app-root-path": "^2.2.1",
     "electron-is-dev": "^1.1.0",
@@ -198,6 +211,6 @@
     "electron-updater": "^4.3.4",
     "electron-util": "^0.14.2",
     "mousetrap-global-bind": "^1.1.0",
-    "pod6": "^0.0.28"
+    "pod6": "0.0.29"
   }
 }
