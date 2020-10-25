@@ -112,8 +112,26 @@ export class App extends EventEmitter {
             } //
             this.createWindow({id:0, filePath: filePaths[0]}).then();
           });
-    } 
+    }
 
+    openImportMakdownDialog( win:BrowserWindow ) {
+      const dialogOptions  = {
+          title: 'Select Markdown file',
+          properties: [ 'openFile'],
+          filters: [
+            {
+              name: 'Markdown',
+              extensions: ['md', 'mkdn', 'mkd', 'mdown','markdown'],
+            },
+          ],
+        } as OpenDialogOptions
+      dialog.showOpenDialog( dialogOptions).then(({ filePaths }) => {
+          if (!Array.isArray(filePaths) || !filePaths.length) {
+            return;
+          } //
+          this.createWindow({id:0, type:'importMarkdown',filePath: filePaths[0]}).then();
+        });
+  }
 }
 
 

@@ -59,6 +59,19 @@ const openAbout = () => {
           accelerator: 'CmdOrCtrl+S',
           click(model, item, win): void {
             if (item) item.webContents.send("menu-file-save");
+          }
+        },
+        { type: 'separator' },
+        {
+        label: menuLabel('&Import from...'),
+        submenu: [
+          {
+            label: menuLabel('&Markdown'),
+            click(model, item, win) {
+              mainApp.openImportMakdownDialog(win)
+            },
+          },
+        ]
         },
 ],
     }

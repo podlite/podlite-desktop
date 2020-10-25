@@ -8,6 +8,7 @@ import Mousetrap from 'mousetrap'
 import 'mousetrap-global-bind';
 import '../../../node_modules/codemirror/lib/codemirror.css';
 import './App.css';
+import { mdToPod6 } from 'podlite';
 //@ts-ignore
 import { toHtml , version, parse } from 'pod6'
 
@@ -146,7 +147,22 @@ useEffect(()=>{
                                                         setChanged(false)
  }
   vmd.on('file', handlerContent)
-  return function cleanup() { vmd.off( 'file', handlerContent ) }
+
+  const handlerImportMarkdownContent = (_, {content, filePath }) => { 
+    setFileName( filePath ? vmd.path.parse(filePath)['name'] : filePath )
+    setFileExt( filePath ? vmd.path.parse(filePath)['ext'] : filePath )
+    setFilePath(filePath)
+    const text = mdToPod6(content)
+    updateText(text)
+    setChanged(true)
+}
+
+
+  vmd.on('importMarkdown', handlerImportMarkdownContent)
+  return function cleanup() { 
+    vmd.off( 'file', handlerContent ) 
+    vmd.off('importMarkdown', handlerImportMarkdownContent)
+  }
 })
 // hot keys
   useEffect( () => {
