@@ -12,15 +12,19 @@ const isDev = require('electron-is-dev')
 export interface WindowConfig {
   filePath? : string,
   id: number,
+  type?: 'open'|'importMarkdown'
 }
 export class Window extends EventEmitter {
     public browserWindow:BrowserWindow 
     public id:number
     public filePath: string
+    public type: string
+   
     constructor( options: WindowConfig ) {
       super()
       this.id = options.id
       this.filePath = options.filePath
+      this.type = options.type || 'open'
       const windowTitle = options.filePath ? path.parse( options.filePath )['name'] : "[new]"
       this.browserWindow = new BrowserWindow({
         webPreferences: {
