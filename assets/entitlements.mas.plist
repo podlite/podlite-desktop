@@ -4,7 +4,17 @@
 <dict>
 	<key>com.apple.security.app-sandbox</key>
 	<true/>
+	<key>com.apple.application-identifier</key>
+  	<string>N5Q5DQ2LZJ.org.podlite.podlite</string>
+    <key>com.apple.developer.team-identifier</key>
+  	<string>N5Q5DQ2LZJ</string>
+    <key>com.apple.security.application-groups</key>
+    <array>
+      <string>N5Q5DQ2LZJ.org.podlite.podlite</string>
+	</array>
 	<key>com.apple.security.files.user-selected.read-write</key>
+	<true/>
+	<key>com.apple.security.cs.allow-unsigned-executable-memory</key>
 	<true/>
 </dict>
 </plist>
