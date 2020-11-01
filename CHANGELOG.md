@@ -1,5 +1,8 @@
 # upcoming
 
+- fix macos and windows distributions
+- use flexible application windows size
+
 # 0.0.3
  - supports local video ( i.e. .mp4 files) for =Image
  - update pod6 lib to ver 0.28
