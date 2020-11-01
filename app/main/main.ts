@@ -62,10 +62,13 @@ app.on('will-finish-launching', () => {
   })
 })
 
+// https://github.com/electron/electron/issues/15958
 
-const gotTheLock = app.requestSingleInstanceLock();
-if (!gotTheLock) {
-  app.quit();
+if ( !process.mas ) {
+  const gotTheLock = app.requestSingleInstanceLock();
+  if (!gotTheLock) {
+    app.quit();
+  }
 }
 
 if (process.platform === "win32") {

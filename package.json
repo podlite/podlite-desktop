@@ -94,7 +94,9 @@
     "mas": {
       "hardenedRuntime": false,
       "entitlements": "./build/entitlements.mas.plist",
-      "entitlementsInherit": "./build/entitlements.mas.inherit.plist"
+      "gatekeeperAssess": false,
+      "entitlementsInherit": "./build/entitlements.mas.inherit.plist",
+      "provisioningProfile": "build/embedded.provisionprofile"
     },
     "win": {
       "publisherName": "Aliaksandr Zahatski",

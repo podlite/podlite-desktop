@@ -31,12 +31,11 @@ export class Window extends EventEmitter {
           preload: resolve('build/client-api.js'),
           nodeIntegration: true,
           spellcheck: true,
-          webSecurity: false
+          webSecurity: false,
+          enableRemoteModule: true
         },
-        width: 800,
-        height: 680,
-        x:800,
-        y:100,
+        minHeight: 600,
+        minWidth: 800,
         title: windowTitle
 
       })

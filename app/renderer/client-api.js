@@ -5,11 +5,8 @@ const {
   remote,
 } = require('electron');
 
-// const sharedState = remote.require('../shared/shared-state');
-
 const electron = {
   ipc: ipcRenderer,
-  // sharedState,
 };
 
 // no var/let/const on purpose
