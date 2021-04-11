@@ -87,7 +87,29 @@ app.on("second-instance", (event, argv) => {
       // lastFocusedWin().focus();
   }
 });
-app.on('ready', () => {
+const installExtensions = async () => {
+	// require('electron-debug')({
+	//   showDevTools: true
+	// });
+  
+	const installer = require('electron-devtools-installer');
+	const forceDownload = Boolean(process.env.UPGRADE_EXTENSIONS);
+	const extensions = ['REACT_DEVELOPER_TOOLS', 'REDUX_DEVTOOLS'];
+  
+	for (const name of extensions) {
+	  try {
+		await installer.default(installer[name], forceDownload); // eslint-disable-line babel/no-await-in-loop
+	  } catch (err) {}
+	}
+  };
+app.on('ready', async () => {
+    console.log({'process.env.NODE_ENV': process.env.NODE_ENV})
+    // if (process.env.NODE_ENV === 'development') {
+		// Install Dev Extensions
+		console.log('installExtensions')
+		await installExtensions();
+	//   }
+
   setMainMenu(mainApp)
   mainApp.run()
 if (initOpenFileQueue.length) {
