@@ -60,6 +60,7 @@ export default () => {
   const makeHtml = (text:string) => {
     const addons = {
       'Image': ( writer, processor ) => ( node, ctx, interator ) =>{
+        console.log("Image")
         const getPathToOpen = ( filepath, parentDocPath ) => {
           const isRemoteReg = new RegExp(/^(https?|ftp):/)
           const isRemote =  isRemoteReg.test(filepath)
@@ -74,6 +75,7 @@ export default () => {
   
         // get image addr
         const addr = node.content[0].value
+        console.log({addr})
         if ( addr ) {
         // clean up addr
         const filename = addr.replace(/\s+/g,'')
@@ -102,7 +104,13 @@ export default () => {
           // @ts-ignore
             const codeLine = getLine(node)
             if (codeLine) { writer.writeRaw(`<div class="line-src" data-line="${getLine(node)}" id="line-${getLine(node)}">`) }
-            if (def) def(node, ctx, interator)
+            if (def) {
+                console.log({node})
+                def(node, ctx, interator)
+            } else {
+                console.log("no def")
+            }
+            // if (def) def(node, ctx, interator)
             if (codeLine) { writer.writeRaw("</div>") }
   
         } else {

@@ -1,8 +1,10 @@
 {
   "compilerOptions": {
     "target": "esnext",
-    "jsx": "preserve",
+    // "jsx": "preserve",
     "sourceMap": true,
-    "moduleResolution": "node"
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+    "jsx": "react",
   }
 }
