@@ -86,6 +86,62 @@ const preparePDF = async (text:string, filePath:string) => {
     return pdfBuf
 }
 
+const prepareHTML = (text:string, filePath:string):Promise<string> => {
+    return new Promise((resolve, reject) => {
+        var newDiv = document.createElement("div")
+        newDiv.hidden = true;
+        document.body.appendChild(newDiv)
+        ReactDOM.render(
+        <React.StrictMode>
+            <div>{onConvertSource(text,filePath,true ).result}</div>
+        </React.StrictMode>,
+        newDiv, async ()=>{
+            await new Promise(resolve => setTimeout(resolve, 500));
+            const rendered =  newDiv.innerHTML
+            document.body.removeChild(newDiv)
+            const html = `<html>
+        <head>
+        <style>
+        ${PODLITE_CSS}
+
+        footer {
+            font-size: 9px;
+            opacity: 0.3;
+            color: gray;
+            text-align: right;
+          }
+          footer  a:link {
+            color: gray;
+          }
+          
+          @media print {
+            footer {
+              position: fixed;
+              bottom: 0px;
+              right:0;
+            }
+          }
+
+        </style>
+        </head>
+        <body>
+        <div class="EditorApp">
+            <div class="layoutPreview">
+                <div class="Editorright">
+                 <div class="content"> 
+                    ${rendered}
+                </div>
+                </div>
+            </div>
+        </div>
+        <footer id="pageFooter">Made by <a href="https://github.com/zag/podlite-desktop">podlite</a></footer>
+        </body>
+        </html>`
+            resolve(html)
+        })
+    })
+}
+
     // hot keys
      useEffect( () => {
     const saveFileAction  =  () => {
