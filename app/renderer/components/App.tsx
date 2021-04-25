@@ -20,6 +20,18 @@ import { htmlToPdfBuffer } from '../utils/export-pdf';
 
 declare var vmd: any;
 
+    // wrap all elements and add line link info
+    const wrapFunction = (node: Node, children) => {
+        if (typeof node !== 'string' && 'type' in node && 'location' in node) {
+            //@ts-ignore
+            const line = node.location.start.line
+            return <div key={line} className="line-src" data-line={line} id={`line-${line}`}>{children}</div>
+        } else {
+            return children
+        }
+    }
+
+    const wrapFunctionNoLines = (node: Node, children) => children
 
 export const onConvertSource = (text:string, filePath:string, skipLineNumbers:boolean = false):ConverterResult=>{
         
