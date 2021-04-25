@@ -142,6 +142,13 @@ const prepareHTML = (text:string, filePath:string):Promise<string> => {
     })
 }
 
+const App = ()=>{
+    
+    const [text, updateText] = useState('')
+    const [filePath, setFilePath] = useState('')
+    const [isPreviewMode, setPreviewMode] = useState(false)
+    const [isTextChanged, setTextChanged] = useState(false)
+
     useEffect(()=>{
         const fileName = filePath ? vmd.path.parse(filePath)['name'] : filePath
         vmd.setWindowTitle(`${fileName}${isTextChanged ? ' *' : '' }`)
