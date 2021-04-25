@@ -15,6 +15,7 @@ import {PODLITE_CSS} from '../utils/export-html'
 // import '@podlite/editor-react/lib/index.css'
 import './App.css';
 import './Editor.scss'
+import ReactDOM from 'react-dom';
 import { htmlToPdfBuffer } from '../utils/export-pdf';
 
 const preparePDF = async (text:string, filePath:string) => {
