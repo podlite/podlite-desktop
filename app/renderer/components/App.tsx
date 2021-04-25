@@ -18,6 +18,8 @@ import './Editor.scss'
 import ReactDOM from 'react-dom';
 import { htmlToPdfBuffer } from '../utils/export-pdf';
 
+declare var vmd: any;
+
 const preparePDF = async (text:string, filePath:string) => {
     const html = await prepareHTML(text, filePath)
     const pdfBuf = await htmlToPdfBuffer(html,{pdfOptions:{
