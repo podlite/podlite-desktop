@@ -198,12 +198,22 @@ const App = ()=>{
         vmd.on('file', handlerContent)
     })
 
-const App = ()=><Editor
-    isDarkTheme={false}
-    content={content}
-    onChangeSource={()=>{}}
-    sourceType={'pod6'}
-    onConvertSource={onConvertSource}
-    onSavePressed={()=>{}}
+    const onConvertSourceComponent = ( text:string) => { 
+        return onConvertSource(text,filePath ) 
+    }
+
+    return <Editor 
+    isLineNumbers= {true}
+    isControlled = {true}
+    isPreviewModeEnabled = {isPreviewMode}
+    content={text}  
+    onChangeSource = { (content:string)=>{
+        updateText(content)
+        setTextChanged(true)
+    } }
+    onConvertSource = { onConvertSourceComponent }
+    /> 
 />
+    /> 
+}
 export default App;
