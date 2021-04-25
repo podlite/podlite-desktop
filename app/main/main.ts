@@ -1,6 +1,7 @@
 import { App } from './app'
 import update from './update'
 import log from 'electron-log'
+import { protocol } from 'electron'
 
 const fs = require('fs')
 const { BrowserWindow, app,  ipcMain, dialog } = require('electron')
