@@ -142,6 +142,11 @@ const prepareHTML = (text:string, filePath:string):Promise<string> => {
     })
 }
 
+    useEffect(()=>{
+        const fileName = filePath ? vmd.path.parse(filePath)['name'] : filePath
+        vmd.setWindowTitle(`${fileName}${isTextChanged ? ' *' : '' }`)
+      },[isTextChanged, filePath])
+    
     useEffect(() => {
         const handlerFileSaved = (_, { filePath }) => {
             setTextChanged(false)
