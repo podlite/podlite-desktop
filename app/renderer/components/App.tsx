@@ -2,19 +2,20 @@ import * as React from 'react'
 import Editor from './EditorNG'
 import './App.css';
 import './Editor.scss'
-import { useMemo } from 'react';
-import toAny  from 'pod6/built/exportAny'
-import { parse } from 'pod6';
-// import {AstToReact} from './ast-to-react'
+import { htmlToPdfBuffer } from '../utils/export-pdf';
 
-const content = `
-=begin Dia
-graph LR
-A --- B
-B-->C[fa:fa-ban forbidden]
-B-->D(fa:fa-spinner);
-=end Dia
-test
+const preparePDF = async (text:string, filePath:string) => {
+    const html = await prepareHTML(text, filePath)
+    const pdfBuf = await htmlToPdfBuffer(html,{pdfOptions:{
+        landscape: false,
+        pageSize: "A4",
+        printBackground: true,
+        printSelectionOnly: false,
+        marginsType: 0,
+    }})
+    return pdfBuf
+}
+
 
 =begin Dia
 graph LR
