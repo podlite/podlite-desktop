@@ -110,15 +110,15 @@ app.on('ready', async () => {
 		await installExtensions();
 	//   }
 
-  setMainMenu(mainApp)
-  mainApp.run()
-if (initOpenFileQueue.length) {
-    initOpenFileQueue.forEach( (file) => mainApp.createWindow( {id:0,filePath: file}, true ) )
-  } else {
+    setMainMenu(mainApp)
+    mainApp.run()
+    if (initOpenFileQueue.length) {
+        initOpenFileQueue.forEach( (file) => mainApp.createWindow( {id:0,filePath: file}, true ) )
+    } else {
 
-   console.log('openFileDialog(undefined, true)')
-  //  openFileInReader(undefined, undefined, true)
-   // openFileDialog(undefined, true)
-  }
-  update();
+       console.log('openFileDialog(undefined, true)')
+        //  openFileInReader(undefined, undefined, true)
+        // openFileDialog(undefined, true)
+    }
+    update();
 })
