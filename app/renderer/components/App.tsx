@@ -20,6 +20,17 @@ import { htmlToPdfBuffer } from '../utils/export-pdf';
 
 declare var vmd: any;
 
+    const getPathToOpen = ( filepath, parentDocPath ) => {
+        const isRemoteReg = new RegExp(/^(https?|ftp):/)
+        const isRemote =  isRemoteReg.test(filepath)
+        if (isRemote) {
+        return { isRemote, path:filepath }
+        }
+        const path = require('path')
+        const docDirPath = path.dirname(parentDocPath)
+        return {isRemote, path:  path.isAbsolute(filepath) ? `file://${filepath}`: 'file:///'+ path.normalize( path.join(docDirPath,filepath) )}
+    }
+
     // wrap all elements and add line link info
     const wrapFunction = (node: Node, children) => {
         if (typeof node !== 'string' && 'type' in node && 'location' in node) {
