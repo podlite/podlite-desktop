@@ -110,6 +110,11 @@ app.on('ready', async () => {
 		await installExtensions();
 	//   }
 
+    protocol.registerFileProtocol('file', (request, callback) => {
+        const pathname = decodeURI(request.url.replace('file:///', ''));
+        callback(pathname);
+      });
+
     setMainMenu(mainApp)
     mainApp.run()
     if (initOpenFileQueue.length) {
