@@ -1,5 +1,18 @@
 import * as React from 'react'
-import Editor from './EditorNG'
+import Editor, {ConverterResult} from '@podlite/editor-react'
+import { setFn } from 'pod6/built/helpers/handlers'
+import { podlite as podlite_core } from "podlite";
+import { plugin as DiagramPlugin } from '@podlite/diagram'
+import Podlite from '@podlite/to-jsx'
+import Mousetrap from 'mousetrap'
+; // global-bind must be import after Mousetrap
+import 'mousetrap-global-bind';
+const { ipcRenderer, remote } = window.require('electron');
+import { useEffect, useState } from 'react';
+import { Rules } from '@podlite/schema';
+
+import {PODLITE_CSS} from '../utils/export-html'
+// import '@podlite/editor-react/lib/index.css'
 import './App.css';
 import './Editor.scss'
 import { htmlToPdfBuffer } from '../utils/export-pdf';
