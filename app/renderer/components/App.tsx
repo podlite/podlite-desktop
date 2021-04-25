@@ -16,22 +16,41 @@ const preparePDF = async (text:string, filePath:string) => {
     return pdfBuf
 }
 
+    // hot keys
+     useEffect( () => {
+    const saveFileAction  =  () => {
+        if (isTextChanged)  {
+            console.warn("Save File")
+            vmd.saveFile({content:text, filePath})
+        }
+    }
 
-=begin Dia
-graph LR
-A --- B
-B-->C[fa:fa-ban forbidden]
-B-->D(fa:fa-spinner);
-=end Dia
+    const togglePreviewMode  =  (e) => {
+        e.preventDefault()
+        setPreviewMode(!isPreviewMode)
+      }
+
+    Mousetrap.bindGlobal(['command+/'], togglePreviewMode )
+    Mousetrap.bindGlobal(['ctrl+s', 'command+s'], saveFileAction)
+    return () => {
+      Mousetrap.unbind(['ctrl+s', 'command+s'])
+       Mousetrap.unbind(['command+/'])
+    }
+  
+  })
 
 `
 
 
-const onConvertSource = (src) => {
-    return src
-// console.log(src)
-// return AstToReact(src)
-}
+  // desktop section - start
+    useEffect(() => {
+        const handlerContent = (_, {content, filePath }) => { 
+                setFilePath(filePath)
+                updateText(content)                                         
+        }
+        vmd.on('file', handlerContent)
+    })
+
 const App = ()=><Editor
     isDarkTheme={false}
     content={content}
