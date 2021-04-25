@@ -142,6 +142,15 @@ const prepareHTML = (text:string, filePath:string):Promise<string> => {
     })
 }
 
+    useEffect(() => {
+        const handlerFileSaved = (_, { filePath }) => {
+            setTextChanged(false)
+            setFilePath(filePath)
+        }
+        vmd.on('file-saved', handlerFileSaved)
+        return function cleanup() { vmd.off('file-saved', handlerFileSaved ) }
+    })
+
     // hot keys
      useEffect( () => {
     const saveFileAction  =  () => {
