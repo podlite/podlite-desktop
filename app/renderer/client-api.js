@@ -16,7 +16,6 @@ vmd = Object.assign({
   fs:require('fs'),
   path: require('path'),
   saveFile(content) {
-    console.log('save file')
     electron.ipc.send('save-file', content);
   },
 
