@@ -20,6 +20,37 @@ import { htmlToPdfBuffer } from '../utils/export-pdf';
 
 declare var vmd: any;
 
+
+export const onConvertSource = (text:string, filePath:string, skipLineNumbers:boolean = false):ConverterResult=>{
+        
+    let podlite = podlite_core({ importPlugins: true }).use({
+        Diagram: DiagramPlugin,
+        "image": { 'toAst' : (writer) => (node) => {
+                console.warn(JSON.stringify(node, null,2))
+                return node
+        }
+        }
+
+      });
+    const plugins = (makeComponent):Partial<Rules> => { 
+        
+        const mkComponent = (src) => ( writer, processor )=>( node, ctx, interator )=>{
+            // check if node.content defined
+            return makeComponent(src, node, 'content' in node ? interator(node.content, { ...ctx}) : [] )
+        }
+        return {
+        ':image': setFn(( node, ctx ) => {
+            const {path} = getPathToOpen(node.src, filePath)
+            return mkComponent(({ children, key })=><img key={key} src={path} alt={node.alt}/>)
+        }),
+    }}
+      let tree = podlite.parse(text);
+      const asAst = podlite.toAstResult(tree);
+    //@ts-ignore
+    return { result : <Podlite plugins={plugins} wrapElement={skipLineNumbers ? wrapFunctionNoLines : wrapFunction} tree={asAst} />, errors:asAst.errors }
+
+}
+   
 const preparePDF = async (text:string, filePath:string) => {
     const html = await prepareHTML(text, filePath)
     const pdfBuf = await htmlToPdfBuffer(html,{pdfOptions:{
