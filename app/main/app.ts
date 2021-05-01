@@ -69,27 +69,16 @@ export class App extends EventEmitter {
         await this.store('app.json', this.windowsPull.getState())
     }
 
-    load(name): Promise<{ windows: Array<any>}> {
-        return new Promise(resolve => {
-          console.log({'this.storePath':this.storePath}) //
-          if (!this.storePath) return resolve(null)
-          const statePath = this.pathForKey(name)
-          console.log({statePath}) //
-          fs.readFile(statePath, 'utf8', (error, stateString) => {
-            if (error && error.code !== 'ENOENT') {
-              console.warn(`Error reading state file: ${statePath}`, error.stack, error)
-            }
-    
-            if (!stateString) return resolve(null)
-    
+    async load(name): Promise<{ windows: Array<WindowConfig>}> {
+            const statePath = this.pathForKey(name)
             try {
-              resolve(JSON.parse(stateString))
-            } catch (error) {
-              console.warn(`Error parsing state file: ${statePath}`, error.stack, error)
-              resolve(null)
+            const data = fs.readFileSync(statePath, 'utf8').toString()
+            console.log({state:data})
+            return JSON.parse(data)
+            } catch (e) {
+                console.warn(console.warn(`Error reading state file: ${statePath}`, e.stack, e))
+                return null
             }
-          })
-        })
     }
 
     openFileDialog( win:BrowserWindow ) {
