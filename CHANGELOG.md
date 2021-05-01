@@ -1,5 +1,14 @@
 # upcoming
 
+# 0.1.0
+- save windows state between app restarts
+- open external url in browser
+- update export to html
+- add export to pdf
+- fix show assets from disk
+- add =Diagram component
+- switch to using shared podlite library
+- refactor main app
 - fix macos and windows distributions
 - use flexible application windows size
 
