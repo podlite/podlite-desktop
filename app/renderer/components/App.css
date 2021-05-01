@@ -296,17 +296,7 @@ div.video video{
   width: 50%;
   margin: 0 auto;
   height: 100%;
-  overflow-y: initial;
-}
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
   }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
 /* scrollbars */
 
 .CodeMirror-vscrollbar {
