@@ -2,7 +2,7 @@
 /.cache
 /coverage
 *.map
-/release
+/release*
 /build
 
 # dependencies
