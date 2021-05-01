@@ -110,18 +110,22 @@ const prepareHTML = (text:string, filePath:string):Promise<string> => {
             opacity: 0.3;
             color: gray;
             text-align: right;
-          }
-          footer  a:link {
+        }
+        
+        footer  a:link {
             color: gray;
-          }
+        }
           
-          @media print {
+        @media print {
+            body {
+                font-size: 20px;
+            }
             footer {
               position: fixed;
               bottom: 0px;
               right:0;
             }
-          }
+        }
 
         </style>
         </head>
