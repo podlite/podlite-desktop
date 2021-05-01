@@ -175,26 +175,26 @@ const App = ()=>{
 
     // hot keys
      useEffect( () => {
-    const saveFileAction  =  () => {
-        if (isTextChanged)  {
-            console.warn("Save File")
-            vmd.saveFile({content:text, filePath})
+        const saveFileAction  =  () => {
+            if (isTextChanged)  {
+                console.warn("Save File")
+                vmd.saveFile({content:text, filePath})
+            }
         }
-    }
 
-    const togglePreviewMode  =  (e) => {
-        e.preventDefault()
-        setPreviewMode(!isPreviewMode)
-      }
+        const togglePreviewMode  =  (e) => {
+            e.preventDefault()
+            setPreviewMode(!isPreviewMode)
+        }
 
-    Mousetrap.bindGlobal(['command+/'], togglePreviewMode )
-    Mousetrap.bindGlobal(['ctrl+s', 'command+s'], saveFileAction)
-    return () => {
-      Mousetrap.unbind(['ctrl+s', 'command+s'])
-       Mousetrap.unbind(['command+/'])
-    }
+        Mousetrap.bindGlobal(['command+/'], togglePreviewMode )
+        Mousetrap.bindGlobal(['ctrl+s', 'command+s'], saveFileAction)
+        return () => {
+        Mousetrap.unbind(['ctrl+s', 'command+s'])
+        Mousetrap.unbind(['command+/'])
+        }
   
-  })
+    })
 
 `
 
