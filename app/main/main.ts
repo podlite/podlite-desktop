@@ -105,11 +105,11 @@ const installExtensions = async () => {
   };
 app.on('ready', async () => {
     console.log({'process.env.NODE_ENV': process.env.NODE_ENV})
-    // if (process.env.NODE_ENV === 'development') {
+    if (process.env.NODE_ENV === 'development') {
 		// Install Dev Extensions
 		console.log('installExtensions')
 		await installExtensions();
-	//   }
+	  }
 
     protocol.registerFileProtocol('file', (request, callback) => {
         const pathname = decodeURI(request.url.replace('file:///', ''));
