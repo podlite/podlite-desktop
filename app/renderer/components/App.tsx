@@ -65,7 +65,12 @@ export const onConvertSource = (text:string, filePath:string, skipLineNumbers:bo
         return {
         ':image': setFn(( node, ctx ) => {
             const {path} = getPathToOpen(node.src, filePath)
-            return mkComponent(({ children, key })=><img key={key} src={path} alt={node.alt}/>)
+            const filePathToOpen = path
+            if ( filePathToOpen.match(/mp4$/) ) {
+                return mkComponent(({ children, key })=><div className="video shadow"> <video controls> <source src={filePathToOpen} type="video/mp4" /> </video></div>)
+              } else {
+                return mkComponent(({ children, key })=><img key={key} src={path} alt={node.alt}/>)
+              }
         }),
     }}
       let tree = podlite.parse(text);
