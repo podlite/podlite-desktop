@@ -39,7 +39,7 @@ export class App extends EventEmitter {
     store(name, object) {
         return new Promise((resolve, reject) => {
           fs.writeFile(this.pathForKey(name), JSON.stringify(object), 'utf8', error =>
-            error ? reject(error) : resolve()
+            error ? reject(error) : resolve(0)
           )
         })
       }
