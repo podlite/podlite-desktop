@@ -37,7 +37,7 @@ export class App extends EventEmitter {
         console.log("Save state before close")
         await this.store('app.json', this.windowsPull.getState())
     }
-    
+
     pathForKey(key) { return path.join(this.storePath, key) }
     
     store(name, object) {
