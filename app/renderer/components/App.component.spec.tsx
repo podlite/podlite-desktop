@@ -24,3 +24,44 @@ sdsd
     `<img src="file:////tmp/test.jpg">`
   );
 });
+
+it("accepts =alias", () => {
+  render(
+    onConvertSource(
+      `
+  =alias img test.jpg1
+  =para
+  test A<img>
+  `,
+      "/tmp/test.pod6"
+    ).result
+  );
+  expect(root.innerHTML).toMatchInlineSnapshot(`
+    <div class="line-src"
+         data-line="2"
+         id="line-2"
+    >
+      <p>
+        =alias img test.jpg1
+      </p>
+    </div>
+    <div class="line-src"
+         data-line="3"
+         id="line-3"
+    >
+      <div>
+        <div class="line-src"
+             data-line="3"
+             id="line-3"
+        >
+          <p>
+            test
+            <code>
+              A&lt;img&gt;
+            </code>
+          </p>
+        </div>
+      </div>
+    </div>
+  `);
+});
