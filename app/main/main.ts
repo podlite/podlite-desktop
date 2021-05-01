@@ -128,3 +128,10 @@ app.on('ready', async () => {
     }
     update();
 })
+
+
+app.once('before-quit', async () => {
+    if (mainApp) {
+      await mainApp.stop()
+    }
+})

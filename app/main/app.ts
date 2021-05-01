@@ -33,7 +33,12 @@ export class App extends EventEmitter {
           }
           await this.store('app.json', this.windowsPull.getState())
     }
-
+    // call when app is closing
+    async stop () {
+        console.log("Save state before close")
+        await this.store('app.json', this.windowsPull.getState())
+    }
+    
     pathForKey(key) { return path.join(this.storePath, key) }
     
     store(name, object) {
