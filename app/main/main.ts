@@ -1,7 +1,7 @@
 import { App } from './app'
 import update from './update'
 import log from 'electron-log'
-import { protocol } from 'electron'
+import { protocol, shell } from 'electron'
 
 const fs = require('fs')
 const { BrowserWindow, app,  ipcMain, dialog } = require('electron')
@@ -129,6 +129,18 @@ app.on('ready', async () => {
     update();
 })
 
+app.on('web-contents-created', (event, contents) => {
+    const handlerOpenUrl = async (event, urlToOpen) => {
+        // Prevent links or window.open from opening new windows
+        event.preventDefault()
+        const protocol = (new URL(urlToOpen)).protocol
+        if (protocol === 'http:' || protocol === 'https:') {
+          await shell.openExternal(urlToOpen)
+        }
+    }
+    contents.on('new-window', handlerOpenUrl)
+    contents.on('will-navigate',handlerOpenUrl )
+})
 
 app.once('before-quit', async () => {
     if (mainApp) {
