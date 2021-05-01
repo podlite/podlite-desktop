@@ -134,14 +134,21 @@ export class App extends EventEmitter {
   }
 }
 
-
 export class WindowsPull  {
-    private windows: Array<any>
+    private windows: Array<Window>
     constructor(){
       this.windows = []
     }
-    getState(): any {
-        return { windows: this.all().map(item =>{ return { id: item.id, filePath:item.filePath} }) || []}
+
+    getState(): {windows:Array<WindowConfig>} {
+        return { windows: this.all().map(item =>{ return { 
+            id: item.id,
+            filePath:item.filePath,
+            bounds:item.browserWindow.getBounds(),
+            isMaximized: item.browserWindow.isMaximized(),
+            isFullScreen: item.browserWindow.isFullScreen(),
+
+        } }) || []}
     }
     remove (win) {
         const currentIndex = this.windows.indexOf(win)

@@ -1,7 +1,7 @@
 'use strict'
 
 import { EventEmitter } from "events"
-import { BrowserWindow } from 'electron'
+import { BrowserWindow, Rectangle } from 'electron'
 import * as fs from 'fs'
 import * as path from 'path'
 
@@ -13,6 +13,9 @@ export interface WindowConfig {
   filePath? : string,
   id: number,
   type?: 'open'|'importMarkdown'
+  bounds?: Rectangle,
+  isMaximized?: boolean,
+  isFullScreen?:boolean,
 }
 export class Window extends EventEmitter {
     public browserWindow:BrowserWindow 
@@ -34,11 +37,21 @@ export class Window extends EventEmitter {
           webSecurity: false,
           enableRemoteModule: true
         },
+        x: options.bounds?.x,
+        y: options.bounds?.y,
+        height: options.bounds?.height,
+        width: options.bounds?.width,
         minHeight: 600,
         minWidth: 800,
-        title: windowTitle
-
+        title: windowTitle,
       })
+
+      if (options.isMaximized) {
+        this.browserWindow.maximize();
+      }
+      if (options.isFullScreen) {
+        this.browserWindow.setFullScreen(true);
+      }
       const devPath = 'http://localhost:1124/?id=' + this.id
       const prodPath = format({
       pathname: resolve('build/index.html'),
