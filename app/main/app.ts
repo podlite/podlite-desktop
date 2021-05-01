@@ -37,6 +37,7 @@ export class App extends EventEmitter {
     pathForKey(key) { return path.join(this.storePath, key) }
     
     store(name, object) {
+        console.log(`store ${name}`)
         return new Promise((resolve, reject) => {
           fs.writeFile(this.pathForKey(name), JSON.stringify(object), 'utf8', error =>
             error ? reject(error) : resolve(0)
