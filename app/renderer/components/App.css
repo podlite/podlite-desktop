@@ -30,11 +30,7 @@
 .App-link {
   color: #61dafb;
 }
-.layout {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-}
+
 .Editor {
   text-align: left;
   white-space: pre-wrap;
