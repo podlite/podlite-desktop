@@ -12,9 +12,10 @@ import { useEffect, useState } from 'react';
 import { Rules } from '@podlite/schema';
 
 import {PODLITE_CSS} from '../utils/export-html'
-// import '@podlite/editor-react/lib/index.css'
 import './App.css';
-import './Editor.scss'
+import '../../../node_modules/codemirror/lib/codemirror.css';
+import '@podlite/editor-react/lib/index.css'
+
 import ReactDOM from 'react-dom';
 import { htmlToPdfBuffer } from '../utils/export-pdf';
 
