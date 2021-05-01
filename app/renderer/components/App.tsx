@@ -197,6 +197,24 @@ const App = ()=>{
     })
 
     useEffect( () => {
+        // handle export to html
+        const exportToHtml = async (): Promise<void> => {
+            const fileName = filePath ? vmd.path.parse(filePath)['name'] : filePath
+            const { canceled, filePath:filePath1 } = await remote.dialog.showSaveDialog({
+            defaultPath: `*/${fileName}.html`,
+            buttonLabel: "Export",
+            });
+            if (!canceled && filePath1) {
+                const html = await prepareHTML(text, filePath)
+                vmd.fs.writeFileSync(filePath1, html)
+            }
+        };
+        
+        vmd.on('exportHtml', exportToHtml)
+        return () => vmd.off('exportHtml', exportToHtml )
+    })
+
+    useEffect( () => {
         // handle export to pdf
         const exportPdf = async (): Promise<void> => {
           const fileName = filePath ? vmd.path.parse(filePath)['name'] : filePath
