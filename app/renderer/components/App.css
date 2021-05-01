@@ -41,6 +41,7 @@
 [contenteditable]:focus {
   outline: 0px solid transparent;
 }
+
 .layout__panel {
   position: relative;
   width: 100%;
