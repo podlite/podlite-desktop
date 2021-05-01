@@ -28,8 +28,7 @@ export class App extends EventEmitter {
             // create window dd
               this.createWindow({id:0})
           } else {
-                tmpstate.windows.map(async (opt) => this.createWindow(opt))
-
+                tmpstate.windows.map(async (opt) => this.createWindow(opt, true))
           }
           await this.store('app.json', this.windowsPull.getState())
     }
