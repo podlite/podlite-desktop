@@ -72,23 +72,7 @@ pre {
 .title {
   margin:0em;
 }
-.left {
-  border-right: 1px dotted lightgrey;
-  white-space: pre-wrap;
-  word-break: break-word;
-  word-wrap: break-word;
-  width: 50%;
-  font-size: 15px;
-  text-align: left;
-}
 
-.right {
-  text-align: left;
-  word-break: break-word;
-  word-wrap: break-word;
-  margin : 0 1em;
-  font-size: 15px;
-}
 
 /* Start pod6 */ 
 body {
