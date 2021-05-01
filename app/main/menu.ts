@@ -81,8 +81,13 @@ const openAbout = () => {
               click(model, item, win) {
                 if (item) item.webContents.send("exportHtml");
               },
-            }
-  
+            },
+            {
+                label: menuLabel('&Pdf'),
+                click(model, item, win) {
+                  if (item) item.webContents.send("exportPdf");
+                },
+              }
           ]
           }
   
