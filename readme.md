@@ -103,6 +103,7 @@ sequenceDiagram
     Professor-->>Admin: Student is assigned
 ```
 ![Flowchart](./doc/diagram-sample3.png)
+
 [Open this example in pod6.in](https://pod6.in/#p=+%3Dhead2+UML+sequence+diagram%0A%0A%3DDiagram%0AsequenceDiagram%0A++++autonumber%0A++++Student-%3E%3EAdmin%3A+Can+I+enrol+this+semester%3F%0A++++loop+enrolmentCheck%0A++++++++Admin-%3E%3EAdmin%3A+Check+previous+results%0A++++end%0A++++Note+right+of+Admin%3A+Exam+results+may+%3Cbr%3E+be+delayed%0A++++Admin--%3E%3EStudent%3A+Enrolment+success%0A++++Admin-%3E%3EProfessor%3A+Assign+student+to+tutor%0A++++Professor--%3E%3EAdmin%3A+Student+is+assigned)
 
 
@@ -157,6 +158,7 @@ classDiagram
 ```
 
 ![Flowchart](./doc/diagram-sample5.png)
+
 [Open this example in pod6.in](https://pod6.in/#p=+%0A+%3Dhead2+Gant%0A+%0A+%3DDiagram%0A+gantt%0A+title+Example+Gantt+diagram%0A++++dateFormat++YYYY-MM-DD%0A++++section+Team+1%0A++++Research+%26+requirements+%3Adone%2C+a1%2C+2021-04-08%2C+2021-04-10%0A++++Review+%26+documentation+%3A+after+a1%2C+20d%0A++++section+Team+2%0A++++Implementation++++++%3Acrit%2C+active%2C+2021-04-25++%2C+20d%0A++++Testing++++++%3Acrit%2C+20d)
 
 
