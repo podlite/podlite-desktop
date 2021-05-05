@@ -144,7 +144,7 @@ const prepareHTML = (text:string, filePath:string):Promise<string> => {
                 </div>
             </div>
         </div>
-        <footer id="pageFooter">Made by <a href="https://github.com/zag/podlite-desktop">podlite</a></footer>
+        <footer id="pageFooter">Made in <a href="https://github.com/zag/podlite-desktop">podlite</a></footer>
         </body>
         </html>`
             resolve(html)
