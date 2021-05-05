@@ -1,6 +1,6 @@
 
  <h1 align="center">
-<img src="https://github.com/zag/podlite-desktop/raw/master/doc/podlite-desktop.png" alt="Podlite editor logo" width="530">
+<img src="https://github.com/zag/podlite-desktop/raw/master/doc/podlite-desktop.png" alt="Podlite editor logo" width="650">
 <br/> 
   Podlite
 <br/>
@@ -13,6 +13,7 @@
 ![Podlite editor Screenshot](./doc/screenshot-full-page.png)
 ![Podlite editor Screenshot](./doc/Screenshot1.png)
 ![Podlite editor Screenshot](./doc/Screenshot2.png)
+![Podlite editor Screenshot](./doc/Screenshot3.png)
 
 
 ## Get Podlite
