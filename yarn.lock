@@ -1542,50 +1542,49 @@
     "@parcel/utils" "^1.11.0"
     physical-cpu-count "^2.0.0"
 
-"@podlite/diagram@^0.0.4":
-  version "0.0.4"
-  resolved "https://registry.yarnpkg.com/@podlite/diagram/-/diagram-0.0.4.tgz#158c83d04b239573acd0a703d2b386e5c3d90544"
-  integrity sha512-fi7MKTOtX8WZ7RagScZR4Cg4q1791GUrFR81D0L0GSiYOAUWd+ADgSRZw16y2zwhRffKP39gaeZgrXWWJS3M9w==
+"@podlite/diagram@^0.0.7":
+  version "0.0.7"
+  resolved "https://registry.yarnpkg.com/@podlite/diagram/-/diagram-0.0.7.tgz#86d137d9836c3b68ffce21854a3953f29f73e198"
+  integrity sha512-kK/Oj5HZMzWsQNUCEScxMFoRl4cGGFqX6tYHRqEaIWYMKa1Z6npbXk+gdG9uwLodKw5LtvBpSYIxhOsIWD5iUQ==
   dependencies:
     "@types/node" "^14.11.2"
     jest-watch-typeahead "^0.6.1"
-    mermaid "^8.9.2"
+    mermaid "8.10.1"
     react-is "^16.12.0"
     ts-jest "^26.4.1"
 
-"@podlite/editor-react@0.0.6":
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/@podlite/editor-react/-/editor-react-0.0.6.tgz#88a5b1f615b56f19cef664ff451ba4fa1f1d06ef"
-  integrity sha512-D4EXQQL2iNhWMjDF8Xy+XKr+ap8zkKWU+zXGm/fxRTWJjakW5HGsHC84yU2wqhs2KUuM40fia/hRCaH4rKzp8w==
+"@podlite/editor-react@^0.0.11":
+  version "0.0.11"
+  resolved "https://registry.yarnpkg.com/@podlite/editor-react/-/editor-react-0.0.11.tgz#1e7a080f2637de33c1e63da12cf872059a7af91b"
+  integrity sha512-Hy3zFujAwCabTiwWcUot34iuYXjX92ZGxS6wlXFtou/No5PphUeKKivg4Vaznq7F1guh1EKvr03gr3jeRcQi6Q==
   dependencies:
-    codemirror "^5.60.0"
     mousetrap "^1.6.5"
     mousetrap-global-bind "^1.1.0"
     react-codemirror2 "^7.2.1"
 
-"@podlite/image@^0.0.4":
-  version "0.0.4"
-  resolved "https://registry.yarnpkg.com/@podlite/image/-/image-0.0.4.tgz#0a26f116d3a7c55e0bd8608ae5aaf2c13b3f9bee"
-  integrity sha512-ZgMdgEwPWGOlTLebE0dcN7f8FFWvKAt8HzbhcnGt2A4KWdK7nfIgSkDKirkgjRPt4O+oW6WT4D4ER0+/fYpajQ==
+"@podlite/image@^0.0.7":
+  version "0.0.7"
+  resolved "https://registry.yarnpkg.com/@podlite/image/-/image-0.0.7.tgz#81abe946c3de49726b869de5cb71b6fe98abad83"
+  integrity sha512-yA6ZL/FXN9c+Kn8m5TaSY2keTQJHRiL9fEPKapOiBnI09b52RMc9hfasMqa3CjOHJefnXM6517+16cwUx1u9jQ==
   dependencies:
-    "@podlite/schema" "^0.0.3"
+    "@podlite/schema" "^0.0.6"
 
-"@podlite/schema@^0.0.3":
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/@podlite/schema/-/schema-0.0.3.tgz#5e0aeba0fc00dbc331cfa70b1384110ab9e87209"
-  integrity sha512-RvIFu671vcKhnJVqYHoI00MIkgG+7l5yBUBKH3KOmJM5UapfAvgNvgZBpuuThMWoYJ85rv2IK616Dj56Ocaz4A==
+"@podlite/schema@^0.0.6":
+  version "0.0.6"
+  resolved "https://registry.yarnpkg.com/@podlite/schema/-/schema-0.0.6.tgz#1efc92f1f070975f7c87c690329dc42f91bc8db4"
+  integrity sha512-5Pm57EVBG2ovMJAELCFpke8PS4rwUvGLAkp1UQsYSWAl1w/uJ7QvwdzqzUrt7Cv0ZxY5BK6DVBKcVgm+SHZQyw==
   dependencies:
     ajv "^7.2.3"
     json-pointer "^0.6.1"
-    pod6 "0.0.38"
+    pod6 "0.0.41"
 
-"@podlite/to-jsx@0.0.4":
-  version "0.0.4"
-  resolved "https://registry.yarnpkg.com/@podlite/to-jsx/-/to-jsx-0.0.4.tgz#0aa9588588cc4616de24322f1d7c07e0094a3685"
-  integrity sha512-XJV/BKKqtvo7XaXYCt+BNbAJ8GLOgmJdqfr9bw/mz5nFS0RQ4m94E7cfPjxROHsJkIzedyGDfLHPbviYxM1bMg==
+"@podlite/to-jsx@^0.0.7":
+  version "0.0.7"
+  resolved "https://registry.yarnpkg.com/@podlite/to-jsx/-/to-jsx-0.0.7.tgz#31dfee7c373edf3e73af665f48307c33786173e3"
+  integrity sha512-hlJwwElULEQWxLh68yD2T87h8f6ofO4g2w0xBfIjXRYnfvXV9lQYM63pklUzbXPPaw7LzerkXbYXw14lc7UQ0w==
   dependencies:
-    "@podlite/diagram" "^0.0.4"
-    pod6 "0.0.38"
+    "@podlite/diagram" "^0.0.7"
+    pod6 "0.0.41"
     react-is "^17.0.2"
 
 "@sindresorhus/is@^0.14.0":
@@ -1665,22 +1664,10 @@
   dependencies:
     "@babel/types" "^7.3.0"
 
-"@types/codemirror@*":
-  version "0.0.98"
-  resolved "https://registry.yarnpkg.com/@types/codemirror/-/codemirror-0.0.98.tgz#b35c7a4ab1fc1684b08a4e3eb65240020556ebfb"
-  integrity sha512-cbty5LPayy2vNSeuUdjNA9tggG+go5vAxmnLDRWpiZI5a+RDBi9dlozy4/jW/7P/gletbBWbQREEa7A81YxstA==
-  dependencies:
-    "@types/tern" "*"
-
 "@types/debug@^4.1.5":
   version "4.1.5"
   resolved "https://registry.yarnpkg.com/@types/debug/-/debug-4.1.5.tgz#b14efa8852b7768d898906613c23f688713e02cd"
   integrity sha512-Q1y515GcOdTHgagaVFhHnIFQ38ygs/kmxdNpvpou+raI9UO3YZcHDngBSYKQklcKlvA7iuQlmIKbzvmxcOE9CQ==
-
-"@types/estree@*":
-  version "0.0.45"
-  resolved "https://registry.yarnpkg.com/@types/estree/-/estree-0.0.45.tgz#e9387572998e5ecdac221950dab3e8c3b16af884"
-  integrity sha512-jnqIUKDUqJbDIUxm0Uj7bnlMnRm1T/eZ9N+AVMqhPgzrba2GhGG5o/jCTwmdPK709nEZsGoMzXEDUjcXHa3W0g==
 
 "@types/fs-extra@^9.0.1":
   version "9.0.2"
@@ -1770,14 +1757,6 @@
   resolved "https://registry.yarnpkg.com/@types/q/-/q-1.5.4.tgz#15925414e0ad2cd765bfef58842f7e26a7accb24"
   integrity sha512-1HcDas8SEj4z1Wc696tH56G8OlRaH/sqZOynNNB+HF0WOeXPaxTtbYzJY2oEfiUxjSKjhCKr+MvR7dCHcEelug==
 
-"@types/react-codemirror@^1.0.3":
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/@types/react-codemirror/-/react-codemirror-1.0.3.tgz#5b0e4d5529a6bc934e992c49f3d1fa77daacc59b"
-  integrity sha512-EAyys2Wpys7bJatgnfpXXs4Gi1Vktj23mNngG4Ex2Q0W6eVgfkP4GP7qHyDVU2wbW3T0K7Jqatf2dCob25ptMw==
-  dependencies:
-    "@types/codemirror" "*"
-    "@types/react" "*"
-
 "@types/react-dom@^16.8.4":
   version "16.9.8"
   resolved "https://registry.yarnpkg.com/@types/react-dom/-/react-dom-16.9.8.tgz#fe4c1e11dfc67155733dfa6aa65108b4971cb423"
@@ -1807,13 +1786,6 @@
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/@types/stack-utils/-/stack-utils-2.0.0.tgz#7036640b4e21cc2f259ae826ce843d277dad8cff"
   integrity sha512-RJJrrySY7A8havqpGObOB4W92QXKJo63/jFLLgpvOtsGUqbQZ9Sbgl35KMm1DjC6j7AvmmU2bIno+3IyEaemaw==
-
-"@types/tern@*":
-  version "0.23.3"
-  resolved "https://registry.yarnpkg.com/@types/tern/-/tern-0.23.3.tgz#4b54538f04a88c9ff79de1f6f94f575a7f339460"
-  integrity sha512-imDtS4TAoTcXk0g7u4kkWqedB3E4qpjXzCpD2LU5M5NAXHzCDsypyvXSaG7mM8DKYkCRa7tFp4tS/lp/Wo7Q3w==
-  dependencies:
-    "@types/estree" "*"
 
 "@types/unist@^2.0.0", "@types/unist@^2.0.2":
   version "2.0.3"
@@ -2989,11 +2961,6 @@ class-utils@^0.3.5:
     isobject "^3.0.0"
     static-extend "^0.1.1"
 
-classnames@^2.2.5:
-  version "2.2.6"
-  resolved "https://registry.yarnpkg.com/classnames/-/classnames-2.2.6.tgz#43935bffdd291f326dad0a205309b38d00f650ce"
-  integrity sha512-JR/iSQOSt+LQIWwrwEzJ9uk0xfN3mTVYMwt1Ir5mUcSN6pU+V4zQFFaJsclJbPuAUQH+yfWef6tm7l1quW3C8Q==
-
 clean-css@^4.1.6, clean-css@^4.2.1:
   version "4.2.3"
   resolved "https://registry.yarnpkg.com/clean-css/-/clean-css-4.2.3.tgz#507b5de7d97b48ee53d84adb0160ff6216380f78"
@@ -3081,16 +3048,6 @@ code-point-at@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/code-point-at/-/code-point-at-1.1.0.tgz#0d070b4d043a5bea33a2f1a40e2edb3d9a4ccf77"
   integrity sha1-DQcLTQQ6W+ozovGkDi7bPZpMz3c=
-
-codemirror@^5.18.2:
-  version "5.58.2"
-  resolved "https://registry.yarnpkg.com/codemirror/-/codemirror-5.58.2.tgz#ed54a1796de1498688bea1cdd4e9eeb187565d1b"
-  integrity sha512-K/hOh24cCwRutd1Mk3uLtjWzNISOkm4fvXiMO7LucCrqbh6aJDdtqUziim3MZUI6wOY0rvY1SlL1Ork01uMy6w==
-
-codemirror@^5.60.0:
-  version "5.61.0"
-  resolved "https://registry.yarnpkg.com/codemirror/-/codemirror-5.61.0.tgz#318e5b034a707207948b92ffc2862195e8fdb08e"
-  integrity sha512-D3wYH90tYY1BsKlUe0oNj2JAhQ9TepkD51auk3N7q+4uz7A/cgJ5JsWHreT0PqieW1QhOuqxQ2reCXV1YXzecg==
 
 collapse-white-space@^1.0.2:
   version "1.0.6"
@@ -3346,14 +3303,6 @@ create-hmac@^1.1.0, create-hmac@^1.1.4, create-hmac@^1.1.7:
     ripemd160 "^2.0.0"
     safe-buffer "^5.0.1"
     sha.js "^2.4.8"
-
-create-react-class@^15.5.1:
-  version "15.7.0"
-  resolved "https://registry.yarnpkg.com/create-react-class/-/create-react-class-15.7.0.tgz#7499d7ca2e69bb51d13faf59bd04f0c65a1d6c1e"
-  integrity sha512-QZv4sFWG9S5RUvkTYWbflxeZX+JG7Cz0Tn33rQBJ+WFQTqTfUTjMjiv9tnfXazjsO5r0KhPs+AqCjyrQX6h2ng==
-  dependencies:
-    loose-envify "^1.3.1"
-    object-assign "^4.1.1"
 
 cross-spawn@^5.0.1:
   version "5.1.0"
@@ -6907,11 +6856,6 @@ lodash.clone@^4.5.0:
   resolved "https://registry.yarnpkg.com/lodash.clone/-/lodash.clone-4.5.0.tgz#195870450f5a13192478df4bc3d23d2dea1907b6"
   integrity sha1-GVhwRQ9aExkkeN9Lw9I9LeoZB7Y=
 
-lodash.debounce@^4.0.8:
-  version "4.0.8"
-  resolved "https://registry.yarnpkg.com/lodash.debounce/-/lodash.debounce-4.0.8.tgz#82d79bff30a67c4005ffd5e2515300ad9ca4d7af"
-  integrity sha1-gteb/zCmfEAF/9XiUVMArZyk168=
-
 lodash.isequal@^4.5.0:
   version "4.5.0"
   resolved "https://registry.yarnpkg.com/lodash.isequal/-/lodash.isequal-4.5.0.tgz#415c4478f2bcc30120c22ce10ed3226f7d3e18e0"
@@ -7112,6 +7056,23 @@ merge2@^1.2.3:
   version "1.4.1"
   resolved "https://registry.yarnpkg.com/merge2/-/merge2-1.4.1.tgz#4368892f885e907455a6fd7dc55c0c9d404990ae"
   integrity sha512-8q7VEgMJW4J8tcfVPy8g09NcQwZdbwFEqhe/WZkoIzjn/3TGDwtOCYtXGxA3O8tPzpczCCDgv+P2P5y00ZJOOg==
+
+mermaid@8.10.1:
+  version "8.10.1"
+  resolved "https://registry.yarnpkg.com/mermaid/-/mermaid-8.10.1.tgz#9573f702024e2173f4aa07d9b207d750507cf838"
+  integrity sha512-KxwKEJDKy303TQdz5TQMFb/4u+gUL21CefUMGOfuigDh9powcYaNmuJ5BkHmO0jB3Y1z2zlsuKvHZ2CusWH5+A==
+  dependencies:
+    "@braintree/sanitize-url" "^3.1.0"
+    d3 "^5.7.0"
+    dagre "^0.8.4"
+    dagre-d3 "^0.6.4"
+    entity-decode "^2.0.2"
+    graphlib "^2.1.7"
+    he "^1.2.0"
+    khroma "^1.1.0"
+    minify "^4.1.1"
+    moment-mini "^2.22.1"
+    stylis "^3.5.2"
 
 mermaid@^8.9.2:
   version "8.9.2"
@@ -8073,20 +8034,20 @@ pn@^1.1.0:
   resolved "https://registry.yarnpkg.com/pn/-/pn-1.1.0.tgz#e2f4cef0e219f463c179ab37463e4e1ecdccbafb"
   integrity sha512-2qHaIQr2VLRFoxe2nASzsV6ef4yOOH+Fi9FBOVH6cqeSgUnoyySPZkxzLuzd+RYOQTRpROA0ztTMqxROKSb/nA==
 
-pod6@0.0.38:
-  version "0.0.38"
-  resolved "https://registry.yarnpkg.com/pod6/-/pod6-0.0.38.tgz#85a803a69066e4ce71493d98f73746d6277e7153"
-  integrity sha512-Li0Fhyj++mazJLVt+yuWajljicWsKxaasKtLEEVggeV9DdAOgzbOQOOFaeFL2iKMmdK56eM8ookVVCN57tMEdQ==
+pod6@0.0.41, pod6@^0.0.41:
+  version "0.0.41"
+  resolved "https://registry.yarnpkg.com/pod6/-/pod6-0.0.41.tgz#794a85911c38ccd01140cb96bb09b5d3f9afd41a"
+  integrity sha512-5eB8RpU0YTW/IrNt2AC+yTbHVzz4twkiPiFgfNTyaljPxwRj1z4IijdMKh/85je1s4w2psnfVuASDigeNqISMQ==
 
-podlite@0.0.8:
-  version "0.0.8"
-  resolved "https://registry.yarnpkg.com/podlite/-/podlite-0.0.8.tgz#05650d41852b1985e165b5dff2323a64e526840e"
-  integrity sha512-nXJVIt0cXSQCi7rgCsZy/jemR8pavUrPhik8Tdez0Id/eg1POqQHnJhLdLIoZUpUFhQ3bFY+44XPlSQeftRSPw==
+podlite@^0.0.11:
+  version "0.0.11"
+  resolved "https://registry.yarnpkg.com/podlite/-/podlite-0.0.11.tgz#ffe9af5f37c6d7dbec0868ac1bebc3c3da2e29ec"
+  integrity sha512-PBlHdW2yX5k06kqkfqg2RbQ23CIt/BAIeqAI/BBAaHzePpjZHo8OMK5Nk0rj381CIwIVjK+w5ysTNSxA3vQoXA==
   dependencies:
-    "@podlite/diagram" "^0.0.4"
-    "@podlite/image" "^0.0.4"
-    "@podlite/schema" "^0.0.3"
-    pod6 "0.0.38"
+    "@podlite/diagram" "^0.0.7"
+    "@podlite/image" "^0.0.7"
+    "@podlite/schema" "^0.0.6"
+    pod6 "0.0.41"
     remark-parse "8.0.3"
     unified "9.2.0"
 
@@ -8561,7 +8522,7 @@ prompts@^2.0.1:
     kleur "^3.0.3"
     sisteransi "^1.0.5"
 
-prop-types@^15.5.4, prop-types@^15.6.2:
+prop-types@^15.6.2:
   version "15.7.2"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.7.2.tgz#52c41e75b8c87e72b9d9360e0206b99dcbffa6c5"
   integrity sha512-8QQikdH7//R2vurIJSutZ1smHYTcLpRWEOlHnzcWHmBYrOGUysKwSsrC89BCiFj3CbrfJ/nXFdJepOVrY1GCHQ==
@@ -8705,18 +8666,6 @@ react-codemirror2@^7.2.1:
   version "7.2.1"
   resolved "https://registry.yarnpkg.com/react-codemirror2/-/react-codemirror2-7.2.1.tgz#38dab492fcbe5fb8ebf5630e5bb7922db8d3a10c"
   integrity sha512-t7YFmz1AXdlImgHXA9Ja0T6AWuopilub24jRaQdPVbzUJVNKIYuy3uCFZYa7CE5S3UW6SrSa5nAqVQvtzRF9gw==
-
-react-codemirror@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/react-codemirror/-/react-codemirror-1.0.0.tgz#91467b53b1f5d80d916a2fd0b4c7adb85a9001ba"
-  integrity sha1-kUZ7U7H12A2Rai/QtMetuFqQAbo=
-  dependencies:
-    classnames "^2.2.5"
-    codemirror "^5.18.2"
-    create-react-class "^15.5.1"
-    lodash.debounce "^4.0.8"
-    lodash.isequal "^4.5.0"
-    prop-types "^15.5.4"
 
 react-dom@^16.12.0:
   version "16.14.0"
