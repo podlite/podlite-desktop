@@ -14,6 +14,7 @@ import { Rules } from '@podlite/schema';
 import {PODLITE_CSS} from '../utils/export-html'
 import './App.css';
 import '../../../node_modules/codemirror/lib/codemirror.css';
+import 'codemirror/addon/hint/show-hint';
 import '@podlite/editor-react/lib/index.css'
 
 import ReactDOM from 'react-dom';
