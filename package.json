@@ -70,7 +70,8 @@
       ],
       "category": "public.app-category.productivity",
       "hardenedRuntime": true,
-      "entitlements": "./node_modules/electron-builder-notarize/entitlements.mac.inherit.plist"
+      "entitlements": "./node_modules/electron-builder-notarize/entitlements.mac.inherit.plist",
+      "provisioningProfile": "build/embedded.provisionprofile"
     },
     "dmg": {
       "icon": "dist-assets/dmg-icon.icns",
@@ -187,6 +188,7 @@
     "@types/react-dom": "^16.8.4",
     "babel-core": "^7.0.0-bridge.0",
     "babel-jest": "^24.8.0",
+    "codemirror": "5.x",
     "electron": "10.1.5",
     "electron-builder": "22.9.1",
     "electron-builder-notarize": "^1.2.0",
