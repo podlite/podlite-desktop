@@ -182,7 +182,7 @@ In order to keep the match between this documentation and the last release, plea
 
 ## AUTHOR
 
-Copyright (c) 2020 Aliaksandr Zahatski
+Copyright (c) 2020 - 2021 Alexandr Zahatski
 
 
 ## License
