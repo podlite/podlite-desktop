@@ -195,7 +195,7 @@
     "fs-extra": "^8.1.0",
     "jest": "26.6.3",
     "jest-serializer-html": "^7.0.0",
-    "mermaid": "^8.9.2",
+    "mermaid": "^8.13.8",
     "mousetrap": "^1.6.0",
     "nodemon": "^1.19.1",
     "npm-run-all": "^4.1.5",
