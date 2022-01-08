@@ -10,7 +10,7 @@ const isDev = require('electron-is-dev')
 
 export interface WindowConfig {
   filePath? : string,
-  id: number,
+  id?: number,
   type?: 'open'|'importMarkdown'
   bounds?: Rectangle,
   isMaximized?: boolean,

@@ -104,7 +104,7 @@ export class App extends EventEmitter {
             if (!Array.isArray(filePaths) || !filePaths.length) {
               return;
             } //
-            this.createWindow({id:0, filePath: filePaths[0]}).then();
+            this.createWindow({filePath: filePaths[0]}).then();
           });
     }
 
