@@ -185,15 +185,18 @@ const App = ()=>{
         }
 
         const togglePreviewMode  =  (e) => {
-            e.preventDefault()
+            console.log("tooflge")
+            Object.hasOwnProperty.call(e, 'preventDefault') && e.preventDefault();
             setPreviewMode(!isPreviewMode)
         }
 
-        Mousetrap.bindGlobal(['command+/'], togglePreviewMode )
-        Mousetrap.bindGlobal(['ctrl+s', 'command+s'], saveFileAction)
+        // make menu command listener
+        vmd.on('menu-file-save', saveFileAction)
+        vmd.on('view-preview-toggle', togglePreviewMode)
+        
         return () => {
-        Mousetrap.unbind(['ctrl+s', 'command+s'])
-        Mousetrap.unbind(['command+/'])
+            vmd.off('menu-file-save', saveFileAction)
+            vmd.off('view-preview-toggle', togglePreviewMode)
         }
   
     })
