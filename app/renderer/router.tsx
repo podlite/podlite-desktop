@@ -4,6 +4,7 @@ import { HashRouter, Route, Switch } from 'react-router-dom'
 import Root from './pages/root'
 import Start from './pages/start'
 
+//@ts-ignore
 vmd.on('file', () => console.log('handlerContent2'))
 export default () => {
   return (
