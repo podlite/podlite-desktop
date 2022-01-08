@@ -53,6 +53,13 @@ const openAbout = () => {
       label: menuLabel('&File'),
       submenu: [
         {
+            label: menuLabel('&New'),
+            accelerator: 'CmdOrCtrl+N',
+            click(model, item, win) {
+              mainApp.createWindow({})
+            },
+        },
+        {
           label: menuLabel('&Open'),
           accelerator: 'CmdOrCtrl+O',
           click(model, item, win) {
