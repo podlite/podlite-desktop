@@ -1,10 +1,22 @@
 {
+  "include": ["app", "types"],
   "compilerOptions": {
-    "target": "esnext",
-    // "jsx": "preserve",
-    "sourceMap": true,
+    "target": "es2018",
     "moduleResolution": "node",
-    "allowSyntheticDefaultImports": true,
     "jsx": "react",
-  }
+    "baseUrl": "./",
+    "outDir":"./dist",
+    "strict": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": false,
+    "esModuleInterop": true,
+    "noImplicitAny": false,
+    "strictNullChecks": false,
+  },
+  "exclude": [
+    "node_modules",
+    "**/*.spec.*"
+]
 }
