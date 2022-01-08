@@ -28,7 +28,15 @@ ipcMain.on('save-file', async (event, {content, filePath}) => {
     fs.writeFileSync(saveDialogResult.filePath, content)
     win.webContents.send('file-saved', { filePath: saveDialogResult.filePath })
   }
+})
 
+// save windows in new filename
+ipcMain.on('save-file-as', async (event, {content, filePath}) => {
+    const win = BrowserWindow.fromWebContents(event.sender)
+    const saveDialogResult = await dialog.showSaveDialog(win, {title:"Save as"})
+    if (saveDialogResult.canceled) {return}
+    fs.writeFileSync(saveDialogResult.filePath, content)
+    win.webContents.send('file-saved', { filePath: saveDialogResult.filePath })
 })
 
 ipcMain.on('open-dev', (event) => {
