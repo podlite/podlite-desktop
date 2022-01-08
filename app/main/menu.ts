@@ -16,17 +16,20 @@ function menuLabel(label) {
     }
     return label
   }
-
 const openAbout = () => {
   openAboutWindow({
     icon_path: join(__dirname, 'icon.png'),
     copyright: `Copyright (c) 2020 Alexandr Zahatski, https://zahatski.com <br/><p style="text-align:center">pod6: ${version}</p>`,
-    package_json_dir: __dirname,
+    package_json_dir: join(__dirname, '..'),
+    about_page_dir: join(__dirname, '..','vendors','about-window'),
     bug_report_url: BUG_REPORT_URL,
     homepage: HOME_PAGE,
     adjust_window_size: true,
     use_inner_html: true,
     use_version_info:false,
+    win_options:{
+        webSecurity: false,
+    }
 })
 }
   export default function setMainMenu(mainApp:App)  {
@@ -51,6 +54,7 @@ const openAbout = () => {
           label: menuLabel('&Open'),
           accelerator: 'CmdOrCtrl+O',
           click(model, item, win) {
+              //@ts-ignore
             mainApp.openFileDialog(win)
           },
         },
@@ -68,6 +72,7 @@ const openAbout = () => {
           {
             label: menuLabel('&Markdown'),
             click(model, item, win) {
+              //@ts-ignore
               mainApp.openImportMakdownDialog(win)
             },
           },
@@ -107,6 +112,7 @@ const openAbout = () => {
           {
             label: menuLabel('&Open DevTools'),
             click(model, item, win) {
+            //@ts-ignore
               item.webContents.openDevTools({ mode: 'detach' })
             },
             
