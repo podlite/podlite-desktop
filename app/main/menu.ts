@@ -9,6 +9,7 @@ const join = require('path').join;
 
 const BUG_REPORT_URL = 'https://github.com/zag/podlite-desktop/issues'
 const HOME_PAGE = 'https://github.com/zag/podlite-desktop'
+const RELEASE_PAGE = 'https://github.com/zag/podlite-desktop/releases'
 
 function menuLabel(label) {
     if (process.platform === 'darwin') {
@@ -109,6 +110,12 @@ const openAbout = () => {
               shell.openExternal(HOME_PAGE);
             },
           },
+          {
+            label: 'Release notes',
+            click(): void {
+              shell.openExternal(RELEASE_PAGE);
+            },
+          },
           { type: "separator" },
           {
             label: menuLabel('&Open DevTools'),
@@ -116,8 +123,8 @@ const openAbout = () => {
             //@ts-ignore
               item.webContents.openDevTools({ mode: 'detach' })
             },
-            
           },
+
           {
             label: "Report an Issue...",
             click(): void {
