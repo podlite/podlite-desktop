@@ -1,5 +1,5 @@
 const a = ({ electronStore, electronStoreOpts } = {electronStore: '', electronStoreOpts: ''}) => {
-    const store = electronStore 
+    const store:any = electronStore
   
     return {
       get store() {

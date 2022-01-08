@@ -39,7 +39,7 @@ ipcMain.on('set-title', (event,title) => {
   const win = BrowserWindow.fromWebContents(event.sender)
   win.setTitle(title)
 })
-app.on('save-file', () => console.log('app.save-file'))
+app.on('save-file', () => console.log('app.save-file'));
 
 
 app.on('window-all-closed', () => {
