@@ -1,5 +1,14 @@
 # upcoming
 
+# 0.2.1
+- fix save menu #22
+- add "New", "Save As" menu items
+- add View menu with Preview toggle
+- add "Release notes" reference
+
+# 0.2.0
+- directive suggestions
+- pod6 snippets 🏷
 # 0.1.0
 - save windows state between app restarts
 - open external url in browser
