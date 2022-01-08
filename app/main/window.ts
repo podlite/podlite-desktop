@@ -1,11 +1,10 @@
 'use strict'
 
-import { EventEmitter } from "events"
 import { BrowserWindow, Rectangle } from 'electron'
+import { EventEmitter } from "events"
 import * as fs from 'fs'
 import * as path from 'path'
 
-const { resolve } = require('app-root-path')
 const { format } = require('url')
 const isDev = require('electron-is-dev')
 
@@ -26,13 +25,15 @@ export class Window extends EventEmitter {
     constructor( options: WindowConfig ) {
       super()
       this.id = options.id
+      //@ts-ignore
       this.filePath = options.filePath
       this.type = options.type || 'open'
       const windowTitle = options.filePath ? path.parse( options.filePath )['name'] : "[new]"
       this.browserWindow = new BrowserWindow({
         webPreferences: {
-          preload: resolve('build/client-api.js'),
+        preload: `${__dirname}/client-api.js`,
           nodeIntegration: true,
+          contextIsolation: false, // protect against prototype pollution
           spellcheck: true,
           webSecurity: false,
           enableRemoteModule: true
@@ -54,7 +55,7 @@ export class Window extends EventEmitter {
       }
       const devPath = 'http://localhost:1124/?id=' + this.id
       const prodPath = format({
-      pathname: resolve('build/index.html'),
+      pathname: `${__dirname}/index.html`,
       protocol: 'file:',
       slashes: true,
       query: {
@@ -107,6 +108,7 @@ export class Window extends EventEmitter {
         }
       }
     )
+    //@ts-ignore
     this.browserWindow.webContents.on('save-file', () => {console.log('webContents.save-file')})
 
     }
