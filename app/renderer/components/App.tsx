@@ -160,7 +160,7 @@ const App = ()=>{
 
     useEffect(()=>{
         const fileName = filePath ? vmd.path.parse(filePath)['name'] : filePath
-        vmd.setWindowTitle(`${fileName}${isTextChanged ? ' *' : '' }`)
+        vmd.setWindowTitle(`${fileName||'[new]'}${isTextChanged ? ' *' : '' }`)
       },[isTextChanged, filePath])
     
     useEffect(() => {
@@ -176,23 +176,25 @@ const App = ()=>{
      useEffect( () => {
         const saveFileAction  =  () => {
             if (isTextChanged)  {
-                console.warn("Save File")
                 vmd.saveFile({content:text, filePath})
             }
         }
-
+        const saveFileAsAction  =  () => {
+               vmd.saveFileAs({content:text})
+        }
         const togglePreviewMode  =  (e) => {
-            console.log("tooflge")
             Object.hasOwnProperty.call(e, 'preventDefault') && e.preventDefault();
             setPreviewMode(!isPreviewMode)
         }
 
-        // make menu command listener
+        // make menu command listeners
         vmd.on('menu-file-save', saveFileAction)
+        vmd.on('menu-file-save-as', saveFileAsAction)
         vmd.on('view-preview-toggle', togglePreviewMode)
         
         return () => {
             vmd.off('menu-file-save', saveFileAction)
+            vmd.off('menu-file-save-as', saveFileAsAction)
             vmd.off('view-preview-toggle', togglePreviewMode)
         }
   

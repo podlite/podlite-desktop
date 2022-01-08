@@ -18,6 +18,9 @@ vmd = Object.assign({
   saveFile(content) {
     electron.ipc.send('save-file', content);
   },
+  saveFileAs(content) {
+    electron.ipc.send('save-file-as', content);
+  },
 
   openFile(filePath) {
     electron.ipc.send('open-file', filePath);
