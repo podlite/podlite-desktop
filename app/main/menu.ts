@@ -28,6 +28,7 @@ const openAbout = () => {
     use_inner_html: true,
     use_version_info:false,
     win_options:{
+        //@ts-ignore
         webSecurity: false,
     }
 })
@@ -140,6 +141,19 @@ const openAbout = () => {
       ],
     }
 
+    const viewMenu:MenuItemConstructorOptions = {
+        label: "View",
+        submenu: [
+            {
+                label: menuLabel('&Toggle Preview'),
+                accelerator: 'CmdOrCtrl+/',
+                click(model, item, win): void {
+                console.log("sending view-preview-toggle")
+                  if (item) item.webContents.send("view-preview-toggle");
+                }
+              },
+        ],
+    }
     if (!is.macos) { 
       (helpMenu.submenu as MenuItemConstructorOptions[]).push({
         label: `About ${app.name}`,
@@ -148,7 +162,7 @@ const openAbout = () => {
     }
 
     const template:MenuItemConstructorOptions[] = [
-      ...( is.macos ? [appMenu] : []), fileMenu, editMenu, helpMenu
+      ...( is.macos ? [appMenu] : []), fileMenu, editMenu, viewMenu, helpMenu
     ]
       
 

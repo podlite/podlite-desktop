@@ -12921,7 +12921,7 @@ fsevents@~2.1.2:
   languageName: node
   linkType: hard
 
-"mousetrap@npm:^1.6.0, mousetrap@npm:^1.6.5":
+"mousetrap@npm:^1.6.5":
   version: 1.6.5
   resolution: "mousetrap@npm:1.6.5"
   checksum: 1ce36af5ac57e1fab687e3da004cc18914275f8ceef33f16d01110edc5126a5dbaace578b1e61179f93a506e71a88fe886f305db537a3673cf9f73affd1dffa6
@@ -14419,8 +14419,6 @@ fsevents@~2.1.2:
     markdown-loader: ^6.0.0
     mermaid: ^8.9.2
     mini-css-extract-plugin: 1.3.6
-    mousetrap: ^1.6.0
-    mousetrap-global-bind: ^1.1.0
     node-polyfill-webpack-plugin: ^1.1.4
     nodemon: ^1.19.1
     npm-run-all: ^4.1.5

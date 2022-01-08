@@ -4,9 +4,6 @@ import { setFn } from 'pod6/built/helpers/handlers'
 import { podlite as podlite_core } from "podlite";
 import { plugin as DiagramPlugin } from '@podlite/diagram'
 import Podlite from '@podlite/to-jsx'
-import Mousetrap from 'mousetrap'
-; // global-bind must be import after Mousetrap
-import 'mousetrap-global-bind';
 const { ipcRenderer, remote } = window.require('electron');
 import { useEffect, useState } from 'react';
 import { Rules } from '@podlite/schema';
