@@ -67,6 +67,14 @@ const openAbout = () => {
             if (item) item.webContents.send("menu-file-save");
           }
         },
+        {
+            label: menuLabel('&Save as'),
+            accelerator: 'CmdOrCtrl+Shift+S',
+            click(model, item, win): void {
+              if (item) item.webContents.send("menu-file-save-as");
+            }
+          },
+    
         { type: 'separator' },
         {
         label: menuLabel('&Import from...'),
