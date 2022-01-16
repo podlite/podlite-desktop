@@ -51,6 +51,9 @@ const commonConfig = {
   resolve: {
     extensions: ['.tsx', '.ts', '.js', '.jsx','.css'],
     plugins: [PnpWebpackPlugin],
+    alias: {
+        react: path.resolve('./node_modules/react'),
+    }
   },
   plugins: [
     new HtmlWebpackPlugin({
