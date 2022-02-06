@@ -3,7 +3,7 @@
   "productName": "podlite",
   "author": "Aliaksandr Zahatski",
   "license": "MIT",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "pod6 editor",
   "main": "build/main.js",
   "repository": {
@@ -95,7 +95,7 @@
       "entitlements": "./build/entitlements.mas.plist",
       "gatekeeperAssess": false,
       "entitlementsInherit": "./build/entitlements.mas.inherit.plist",
-      "provisioningProfile": "build/embedded.provisionprofile"
+      "provisioningProfile": "build/podlite_provision.provisionprofile"
     },
     "win": {
       "publisherName": "Aliaksandr Zahatski",
@@ -211,10 +211,10 @@
     "webpack-dev-server": "^4.7.2"
   },
   "dependencies": {
-    "@podlite/diagram": "^0.0.7",
-    "@podlite/editor-react": "^0.0.11",
-    "@podlite/schema": "^0.0.6",
-    "@podlite/to-jsx": "^0.0.7",
+    "@podlite/diagram": "^0.0.10",
+    "@podlite/editor-react": "^0.0.14",
+    "@podlite/schema": "^0.0.7",
+    "@podlite/to-jsx": "^0.0.10",
     "@types/react-router-dom": "^5.3.2",
     "about-window": "1.15.2",
     "codemirror": "5.x",
@@ -222,8 +222,8 @@
     "electron-log": "^4.2.4",
     "electron-updater": "^4.3.4",
     "electron-util": "^0.14.2",
-    "pod6": "^0.0.41",
-    "podlite": "^0.0.11",
+    "pod6": "0.0.43",
+    "podlite": "^0.0.16",
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
     "remove": "^0.1.5"

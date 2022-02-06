@@ -35,6 +35,14 @@ Download the [latest release](https://github.com/zag/podlite-desktop/releases/la
 * And more features to come...
 
 ## pod6 extensions
+### `=Toc` - add Table of contents
+Examples: 
+`=Toc head1, head2, head3
+`
+`=for Toc :title('Table of contents')
+head1, head2, head3
+`
+
 ### `=Image` - use images or video in posts
 
 Example:
@@ -44,6 +52,10 @@ Example:
 
 `=Image some-video.mp4
 `
+`=Image some-video.mp4
+This is a caption!
+`
+
 ### `=Diagram` - use diagrams
 
 To render beautiful graphs, sequence and Gantt diagrams and flowcharts, one can use the `=Diagram` blocks.
@@ -182,7 +194,7 @@ In order to keep the match between this documentation and the last release, plea
 
 ## AUTHOR
 
-Copyright (c) 2020 - 2021 Alexandr Zahatski
+Copyright (c) 2020 - 2022 Alexandr Zahatski
 
 
 ## License

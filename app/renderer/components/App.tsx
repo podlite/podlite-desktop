@@ -6,7 +6,7 @@ import { plugin as DiagramPlugin } from '@podlite/diagram'
 import Podlite from '@podlite/to-jsx'
 const { ipcRenderer, remote } = window.require('electron');
 import { useEffect, useState } from 'react';
-import { Rules } from '@podlite/schema';
+import { Rules, makeInterator } from '@podlite/schema';
 
 import {PODLITE_CSS} from '../utils/export-html'
 import './App.css';
@@ -60,18 +60,30 @@ export const onConvertSource = (text:string, filePath:string, skipLineNumbers:bo
             return makeComponent(src, node, 'content' in node ? interator(node.content, { ...ctx}) : [] )
         }
         return {
-        ':image': setFn(( node, ctx ) => {
-            const {path} = getPathToOpen(node.src, filePath)
-            const filePathToOpen = path
-            if ( filePathToOpen.match(/mp4$/) ) {
-                return mkComponent(({ children, key })=><div className="video shadow"> <video controls> <source src={filePathToOpen} type="video/mp4" /> </video></div>)
+        ':image': setFn(( node, ctx, interator, next ) => {
+            // const {path} = getPathToOpen(node.src, filePath)
+            // const filePathToOpen = path
+            if ( node.src.match(/mp4$/) ) {
+                return mkComponent(({ children, key })=><div className="video shadow"> <video controls> <source src={node.src} type="video/mp4" /> </video></div>)
               } else {
-                return mkComponent(({ children, key })=><img key={key} src={path} alt={node.alt}/>)
+                return mkComponent(({ children, key })=><img key={key} src={node.src} alt={node.alt}/>)
               }
         }),
     }}
       let tree = podlite.parse(text);
-      const asAst = podlite.toAstResult(tree);
+      const {interator: astTree, ...astResult} = podlite.toAstResult(tree);
+      // process ast tree by converting paths to absolute
+      const rules = {
+        ":image": (node)=>{
+            const {path} = getPathToOpen(node.src, filePath)
+            return {...node, src:path}
+        },
+    }
+    const astProcessed = makeInterator(rules)(astTree, {})
+      const asAst = {
+        interator: astProcessed,
+        ...astResult
+      }
     //@ts-ignore
     return { result : <Podlite plugins={plugins} wrapElement={skipLineNumbers ? wrapFunctionNoLines : wrapFunction} tree={asAst} />, errors:asAst.errors }
 

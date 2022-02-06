@@ -116,7 +116,7 @@ app.on('ready', async () => {
     if (process.env.NODE_ENV === 'development') {
 		// Install Dev Extensions
 		console.log('installExtensions')
-		await installExtensions();
+		// await installExtensions();
 	  }
 
     protocol.registerFileProtocol('file', (request, callback) => {
