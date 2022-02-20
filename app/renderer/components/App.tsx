@@ -63,7 +63,8 @@ export const onConvertSource = (text:string, filePath:string, skipLineNumbers:bo
         ':image': setFn(( node, ctx, interator, next ) => {
             // const {path} = getPathToOpen(node.src, filePath)
             // const filePathToOpen = path
-            if ( node.src.match(/mp4$/) ) {
+
+            if ( node.src.match(/(mp4|mov)$/) ) {
                 return mkComponent(({ children, key })=><div className="video shadow"> <video controls> <source src={node.src} type="video/mp4" /> </video></div>)
               } else {
                 return mkComponent(({ children, key })=><img key={key} src={node.src} alt={node.alt}/>)

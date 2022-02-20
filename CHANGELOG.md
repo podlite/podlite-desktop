@@ -1,5 +1,11 @@
 # upcoming
 
+- fix =Image .mov, .mp4 files
+- fix styles
+#  0.3.0
+- =Toc - table of contents block.
+- add :caption support for =Images and =Diagrams
+- =Image block now supports :link and formatting codes in caption.
 # 0.2.1
 - fix save menu #22
 - add "New", "Save As" menu items
