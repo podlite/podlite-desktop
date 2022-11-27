@@ -15,6 +15,7 @@ import '@podlite/editor-react/lib/index.css'
 
 import * as ReactDOM from 'react-dom';
 import { htmlToPdfBuffer } from '../utils/export-pdf';
+import { isNamedBlock } from '@podlite/schema/lib/ast-inerator';
 
 declare var vmd: any;
 
@@ -31,7 +32,9 @@ declare var vmd: any;
 
     // wrap all elements and add line link info
     const wrapFunction = (node: Node, children) => {
-        if (typeof node !== 'string' && 'type' in node && 'location' in node) {
+        if (typeof node !== 'string' && 'type' in node && 'location' in node && node.type === 'block' && 
+        (['para','head','item', 'table', 'comment','nested','input','output','pod', 'caption'].includes(node.name)
+        || isNamedBlock(node.name))) {
             //@ts-ignore
             const line = node.location.start.line
             return <div key={line} className="line-src" data-line={line} id={`line-${line}`}>{children}</div>
