@@ -1,7 +1,12 @@
 # upcoming
 
-- fix =Image .mov, .mp4 files
+# 0.4.0
+- support `=useReact`, `=React` blocks
+- `=Markdown` - markdown block
+- enhance code snippets, add markdown suggestions
+- fix `=Image` .mov, .mp4 files
 - fix styles
+
 #  0.3.0
 - =Toc - table of contents block.
 - add :caption support for =Images and =Diagrams
