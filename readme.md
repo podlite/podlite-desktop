@@ -60,10 +60,6 @@ Examples:
 
 ### `=useReact`, `=React` - additional blocks to support the "Podlite for Web" package
 
-
-For more information, please read the following article: Start your own blog/website with Podlite for Web
-
-
 For more information, please read the following article: 
 [Start your own blog/website with Podlite for Web](https://zahatski.com/2022/8/23/1/start-you-own-blog-site-with-podlite-for-web)
 
