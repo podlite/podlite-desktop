@@ -57,11 +57,31 @@ export const onConvertSource = (text:string, filePath:string, skipLineNumbers:bo
       });
     const plugins = (makeComponent):Partial<Rules> => { 
         
-        const mkComponent = (src) => ( writer, processor )=>( node, ctx, interator )=>{
+        const mkComponent = (src, attr?:{}) => ( writer, processor )=>( node, ctx, interator )=>{
             // check if node.content defined
-            return makeComponent(src, node, 'content' in node ? interator(node.content, { ...ctx}) : [] )
+            return makeComponent(src, node, 'content' in node ? interator(node.content, { ...ctx}) : [], {...attr} )
         }
         return {
+        useReact: setFn(( node, ctx, interator, next ) => {
+            const text = getTextContentFromNode(node)
+            return mkComponent(({ children, key })=><div key={key} ><i>=useReact</i> {text}</div>)
+        }),
+        React: ( writer, processor ) => 
+         ( node, ctx, interator ) => 
+             {
+                const text = getTextContentFromNode(node)
+                let podlite = podlite_core({ importPlugins: true }).use({})
+                let tree = podlite.parse(text)
+                const asAst = podlite.toAstResult(tree).interator as PodliteDocument
+                const childrens = interator( asAst.content, ctx )
+                     return makeComponent(({key, children})=>{
+                        return <div className="react" key={key} >
+                            { children.map((i, id)=><div id={id} style={ {border: '1px dotted #ff000033', padding: '5px',
+    margin: '1px'} } >{i}</div>)}
+                        </div>
+                     }, node, childrens  )
+
+             },
         ':image': setFn(( node, ctx, interator, next ) => {
             // const {path} = getPathToOpen(node.src, filePath)
             // const filePathToOpen = path
