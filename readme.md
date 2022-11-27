@@ -55,6 +55,9 @@ Examples:
 
 =end Markdown
 ```
+
+[Open this example in pod6.in](https://pod6.in/#p=%3Dbegin+Markdown%0A%0A++%23+Cases%0A++%0A++*Write*+the+documentation+with+the+markup+you+__love__%21%0A%0A++*+item1+%0A++*+item2%0A++%09+*+%7E%7Esub+item1%7E%7E%0A+++++*+sub+item2%0A%0A+%7C+Syntax++++++%7C+Description+%7C%0A+%7C+-----------+%7C+-----------+%7C%0A+%7C+Header++++++%7C+Title+++++++%7C%0A+%7C+Paragraph+++%7C+Text++++++++%7C%0A+%0A%0A%0A%3Dend+Markdown)
+
 ### `=useReact`, `=React` - additional blocks to support the "Podlite for Web" package
 
 
