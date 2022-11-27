@@ -5,7 +5,7 @@ import { podlite as podlite_core } from "podlite";
 import Podlite from '@podlite/to-jsx'
 const { ipcRenderer, remote } = window.require('electron');
 import { useEffect, useState } from 'react';
-import { Rules, makeInterator } from '@podlite/schema';
+import { Rules, makeInterator, Node, getTextContentFromNode, PodliteDocument } from '@podlite/schema';
 
 import {PODLITE_CSS} from '../utils/export-html'
 import './App.css';
@@ -47,7 +47,7 @@ declare var vmd: any;
 export const onConvertSource = (text:string, filePath:string, skipLineNumbers:boolean = false):ConverterResult=>{
         
     let podlite = podlite_core({ importPlugins: true }).use({
-        Diagram: DiagramPlugin,
+
         "image": { 'toAst' : (writer) => (node) => {
                 console.warn(JSON.stringify(node, null,2))
                 return node
