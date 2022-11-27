@@ -32,9 +32,38 @@ Download the [latest release](https://github.com/zag/podlite-desktop/releases/la
 * export to html and pdf
 * import from markdown
 * make diagrams via =Diagram block
+* write in markdown via =Markdown block
 * And more features to come...
 
 ## pod6 extensions
+### `=Markdown` - markdown block
+
+You can switch to write GitHub Flavored Markdown ([GFM](https://github.github.com/gfm/)).
+
+Examples: 
+```
+=begin Markdown
+
+  # Cases
+  
+  *Write* the documentation with the markup you __love__!
+
+  * item1 
+  * item2
+  	 * ~~sub item1~~
+     * sub item2
+
+=end Markdown
+```
+### `=useReact`, `=React` - additional blocks to support the "Podlite for Web" package
+
+
+For more information, please read the following article: Start your own blog/website with Podlite for Web
+
+
+For more information, please read the following article: 
+[Start your own blog/website with Podlite for Web](https://zahatski.com/2022/8/23/1/start-you-own-blog-site-with-podlite-for-web)
+
 ### `=Toc` - add Table of contents
 Examples: 
 ```
@@ -182,10 +211,13 @@ classDiagram
 Diagrams are created by linking text labels using arrow connectors. You can choose different shapes, add labels to connectors, and style connectors and shapes.
 `=Diagram` uses Mermaid diagramming and charting tool.
 [Mermaid documentation for the complete syntax](https://mermaid-js.github.io/mermaid/#/)
+
+
 ## Documentation
 * [Pod6 - An easy-to-use markup language for documenting Raku modules and programs](https://docs.raku.org/language/pod)
 * Specification of pod6: [Synopsis 26](https://github.com/perl6/specs/blob/master/S26-documentation.pod)
-* [Create a blog with pod6](https://zahatski.com/2020/5/28/1/create-a-blog-with-pod6)
+* [A minimal, lightweight starter for creating static blogs/sites using nexjs and Raku Pod ( aka pod6 ) markup language](https://github.com/podlite/podlite-web)
+    * [Start your own blog/site with PodLite for Web](https://dev.to/zag/start-your-own-blogsite-with-podlite-for-web-h9n)
 * Pod6 online editor: [Pod6 to HTML online](https://pod6.in/)
 
 ## Contributing
