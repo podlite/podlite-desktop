@@ -4,12 +4,12 @@ const {  app, Menu  } = require('electron')
 import { MenuItemConstructorOptions, shell, BrowserWindow } from "electron"
 import { is } from "electron-util"
 import openAboutWindow from "about-window"
-import { version }  from 'pod6'
+import { version }  from '@podlite/schema'
 const join = require('path').join;
 
-const BUG_REPORT_URL = 'https://github.com/zag/podlite-desktop/issues'
-const HOME_PAGE = 'https://github.com/zag/podlite-desktop'
-const RELEASE_PAGE = 'https://github.com/zag/podlite-desktop/releases'
+const BUG_REPORT_URL = 'https://github.com/podlite/podlite-desktop/issues'
+const HOME_PAGE = 'https://github.com/podlite/podlite-desktop'
+const RELEASE_PAGE = 'https://github.com/podlite/podlite-desktop/releases'
 
 function menuLabel(label) {
     if (process.platform === 'darwin') {
@@ -20,7 +20,7 @@ function menuLabel(label) {
 const openAbout = () => {
   openAboutWindow({
     icon_path: join(__dirname, 'icon.png'),
-    copyright: `Copyright (c) 2020 Alexandr Zahatski, https://zahatski.com <br/><p style="text-align:center">pod6: ${version}</p>`,
+    copyright: `Copyright (c) 2020-2024 Alexandr Zahatski, https://zahatski.com <br/><p style="text-align:center">@podlite/schema: ${version}</p>`,
     package_json_dir: join(__dirname, '..'),
     about_page_dir: join(__dirname, '..','vendors','about-window'),
     bug_report_url: BUG_REPORT_URL,
