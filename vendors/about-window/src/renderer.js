@@ -1,6 +1,6 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const electron_1 = require("electron");
+'use strict';
+Object.defineProperty(exports, '__esModule', { value: true });
+const electron_1 = require('electron');
 electron_1.ipcRenderer.on('about-window:info', (_, info, app_name, version) => {
     const open_home = () => electron_1.shell.openExternal(info.homepage);
     const content = info.use_inner_html ? 'innerHTML' : 'innerText';
@@ -17,8 +17,7 @@ electron_1.ipcRenderer.on('about-window:info', (_, info, app_name, version) => {
     const copyright_elem = document.querySelector('.copyright');
     if (info.copyright) {
         copyright_elem[content] = info.copyright;
-    }
-    else if (info.license) {
+    } else if (info.license) {
         copyright_elem[content] = `Distributed under ${info.license} license.`;
     }
     const icon_elem = document.getElementById('app-icon');

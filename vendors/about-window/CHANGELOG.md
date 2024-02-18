@@ -1,12 +1,13 @@
 <a name="v1.15.1"></a>
+
 # [v1.15.1](https://github.com/rhysd/electron-about-window/releases/tag/v1.15.1) - 25 Oct 2021
 
 - Fix the type definitions file for TypeScript is outdated (thanks @h3poteto, #70)
 
 [Changes][v1.15.1]
 
-
 <a name="v1.15.0"></a>
+
 # [v1.15.0](https://github.com/rhysd/electron-about-window/releases/tag/v1.15.0) - 02 Oct 2021
 
 - Support Electron 14+ by removing dependency of `remote` module
@@ -14,8 +15,8 @@
 
 [Changes][v1.15.0]
 
-
 <a name="v1.14.0"></a>
+
 # [v1.14.0](https://github.com/rhysd/electron-about-window/releases/tag/v1.14.0) - 09 Mar 2021
 
 - Allow to specify custom version entries for version information. See [the example code](https://github.com/rhysd/electron-about-window/blob/a0a81c918fb02f8cf9772df7df5ee55ee5de6ae9/example/main.js#L38-L46) for the usage. (#53, thanks to @noob9527)
@@ -23,16 +24,16 @@
 
 [Changes][v1.14.0]
 
-
 <a name="v1.13.4"></a>
+
 # [v1.13.4](https://github.com/rhysd/electron-about-window/releases/tag/v1.13.4) - 05 Jun 2020
 
 - Allow to import this package without Electron runtime (#58)
 
 [Changes][v1.13.4]
 
-
 <a name="v1.13.3"></a>
+
 # [v1.13.3](https://github.com/rhysd/electron-about-window/releases/tag/v1.13.3) - 03 Jun 2020
 
 - **Fix:** Broken at Electron v10 beta because `enableRemoteModule` is set to `false` by default from v10
@@ -40,8 +41,8 @@
 
 [Changes][v1.13.3]
 
-
 <a name="v1.13.2"></a>
+
 # [v1.13.2](https://github.com/rhysd/electron-about-window/releases/tag/v1.13.2) - 13 Nov 2019
 
 - Supported Electron v7 (#50). Still should work with electron v6 or earlier.
@@ -52,25 +53,24 @@
 
 [Changes][v1.13.2]
 
-
 <a name="v1.13.0"></a>
+
 # [v1.13.0](https://github.com/rhysd/electron-about-window/releases/tag/v1.13.0) - 16 May 2019
 
 - Fixed this package did not work with Electron v5 #38
-- Added `about_page_dir` option for changing directory of HTML file #29 
-- Added `win_title` option for changing title of window #31 
-- Added `show_close_button` option for adding close button #34 
+- Added `about_page_dir` option for changing directory of HTML file #29
+- Added `win_title` option for changing title of window #31
+- Added `show_close_button` option for adding close button #34
 
 [Changes][v1.13.0]
 
-
 <a name="v1.12.0"></a>
+
 # [v1.12.0](https://github.com/rhysd/electron-about-window/releases/tag/v1.12.0) - 04 Jul 2018
 
-- Added `use_version_info` flag to hide version information #25 
+- Added `use_version_info` flag to hide version information #25
 
 [Changes][v1.12.0]
-
 
 [v1.15.1]: https://github.com/rhysd/electron-about-window/compare/v1.15.0...v1.15.1
 [v1.15.0]: https://github.com/rhysd/electron-about-window/compare/v1.14.0...v1.15.0
