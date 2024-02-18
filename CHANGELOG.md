@@ -1,5 +1,10 @@
 # upcoming
 
+# 0.5.0
+- `=markdown` - standart block
+- text search cmd-F
+- new blocks `=Mermaid`, `=picture`
+
 # 0.4.0
 - support `=useReact`, `=React` blocks
 - `=Markdown` - markdown block

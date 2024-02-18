@@ -1,20 +1,20 @@
 import * as React from 'react'
 import Editor, {ConverterResult} from '@podlite/editor-react'
-import { setFn } from 'pod6/built/helpers/handlers'
 import { podlite as podlite_core } from "podlite";
 import Podlite from '@podlite/to-jsx'
 const { ipcRenderer, remote } = window.require('electron');
 import { useEffect, useState } from 'react';
-import { Rules, makeInterator, Node, getTextContentFromNode, PodliteDocument } from '@podlite/schema';
+import { Rules, makeInterator, Node, getTextContentFromNode, PodliteDocument, setFn } from '@podlite/schema';
 
 import {PODLITE_CSS} from '../utils/export-html'
 import './App.css';
 import 'codemirror/lib/codemirror.css';
+import 'codemirror/addon/dialog/dialog.css'
 import '@podlite/editor-react/lib/index.css'
 
 import * as ReactDOM from 'react-dom';
 import { htmlToPdfBuffer } from '../utils/export-pdf';
-import { isNamedBlock } from '@podlite/schema/lib/ast-inerator';
+import { isNamedBlock } from '@podlite/schema';
 
 declare var vmd: any;
 
