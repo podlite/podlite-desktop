@@ -1,13 +1,13 @@
 {
-    "compilerOptions": {
-      "lib": ["dom", "esnext"],
-      "module": "esnext",
-      "target": "es5",
-      "jsx": "react",
-      "esModuleInterop": true,
-      "downlevelIteration": true,
-      "allowJs": true,
-      "allowSyntheticDefaultImports": true,
-      "moduleResolution": "node"
-    }
+  "compilerOptions": {
+    "lib": ["dom", "esnext"],
+    "module": "esnext",
+    "target": "es5",
+    "jsx": "react",
+    "esModuleInterop": true,
+    "downlevelIteration": true,
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true,
+    "moduleResolution": "node"
   }
+}

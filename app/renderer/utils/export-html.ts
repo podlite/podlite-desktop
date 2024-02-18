@@ -1,6 +1,4 @@
-
-export const  PODLITE_CSS =
-`.EditorApp {
+export const PODLITE_CSS = `.EditorApp {
     /* text-align: center; */
     font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
     -webkit-font-smoothing: antialiased;

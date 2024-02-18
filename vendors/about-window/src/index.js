@@ -1,13 +1,12 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const electron_1 = require("electron");
-const fs_1 = require("fs");
-const path = require("path");
+'use strict';
+Object.defineProperty(exports, '__esModule', { value: true });
+const electron_1 = require('electron');
+const fs_1 = require('fs');
+const path = require('path');
 function loadPackageJson(pkg_path) {
     try {
         return require(pkg_path);
-    }
-    catch (e) {
+    } catch (e) {
         return null;
     }
 }
@@ -16,8 +15,7 @@ function detectPackageJson(specified_dir, app) {
         const pkg = loadPackageJson(path.join(specified_dir, 'package.json'));
         if (pkg !== null) {
             return pkg;
-        }
-        else {
+        } else {
             console.warn('about-window: package.json is not found in specified directory path: ' + specified_dir);
         }
     }
@@ -35,9 +33,7 @@ function detectPackageJson(specified_dir, app) {
                     return pkg;
                 }
             }
-        }
-        catch (e) {
-        }
+        } catch (e) {}
     }
     return null;
 }
@@ -72,15 +68,18 @@ function injectInfoFromPackageJson(info, app) {
 }
 function normalizeParam(info_or_img_path) {
     if (!info_or_img_path) {
-        throw new Error('First parameter of openAboutWindow() must not be empty. Please see the document: https://github.com/rhysd/electron-about-window/blob/master/README.md');
+        throw new Error(
+            'First parameter of openAboutWindow() must not be empty. Please see the document: https://github.com/rhysd/electron-about-window/blob/master/README.md'
+        );
     }
     if (typeof info_or_img_path === 'string') {
         return { icon_path: info_or_img_path };
-    }
-    else {
+    } else {
         const info = info_or_img_path;
         if (!info.icon_path) {
-            throw new Error("First parameter of openAboutWindow() must have key 'icon_path'. Please see the document: https://github.com/rhysd/electron-about-window/blob/master/README.md");
+            throw new Error(
+                "First parameter of openAboutWindow() must have key 'icon_path'. Please see the document: https://github.com/rhysd/electron-about-window/blob/master/README.md"
+            );
         }
         return Object.assign({}, info);
     }
@@ -90,9 +89,14 @@ function openAboutWindow(info_or_img_path) {
     let info = normalizeParam(info_or_img_path);
     const ipc = electron_1.ipcMain !== null && electron_1.ipcMain !== void 0 ? electron_1.ipcMain : info.ipcMain;
     const app = electron_1.app !== null && electron_1.app !== void 0 ? electron_1.app : info.app;
-    const BrowserWindow = electron_1.BrowserWindow !== null && electron_1.BrowserWindow !== void 0 ? electron_1.BrowserWindow : info.BrowserWindow;
+    const BrowserWindow =
+        electron_1.BrowserWindow !== null && electron_1.BrowserWindow !== void 0
+            ? electron_1.BrowserWindow
+            : info.BrowserWindow;
     if (!app || !BrowserWindow || !ipc) {
-        throw new Error("openAboutWindow() is called on non-main process. Set 'app', 'BrowserWindow' and 'ipcMain' properties in the 'info' argument of the function call");
+        throw new Error(
+            "openAboutWindow() is called on non-main process. Set 'app', 'BrowserWindow' and 'ipcMain' properties in the 'info' argument of the function call"
+        );
     }
     if (window !== null) {
         window.focus();
@@ -103,25 +107,27 @@ function openAboutWindow(info_or_img_path) {
         base_path = path.join(__dirname, '..');
     }
     const index_html = 'file://' + path.join(base_path, 'about.html');
-    const options = Object.assign({
-        width: 400,
-        height: 400,
-        useContentSize: true,
-        titleBarStyle: 'hidden-inset',
-        show: !info.adjust_window_size,
-        icon: info.icon_path,
-        webPreferences: {
-            nodeIntegration: true,
-            contextIsolation: false,
+    const options = Object.assign(
+        {
+            width: 400,
+            height: 400,
+            useContentSize: true,
+            titleBarStyle: 'hidden-inset',
+            show: !info.adjust_window_size,
+            icon: info.icon_path,
+            webPreferences: {
+                nodeIntegration: true,
+                contextIsolation: false,
+            },
         },
-    }, info.win_options || {});
+        info.win_options || {}
+    );
     window = new BrowserWindow(options);
     const on_win_adjust_req = (_, width, height, show_close_button) => {
         if (height > 0 && width > 0) {
             if (show_close_button) {
                 window.setContentSize(width, height + 40);
-            }
-            else {
+            } else {
                 window.setContentSize(width, height + 52);
             }
         }
@@ -155,8 +161,7 @@ function openAboutWindow(info_or_img_path) {
         if (info.open_devtools) {
             if (process.versions.electron >= '1.4') {
                 window.webContents.openDevTools({ mode: 'detach' });
-            }
-            else {
+            } else {
                 window.webContents.openDevTools();
             }
         }

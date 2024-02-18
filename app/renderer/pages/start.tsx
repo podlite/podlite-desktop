@@ -2,4 +2,4 @@ import * as React from 'react'
 
 // import ExampleApp from '../components/exampleapp'
 
-export default () => (<div/>)
+export default () => <div />

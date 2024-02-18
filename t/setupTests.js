@@ -1,6 +1,6 @@
 Object.defineProperty(window, 'require', {
-    writable: true,
-    value: jest.fn().mockImplementation(query => ({
-     'BrowserWindow': "MOCKED@",
-    })),
-  });
+  writable: true,
+  value: jest.fn().mockImplementation(query => ({
+    BrowserWindow: 'MOCKED@',
+  })),
+})

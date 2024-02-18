@@ -8,10 +8,10 @@ import Start from './pages/start'
 vmd.on('file', () => console.log('handlerContent2'))
 export default () => {
   return (
-    <HashRouter hashType='noslash'>
+    <HashRouter hashType="noslash">
       <Switch>
-        <Route exact path='/' component={Start} />
-        <Route exact path='/start' component={Start} />
+        <Route exact path="/" component={Start} />
+        <Route exact path="/start" component={Start} />
         <Route component={() => <h1>204 No Content</h1>} />
       </Switch>
     </HashRouter>

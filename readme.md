@@ -1,4 +1,3 @@
-
  <h1 align="center">
 <img src="https://github.com/zag/podlite-desktop/raw/master/doc/podlite-desktop.png" alt="Podlite editor logo" width="650">
 <br/> 
@@ -15,40 +14,39 @@
 ![Podlite editor Screenshot](./doc/Screenshot2.png)
 ![Podlite editor Screenshot](./doc/Screenshot3.png)
 
-
 ## Get Podlite
-
 
 Download the [latest release](https://github.com/podlite/podlite-desktop/releases/latest) of Podlite editor here:
 
 ### [✨ Download Podlite ✨](https://github.com/podlite/podlite-desktop/releases/latest)
 
-
 ## Features
 
-* Write in Podlite markup language 
-* Preview elements (such as headers, images, math, embedded videos, todo lists...) while you type
-* Preview mode cmd-/ ( win-/ )
-* export to html and pdf
-* import from markdown
-* make diagrams via =Diagram block
-* write in markdown via =Markdown block
-* And more features to come...
+- Write in Podlite markup language
+- Preview elements (such as headers, images, math, embedded videos, todo lists...) while you type
+- Preview mode cmd-/ ( win-/ )
+- export to html and pdf
+- import from markdown
+- make diagrams via =Diagram block
+- write in markdown via =Markdown block
+- And more features to come...
 
 ## Podlite blocks and extensions
+
 ### `=markdown` - markdown block
 
 You can switch to write GitHub Flavored Markdown ([GFM](https://github.github.com/gfm/)).
 
-Examples: 
+Examples:
+
 ```
 =begin markdown
 
   # Cases
-  
+
   *Write* the documentation with the markup you __love__!
 
-  * item1 
+  * item1
   * item2
   	 * ~~sub item1~~
      * sub item2
@@ -60,14 +58,17 @@ Examples:
 
 ### `=useReact`, `=React` - additional blocks to support the "Podlite for Web" package
 
-For more information, please read the following article: 
+For more information, please read the following article:
 [Start your own blog/website with Podlite for Web](https://zahatski.com/2022/8/23/1/start-you-own-blog-site-with-podlite-for-web)
 
 ### `=toc` - add Table of contents
-Examples: 
+
+Examples:
+
 ```
 =Toc head1, head2, head3
 ```
+
 ```
 =for Toc :title('Table of contents')
 head1, head2, head3
@@ -83,7 +84,8 @@ Example:
 
 ```
 =picture some-video.mp4
-````
+```
+
 ```
 =picture some-video.mp4
 This is a caption!
@@ -193,6 +195,7 @@ classDiagram
 [Open this example in pod6.in](https://pod6.in/#p=%3DMermaid%0AclassDiagram%0A+++Person+<%7C--+Student%0A+++Person+<%7C--+Professor%0A+++Person+%3A+%2BString+name%0A+++Person+%3A+%2BString+phoneNumber%0A+++Person+%3A+%2BString+emailAddress%0A+++Person%3A+%2BpurchaseParkingPass%28%29%0A+++Address+"1"+<--+"0..1"+Person%3Alives+at%0A+++class+Student%7B%0A++++++%2Bint+studentNumber%0A++++++%2Bint+averageMark%0A++++++%2BisEligibleToEnrol%28%29%0A++++++%2BgetSeminarsTaken%28%29%0A++++%7D%0A++++class+Professor%7B%0A++++++%2Bint+salary%0A++++%7D%0A++++class+Address%7B%0A++++++%2BString+street%0A++++++%2BString+city%0A++++++%2BString+state%0A++++++%2Bint+postalCode%0A++++++%2BString+country%0A++++++-validate%28%29%0A++++++%2BoutputAsLabel%28%29%0A++++%7D)
 
 #### Gantt diagram
+
 ```
  =Mermaid
  gantt
@@ -214,16 +217,15 @@ Diagrams are created by linking text labels using arrow connectors. You can choo
 `=Diagram` uses Mermaid diagramming and charting tool.
 [Mermaid documentation for the complete syntax](https://mermaid-js.github.io/mermaid/#/)
 
-
 ## Documentation
 
-* [Podlite is a lightweight block-based markup language designed for flexibility and ease of use.](https://podlite.org)
+- [Podlite is a lightweight block-based markup language designed for flexibility and ease of use.](https://podlite.org)
 
-* Specification of Podite: [podlite.org/specification](https://podlite.org/specification)
+- Specification of Podite: [podlite.org/specification](https://podlite.org/specification)
 
-* [A minimal, lightweight starter for creating static blogs/sites using nexjs and Podlite markup language](https://github.com/podlite/podlite-web)
-    * [Start your own blog/site with PodLite for Web](https://dev.to/zag/start-your-own-blogsite-with-podlite-for-web-h9n)
-* Podlite online editor: [Podlite online: pod6.in](https://pod6.in/)
+- [A minimal, lightweight starter for creating static blogs/sites using nexjs and Podlite markup language](https://github.com/podlite/podlite-web)
+  - [Start your own blog/site with PodLite for Web](https://dev.to/zag/start-your-own-blogsite-with-podlite-for-web-h9n)
+- Podlite online editor: [Podlite online: pod6.in](https://pod6.in/)
 
 ## Contributing
 
@@ -232,12 +234,12 @@ This is an open source program. Feel free to fork and contribute.
 In order to keep the match between this documentation and the last release, please contribute and pull requests on the dedicated develop branch.
 
 ## linux note
+
 ![Podlite editor Screenshot](./doc/linuxAppImage-permissions.png)
 
 ## AUTHOR
 
 Copyright (c) 2020 - 2024 Alexandr Zahatski
-
 
 ## License
 
