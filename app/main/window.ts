@@ -123,4 +123,7 @@ export class Window extends EventEmitter {
       console.log('webContents.save-file')
     })
   }
+  isExist() {
+    return this.browserWindow && !this.browserWindow.isDestroyed()
+  }
 }

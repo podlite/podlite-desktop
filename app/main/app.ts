@@ -51,6 +51,18 @@ export class App extends EventEmitter {
     })
   }
 
+  async openFile(options: WindowConfig, isSkipSaveState: boolean = false) {
+    if (!options.filePath) {
+      return this.createWindow(options, isSkipSaveState)
+    }
+    const win = this.windowsPull.findByFilePath(options.filePath)
+    if (win && win.isExist()) {
+      return win.browserWindow.focus()
+    } else {
+      return this.createWindow(options, isSkipSaveState)
+    }
+  }
+
   async createWindow(options: WindowConfig, isSkipSaveState: boolean = false) {
     let id = options.id || this.windowsPull.getNextId()
     const win = new Window({ ...options, id })
@@ -106,8 +118,9 @@ export class App extends EventEmitter {
     dialog.showOpenDialog(win, dialogOptions).then(({ filePaths }) => {
       if (!Array.isArray(filePaths) || !filePaths.length) {
         return
-      } //
-      this.createWindow({ filePath: filePaths[0] }).then()
+      }
+    this.openFile({ filePath: filePaths[0] }).then()
+    
     })
   }
 
@@ -126,7 +139,7 @@ export class App extends EventEmitter {
       if (!Array.isArray(filePaths) || !filePaths.length) {
         return
       } //
-      this.createWindow({ id: 0, type: 'importMarkdown', filePath: filePaths[0] }).then()
+      this.openFile({ id: 0, type: 'importMarkdown', filePath: filePaths[0] }).then()
     })
   }
 }
@@ -135,6 +148,10 @@ export class WindowsPull {
   private windows: Array<Window>
   constructor() {
     this.windows = []
+  }
+
+  findByFilePath(filePath: string) {
+    return this.windows.find(win => win.filePath === filePath)
   }
 
   getState(): { windows: Array<WindowConfig> } {

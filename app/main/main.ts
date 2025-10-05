@@ -73,7 +73,7 @@ app.on('will-finish-launching', () => {
     if (app.isReady() === false) {
       initOpenFileQueue.push(file)
     } else {
-      mainApp.createWindow({ id: 0, filePath: file })
+      mainApp.openFile({ id: 0, filePath: file })
     }
     event.preventDefault()
   })
@@ -95,7 +95,7 @@ if (process.platform === 'win32') {
 
 app.on('second-instance', (event, argv) => {
   if (argv[3]) {
-    mainApp.createWindow({ id: 0, filePath: argv[3] })
+    mainApp.openFile({ id: 0, filePath: argv[3] })
   } else {
     log.info('no argv[3]')
     // TODO::
@@ -133,7 +133,7 @@ app.on('ready', async () => {
   setMainMenu(mainApp)
   mainApp.run()
   if (initOpenFileQueue.length) {
-    initOpenFileQueue.forEach(file => mainApp.createWindow({ id: 0, filePath: file }, true))
+    initOpenFileQueue.forEach(file => mainApp.openFile({ id: 0, filePath: file }, true))
   } else {
     console.log('openFileDialog(undefined, true)')
     //  openFileInReader(undefined, undefined, true)
