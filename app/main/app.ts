@@ -119,8 +119,7 @@ export class App extends EventEmitter {
       if (!Array.isArray(filePaths) || !filePaths.length) {
         return
       }
-    this.openFile({ filePath: filePaths[0] }).then()
-    
+      this.openFile({ filePath: filePaths[0] }).then()
     })
   }
 
