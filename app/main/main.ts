@@ -51,6 +51,10 @@ ipcMain.on('set-title', (event, title) => {
   const win = BrowserWindow.fromWebContents(event.sender)
   win.setTitle(title)
 })
+ipcMain.on('on-open-url', async (event, url: string) => {
+  await shell.openExternal(url)
+})
+
 app.on('save-file', () => console.log('app.save-file'))
 
 app.on('window-all-closed', () => {

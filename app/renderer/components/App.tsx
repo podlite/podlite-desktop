@@ -1,5 +1,6 @@
 import * as React from 'react'
 import Editor, { ConverterResult } from '@podlite/editor-react'
+import { Editor2 } from '@podlite/editor-react'
 import { podlite as podlite_core } from 'podlite'
 import Podlite from '@podlite/to-jsx'
 const { ipcRenderer, remote } = window.require('electron')
@@ -8,9 +9,10 @@ import { Rules, makeInterator, Node, getTextContentFromNode, PodliteDocument, se
 
 import { PODLITE_CSS } from '../utils/export-html'
 import './App.css'
-import 'codemirror/lib/codemirror.css'
-import 'codemirror/addon/dialog/dialog.css'
-import '@podlite/editor-react/lib/index.css'
+
+import '@podlite/to-jsx/lib/podlite.css'
+import '@podlite/editor-react/lib/podlite-vars.css'
+import '@podlite/editor-react/lib/Editor.css'
 
 import * as ReactDOM from 'react-dom'
 import { htmlToPdfBuffer } from '../utils/export-pdf'
@@ -36,15 +38,7 @@ const getPathToOpen = (filepath, parentDocPath) => {
 
 // wrap all elements and add line link info
 const wrapFunction = (node: Node, children) => {
-  if (
-    typeof node !== 'string' &&
-    'type' in node &&
-    'location' in node &&
-    node.type === 'block' &&
-    (['para', 'head', 'item', 'table', 'comment', 'nested', 'input', 'output', 'pod', 'caption'].includes(node.name) ||
-      isNamedBlock(node.name))
-  ) {
-    //@ts-ignore
+  if (node?.location?.start?.line) {
     const line = node.location.start.line
     return (
       <div key={line} className="line-src" data-line={line} id={`line-${line}`}>
@@ -330,17 +324,25 @@ const App = () => {
     return onConvertSource(text, filePath)
   }
 
+  // this is preventing the editor from rendering and crtl + z not revert to empty file
+  // TODO: fix it when we create file from the menu
+  if (!filePath) return null
   return (
-    <Editor
-      isLineNumbers={true}
-      isControlled={true}
-      isPreviewModeEnabled={isPreviewMode}
-      content={text}
-      onChangeSource={(content: string) => {
+    <Editor2
+      onChange={(content: string) => {
         updateText(content)
         setTextChanged(true)
       }}
-      onConvertSource={onConvertSourceComponent}
+      onOpenLink={(url: string) => {
+        console.log(url)
+        vmd.onOpenUrl(url)
+      }}
+      makePreviewComponent={onConvertSourceComponent}
+      value={text}
+      enablePreview={isPreviewMode || isHalfPreviewMode}
+      previewWidth={isPreviewMode || isHalfPreviewMode ? (isHalfPreviewMode ? '50%' : '100%') : '0%'}
+      readOnly={false}
+      isFullscreen={true}
     />
   )
 }

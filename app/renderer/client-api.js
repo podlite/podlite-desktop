@@ -80,6 +80,9 @@ vmd = Object.assign(
     onContent(callback) {
       vmd.on('md', callback)
     },
+    onOpenUrl(content) {
+      electron.ipc.send('on-open-url', content)
+    },
   },
   // electron.sharedState
 )
