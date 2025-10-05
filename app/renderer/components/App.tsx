@@ -226,6 +226,7 @@ const App = () => {
   const [text, updateText] = useState('')
   const [filePath, setFilePath] = useState('')
   const [isPreviewMode, setPreviewMode] = useState(false)
+  const [isHalfPreviewMode, setHalfPreviewMode] = useState(false)
   const [isTextChanged, setTextChanged] = useState(false)
 
   useEffect(() => {
@@ -256,18 +257,27 @@ const App = () => {
     }
     const togglePreviewMode = e => {
       Object.hasOwnProperty.call(e, 'preventDefault') && e.preventDefault()
+      if (isHalfPreviewMode && !isPreviewMode) {
+        setHalfPreviewMode(false)
+      }
       setPreviewMode(!isPreviewMode)
+    }
+    const toggleHalfPreviewMode = e => {
+      Object.hasOwnProperty.call(e, 'preventDefault') && e.preventDefault()
+      setHalfPreviewMode(!isHalfPreviewMode)
     }
 
     // make menu command listeners
     vmd.on('menu-file-save', saveFileAction)
     vmd.on('menu-file-save-as', saveFileAsAction)
     vmd.on('view-preview-toggle', togglePreviewMode)
+    vmd.on('view-halfpreview-toggle', toggleHalfPreviewMode)
 
     return () => {
       vmd.off('menu-file-save', saveFileAction)
       vmd.off('menu-file-save-as', saveFileAsAction)
       vmd.off('view-preview-toggle', togglePreviewMode)
+      vmd.off('view-halfpreview-toggle', toggleHalfPreviewMode)
     }
   })
 

@@ -19,7 +19,7 @@ function menuLabel(label) {
 const openAbout = () => {
   openAboutWindow({
     icon_path: join(__dirname, 'icon.png'),
-    copyright: `Copyright (c) 2020-2024 Alexandr Zahatski, https://zahatski.com <br/><p style="text-align:center">@podlite/schema: ${version}</p>`,
+    copyright: `Copyright (c) 2020-2025 Alexandr Zahatski, https://zahatski.com <br/><p style="text-align:center">@podlite/schema: ${version}</p>`,
     package_json_dir: join(__dirname, '..'),
     about_page_dir: join(__dirname, '..', 'vendors', 'about-window'),
     bug_report_url: BUG_REPORT_URL,
@@ -168,10 +168,16 @@ export default function setMainMenu(mainApp: App) {
     submenu: [
       {
         label: menuLabel('&Toggle Preview'),
-        accelerator: 'CmdOrCtrl+/',
+        accelerator: 'CmdOrCtrl+.',
         click(model, item, win): void {
-          console.log('sending view-preview-toggle')
           if (item) item.webContents.send('view-preview-toggle')
+        },
+      },
+      {
+        label: menuLabel('&Toggle Half Preview'),
+        accelerator: 'CmdOrCtrl+,',
+        click(model, item, win): void {
+          if (item) item.webContents.send('view-halfpreview-toggle')
         },
       },
     ],
