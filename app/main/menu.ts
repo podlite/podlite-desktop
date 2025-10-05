@@ -65,7 +65,7 @@ export default function setMainMenu(mainApp: App) {
         accelerator: 'CmdOrCtrl+O',
         click(model, item, win) {
           //@ts-ignore
-          mainApp.openFileDialog(win)
+          mainApp.openFileDialog(item)
         },
       },
       {
