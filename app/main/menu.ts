@@ -56,30 +56,29 @@ export default function setMainMenu(mainApp: App) {
       {
         label: menuLabel('&New'),
         accelerator: 'CmdOrCtrl+N',
-        click(model, item, win) {
+        click(item, win, event) {
           mainApp.createWindow({})
         },
       },
       {
         label: menuLabel('&Open'),
         accelerator: 'CmdOrCtrl+O',
-        click(model, item, win) {
-          //@ts-ignore
-          mainApp.openFileDialog(item)
+        click(item, win, event) {
+          mainApp.openFileDialog(win)
         },
       },
       {
         label: menuLabel('&Save'),
         accelerator: 'CmdOrCtrl+S',
-        click(model, item, win): void {
-          if (item) item.webContents.send('menu-file-save')
+        click(item, win, event): void {
+          if (item) win.webContents.send('menu-file-save')
         },
       },
       {
         label: menuLabel('&Save as'),
         accelerator: 'CmdOrCtrl+Shift+S',
-        click(model, item, win): void {
-          if (item) item.webContents.send('menu-file-save-as')
+        click(item, win, event): void {
+          if (item) win.webContents.send('menu-file-save-as')
         },
       },
 
@@ -89,7 +88,7 @@ export default function setMainMenu(mainApp: App) {
         submenu: [
           {
             label: menuLabel('&Markdown'),
-            click(model, item, win) {
+            click(item, win, event) {
               //@ts-ignore
               mainApp.openImportMakdownDialog(win)
             },
@@ -101,14 +100,14 @@ export default function setMainMenu(mainApp: App) {
         submenu: [
           {
             label: menuLabel('&Html'),
-            click(model, item, win) {
-              if (item) item.webContents.send('exportHtml')
+            click(item, win, event) {
+              if (win) win.webContents.send('exportHtml')
             },
           },
           {
             label: menuLabel('&Pdf'),
-            click(model, item, win) {
-              if (item) item.webContents.send('exportPdf')
+            click(item, win, event) {
+              if (win) win.webContents.send('exportPdf')
             },
           },
         ],
@@ -134,9 +133,8 @@ export default function setMainMenu(mainApp: App) {
       { type: 'separator' },
       {
         label: menuLabel('&Open DevTools'),
-        click(model, item, win) {
-          //@ts-ignore
-          item.webContents.openDevTools({ mode: 'detach' })
+        click(item, win, event) {
+          win.webContents.openDevTools({ mode: 'detach' })
         },
       },
 
@@ -169,15 +167,15 @@ export default function setMainMenu(mainApp: App) {
       {
         label: menuLabel('&Toggle Preview'),
         accelerator: 'CmdOrCtrl+.',
-        click(model, item, win): void {
-          if (item) item.webContents.send('view-preview-toggle')
+        click(item, win, event): void {
+          if (win) win.webContents.send('view-preview-toggle')
         },
       },
       {
         label: menuLabel('&Toggle Half Preview'),
         accelerator: 'CmdOrCtrl+,',
-        click(model, item, win): void {
-          if (item) item.webContents.send('view-halfpreview-toggle')
+        click(item, win, event): void {
+          if (win) win.webContents.send('view-halfpreview-toggle')
         },
       },
     ],
