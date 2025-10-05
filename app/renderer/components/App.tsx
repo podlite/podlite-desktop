@@ -316,9 +316,13 @@ const App = () => {
     const handlerContent = (_, { content, filePath }) => {
       setFilePath(filePath)
       updateText(content)
+      setTextChanged(false)
     }
     vmd.on('file', handlerContent)
-  })
+    return () => {
+      vmd.off('file', handlerContent)
+    }
+  }, [])
 
   const onConvertSourceComponent = (text: string) => {
     return onConvertSource(text, filePath)
