@@ -1,9 +1,9 @@
 import * as React from 'react'
-import Editor, { ConverterResult } from '@podlite/editor-react'
+import { ConverterResult } from '@podlite/editor-react'
 import { Editor2 } from '@podlite/editor-react'
 import { podlite as podlite_core } from 'podlite'
 import Podlite from '@podlite/to-jsx'
-const { ipcRenderer, remote } = window.require('electron')
+const { remote } = window.require('electron')
 import { useEffect, useState } from 'react'
 import { Rules, makeInterator, Node, getTextContentFromNode, PodliteDocument, setFn } from '@podlite/schema'
 
@@ -16,7 +16,6 @@ import '@podlite/editor-react/lib/Editor.css'
 
 import * as ReactDOM from 'react-dom'
 import { htmlToPdfBuffer } from '../utils/export-pdf'
-import { isNamedBlock } from '@podlite/schema'
 
 declare var vmd: any
 
@@ -55,27 +54,27 @@ const wrapFunctionNoLines = (node: Node, children) => children
 export const onConvertSource = (text: string, filePath: string, skipLineNumbers: boolean = false): ConverterResult => {
   let podlite = podlite_core({ importPlugins: true }).use({
     image: {
-      toAst: writer => node => {
+      toAst: () => node => {
         console.warn(JSON.stringify(node, null, 2))
         return node
       },
     },
   })
   const plugins = (makeComponent): Partial<Rules> => {
-    const mkComponent = (src, attr?: {}) => (writer, processor) => (node, ctx, interator) => {
+    const mkComponent = (src, attr?: {}) => () => (node, ctx, interator) => {
       // check if node.content defined
       return makeComponent(src, node, 'content' in node ? interator(node.content, { ...ctx }) : [], { ...attr })
     }
     return {
-      useReact: setFn((node, ctx, interator, next) => {
+      useReact: setFn(node => {
         const text = getTextContentFromNode(node)
-        return mkComponent(({ children, key }) => (
+        return mkComponent(({ key }) => (
           <div key={key}>
             <i>=useReact</i> {text}
           </div>
         ))
       }),
-      React: (writer, processor) => (node, ctx, interator) => {
+      React: () => (node, ctx, interator) => {
         const text = getTextContentFromNode(node)
         let podlite = podlite_core({ importPlugins: true }).use({})
         let tree = podlite.parse(text)
@@ -97,12 +96,12 @@ export const onConvertSource = (text: string, filePath: string, skipLineNumbers:
           childrens,
         )
       },
-      ':image': setFn((node, ctx, interator, next) => {
+      ':image': setFn(node => {
         // const {path} = getPathToOpen(node.src, filePath)
         // const filePathToOpen = path
 
         if (node.src.match(/(mp4|mov)$/)) {
-          return mkComponent(({ children, key }) => (
+          return mkComponent(() => (
             <div className="video shadow">
               {' '}
               <video controls>
@@ -112,7 +111,7 @@ export const onConvertSource = (text: string, filePath: string, skipLineNumbers:
             </div>
           ))
         } else {
-          return mkComponent(({ children, key }) => <img key={key} src={node.src} alt={node.alt} />)
+          return mkComponent(({ key }) => <img key={key} src={node.src} alt={node.alt} />)
         }
       }),
     }
@@ -155,7 +154,7 @@ const preparePDF = async (text: string, filePath: string) => {
 }
 
 const prepareHTML = (text: string, filePath: string): Promise<string> => {
-  return new Promise((resolve, reject) => {
+  return new Promise(resolve => {
     var newDiv = document.createElement('div')
     newDiv.hidden = true
     document.body.appendChild(newDiv)
@@ -313,24 +312,58 @@ const App = () => {
 
   // desktop section - start
   useEffect(() => {
-    const handlerContent = (_, { content, filePath }) => {
-      setFilePath(filePath)
-      updateText(content)
-      setTextChanged(false)
+    const handlerContent = async (_, { content, filePath: newFilePath }) => {
+      try {
+        // Check if current file has unsaved changes
+        if (isTextChanged) {
+          const { remote } = window.require('electron')
+          const confirmResult = await remote.dialog.showMessageBox(remote.getCurrentWindow(), {
+            type: 'warning',
+            buttons: ['Save', 'Discard', 'Cancel'],
+            defaultId: 0,
+            cancelId: 2,
+            message: 'The current file has unsaved changes.',
+            detail: 'Do you want to save it before opening the new file?',
+          })
+
+          if (confirmResult.response === 2) {
+            // Cancel
+            return
+          } else if (confirmResult.response === 0) {
+            // Save current file first
+            await new Promise(resolve => {
+              const saveHandler = () => {
+                vmd.off('file-saved', saveHandler)
+                resolve(true)
+              }
+              vmd.on('file-saved', saveHandler)
+              vmd.saveFile({ content: text, filePath })
+            })
+          }
+          // If response === 1 (Discard), continue without saving
+        }
+        
+        setFilePath(newFilePath)
+        updateText(content)
+        setTextChanged(false)
+      } catch (error) {
+        console.error('Error in handlerContent:', error)
+        // Fallback: load the new file anyway
+        setFilePath(newFilePath)
+        updateText(content)
+        setTextChanged(false)
+      }
     }
     vmd.on('file', handlerContent)
     return () => {
       vmd.off('file', handlerContent)
     }
-  }, [])
+  }, [isTextChanged, text, filePath])
 
   const onConvertSourceComponent = (text: string) => {
     return onConvertSource(text, filePath)
   }
 
-  // this is preventing the editor from rendering and crtl + z not revert to empty file
-  // TODO: fix it when we create file from the menu
-  if (!filePath) return null
   return (
     <Editor2
       onChange={(content: string) => {

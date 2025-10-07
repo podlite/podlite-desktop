@@ -59,7 +59,15 @@ export class App extends EventEmitter {
     if (win && win.isExist()) {
       return win.browserWindow.focus()
     } else {
-      return this.createWindow(options, isSkipSaveState)
+      if (options.win?.webContents) {
+        const destWin = this.windowsPull.all().find(item => item.browserWindow === options.win)
+        if (!destWin) {
+          return this.createWindow(options, isSkipSaveState)
+        }
+        destWin.loadFile(options.filePath)
+      } else {
+        return this.createWindow(options, isSkipSaveState)
+      }
     }
   }
 
@@ -119,7 +127,7 @@ export class App extends EventEmitter {
       if (!Array.isArray(filePaths) || !filePaths.length) {
         return
       }
-      this.openFile({ filePath: filePaths[0] }).then()
+      this.openFile({ filePath: filePaths[0], win }).then()
     })
   }
 

@@ -15,6 +15,7 @@ export interface WindowConfig {
   bounds?: Rectangle
   isMaximized?: boolean
   isFullScreen?: boolean
+  win?: BrowserWindow
 }
 export class Window extends EventEmitter {
   public browserWindow: BrowserWindow
@@ -75,13 +76,7 @@ export class Window extends EventEmitter {
      console.log("closed window: " ) //   + mainWindow.id)
     })
     */
-    const sendFile = filePath => {
-      console.log('send ' + filePath)
-      this.browserWindow.webContents.send('file', {
-        content: fs.readFileSync(filePath, { encoding: 'utf8' }),
-        filePath,
-      })
-    }
+
     const importMarkdownFile = filePath => {
       this.browserWindow.webContents.send('importMarkdown', {
         content: fs.readFileSync(filePath, { encoding: 'utf8' }),
@@ -106,7 +101,9 @@ export class Window extends EventEmitter {
       switch (this.type) {
         case 'open':
           if (this.filePath) {
-            sendFile(this.filePath)
+            this.loadFile(this.filePath)
+          } else {
+            this.loadFile('')
           }
           break
         case 'importMarkdown':
@@ -122,6 +119,23 @@ export class Window extends EventEmitter {
     this.browserWindow.webContents.on('save-file', () => {
       console.log('webContents.save-file')
     })
+  }
+  loadFile(filePath: string) {
+    if (this.isExist()) {
+      if (!filePath) {
+        this.filePath = null
+        this.browserWindow.webContents.send('file', {
+          content: '',
+          filePath: '',
+        })
+      } else {
+        this.filePath = filePath
+        this.browserWindow.webContents.send('file', {
+          content: fs.readFileSync(filePath, { encoding: 'utf8' }),
+          filePath,
+        })
+      }
+    }
   }
   isExist() {
     return this.browserWindow && !this.browserWindow.isDestroyed()
