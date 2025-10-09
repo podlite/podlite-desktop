@@ -19,7 +19,7 @@ function menuLabel(label) {
 const openAbout = () => {
   openAboutWindow({
     icon_path: join(__dirname, 'icon.png'),
-    copyright: `Copyright (c) 2020-2025 Alexandr Zahatski, https://zahatski.com <br/><p style="text-align:center">@podlite/schema: ${version}</p>`,
+    copyright: `Copyright (c) 2020-2025 Alexandr Zahatski, https://podlite.org <br/><p style="text-align:center">@podlite/schema: ${version}</p>`,
     package_json_dir: join(__dirname, '..'),
     about_page_dir: join(__dirname, '..', 'vendors', 'about-window'),
     bug_report_url: BUG_REPORT_URL,

@@ -12,6 +12,15 @@ const setMainMenu = require('./menu').default
 //   app.quit();
 // }
 
+// https://github.com/electron/electron/issues/15958
+
+if (!process.mas) {
+  const gotTheLock = app.requestSingleInstanceLock()
+  if (!gotTheLock) {
+    app.quit()
+  }
+}
+
 app.commandLine.appendArgument('enable-transparent-visuals')
 app.commandLine.appendArgument('disable-gpu')
 app.disableHardwareAcceleration()
@@ -78,15 +87,6 @@ app.on('will-finish-launching', () => {
     event.preventDefault()
   })
 })
-
-// https://github.com/electron/electron/issues/15958
-
-if (!process.mas) {
-  const gotTheLock = app.requestSingleInstanceLock()
-  if (!gotTheLock) {
-    app.quit()
-  }
-}
 
 if (process.platform === 'win32') {
   const filePath = process.argv[1]

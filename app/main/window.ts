@@ -34,7 +34,7 @@ export class Window extends EventEmitter {
       webPreferences: {
         preload: `${__dirname}/client-api.js`,
         nodeIntegration: true,
-        contextIsolation: false, // protect against prototype pollution
+        contextIsolation: false,
         spellcheck: true,
         webSecurity: false,
         enableRemoteModule: true,
