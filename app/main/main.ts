@@ -150,6 +150,9 @@ app.on('web-contents-created', (event, contents) => {
     if (protocol === 'http:' || protocol === 'https:') {
       await shell.openExternal(urlToOpen)
     }
+    if (urlToOpen.startsWith('file://')) {
+      await shell.openExternal(urlToOpen)
+    }
   }
   contents.on('new-window', handlerOpenUrl)
   contents.on('will-navigate', handlerOpenUrl)

@@ -74,6 +74,40 @@ export const onConvertSource = (text: string, filePath: string, skipLineNumbers:
           </div>
         ))
       }),
+      'L<>': setFn((node, ctx) => {
+        let { meta } = node
+        if (meta === null) {
+          meta = getTextContentFromNode(node)
+        }
+        const text_content = getTextContentFromNode(node)
+        let processedUrl = meta
+        if (processedUrl.startsWith('file:')) {
+          const filePathOpen = processedUrl.replace('file:', '')
+
+          // Filenames that don't begin with / or ~ are relative to current document's location
+          if (!filePathOpen.startsWith('/') && !filePathOpen.startsWith('~')) {
+            // Get directory from global filepath variable
+            const path = require('path')
+            const currentDocDir = path.dirname(filePath)
+            // Convert relative path to absolute
+            const absolutePath = path.resolve(currentDocDir, filePathOpen)
+            processedUrl = `file://${absolutePath}`
+          }
+
+          // Otherwise, if the path starts with ~, replace it with the user's home directory
+          else if (filePathOpen.startsWith('~')) {
+            const homeDir = require('os').homedir()
+            const path = require('path')
+            const absolutePath = path.join(homeDir, filePathOpen.slice(1))
+            processedUrl = `file://${absolutePath}`
+          }
+        }
+        return mkComponent(({ children, key }) => (
+          <a href={processedUrl} key={key}>
+            {children}
+          </a>
+        ))
+      }),
       React: () => (node, ctx, interator) => {
         const text = getTextContentFromNode(node)
         let podlite = podlite_core({ importPlugins: true }).use({})
@@ -342,7 +376,7 @@ const App = () => {
           }
           // If response === 1 (Discard), continue without saving
         }
-        
+
         setFilePath(newFilePath)
         updateText(content)
         setTextChanged(false)
@@ -372,7 +406,29 @@ const App = () => {
       }}
       onOpenLink={(url: string) => {
         console.log(url)
-        vmd.onOpenUrl(url)
+
+        let processedUrl = url
+        // If URL contains |, use all text after |
+        if (url.includes('|')) {
+          processedUrl = url.split('|').slice(1).join('|').trim()
+        }
+
+        // Handle file scheme with relative paths
+        if (processedUrl.startsWith('file:')) {
+          const filePathOpen = processedUrl.replace('file:', '')
+
+          // Filenames that don't begin with / or ~ are relative to current document's location
+          if (!filePathOpen.startsWith('/') && !filePathOpen.startsWith('~')) {
+            // Get directory from global filepath variable
+            const path = require('path')
+            const currentDocDir = path.dirname(filePath)
+
+            // Convert relative path to absolute
+            const absolutePath = path.resolve(currentDocDir, filePathOpen)
+            processedUrl = `file://${absolutePath}`
+          }
+        }
+        vmd.onOpenUrl(processedUrl)
       }}
       makePreviewComponent={onConvertSourceComponent}
       value={text}

@@ -160,7 +160,9 @@ export class WindowsPull {
   findByFilePath(filePath: string) {
     return this.windows.find(win => win.filePath === filePath)
   }
-
+  getWinByBrowserWindow(win: BrowserWindow) {
+    return this.windows.find(item => item.browserWindow === win)
+  }
   getState(): { windows: Array<WindowConfig> } {
     return {
       windows:
