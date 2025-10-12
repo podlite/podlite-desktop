@@ -81,11 +81,11 @@ export const onConvertSource = (text: string, filePath: string, skipLineNumbers:
         }
         const text_content = getTextContentFromNode(node)
         let processedUrl = meta
-        if (processedUrl.startsWith('file:')) {
+        if (processedUrl?.startsWith('file:')) {
           const filePathOpen = processedUrl.replace('file:', '')
 
           // Filenames that don't begin with / or ~ are relative to current document's location
-          if (!filePathOpen.startsWith('/') && !filePathOpen.startsWith('~')) {
+          if (!filePathOpen?.startsWith('/') && !filePathOpen?.startsWith('~')) {
             // Get directory from global filepath variable
             const path = require('path')
             const currentDocDir = path.dirname(filePath)
@@ -95,7 +95,7 @@ export const onConvertSource = (text: string, filePath: string, skipLineNumbers:
           }
 
           // Otherwise, if the path starts with ~, replace it with the user's home directory
-          else if (filePathOpen.startsWith('~')) {
+          else if (filePathOpen?.startsWith('~')) {
             const homeDir = require('os').homedir()
             const path = require('path')
             const absolutePath = path.join(homeDir, filePathOpen.slice(1))
@@ -414,7 +414,7 @@ const App = () => {
         }
 
         // Handle file scheme with relative paths
-        if (processedUrl.startsWith('file:')) {
+        if (processedUrl?.startsWith('file:')) {
           const filePathOpen = processedUrl.replace('file:', '')
 
           // Filenames that don't begin with / or ~ are relative to current document's location

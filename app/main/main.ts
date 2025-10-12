@@ -150,7 +150,7 @@ app.on('web-contents-created', (event, contents) => {
     if (protocol === 'http:' || protocol === 'https:') {
       await shell.openExternal(urlToOpen)
     }
-    if (urlToOpen.startsWith('file://')) {
+    if (urlToOpen?.startsWith('file://')) {
       await shell.openExternal(urlToOpen)
     }
   }
