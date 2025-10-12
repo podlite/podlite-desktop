@@ -64,6 +64,57 @@ ipcMain.on('on-open-url', async (event, url: string) => {
   await shell.openExternal(url)
 })
 
+// Handle show-save-dialog IPC call
+ipcMain.handle('show-save-dialog', async (event, options) => {
+  const win = BrowserWindow.fromWebContents(event.sender)
+  return await dialog.showSaveDialog(win, options)
+})
+
+// Handle show-message-box IPC call
+ipcMain.handle('show-message-box', async (event, options) => {
+  const win = BrowserWindow.fromWebContents(event.sender)
+  return await dialog.showMessageBox(win, options)
+})
+
+// Handle HTML to PDF conversion
+ipcMain.handle('html-to-pdf', async (_event, { htmlData, pdfOptions }) => {
+  let pdfWindow = null
+  try {
+    const htmlEncoded = encodeURIComponent(htmlData)
+    pdfWindow = new BrowserWindow({
+      show: false,
+      webPreferences: {
+        nodeIntegration: false,
+        contextIsolation: true,
+        webSecurity: false, // Required for loading local resources (e.g. images)
+      },
+    })
+
+    // Set up event listeners BEFORE loading the URL
+    await new Promise((resolve, reject) => {
+      pdfWindow.webContents.once('did-finish-load', () => {
+        resolve(null)
+      })
+      pdfWindow.webContents.once('did-fail-load', (_event: any, errorCode: number, errorDescription: string) => {
+        reject(new Error(`Failed to load HTML: ${errorDescription} (${errorCode})`))
+      })
+      // Now load the URL
+      pdfWindow.loadURL(`data:text/html;charset=UTF-8,${htmlEncoded}`)
+    })
+    // Generate PDF
+    const buffer = await pdfWindow.webContents.printToPDF(pdfOptions)
+    return buffer
+  } catch (error) {
+    log.error('Error generating PDF:', error)
+    throw error
+  } finally {
+    // Clean up the window
+    if (pdfWindow && !pdfWindow.isDestroyed()) {
+      pdfWindow.close()
+    }
+  }
+})
+
 app.on('save-file', () => console.log('app.save-file'))
 
 app.on('window-all-closed', () => {

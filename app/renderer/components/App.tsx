@@ -3,7 +3,7 @@ import { ConverterResult } from '@podlite/editor-react'
 import { Editor2 } from '@podlite/editor-react'
 import { podlite as podlite_core } from 'podlite'
 import Podlite from '@podlite/to-jsx'
-const { remote } = window.require('electron')
+const { ipcRenderer } = window.require('electron')
 import { useEffect, useState } from 'react'
 import { Rules, makeInterator, Node, getTextContentFromNode, PodliteDocument, setFn } from '@podlite/schema'
 
@@ -312,7 +312,7 @@ const App = () => {
     // handle export to html
     const exportToHtml = async (): Promise<void> => {
       const fileName = filePath ? vmd.path.parse(filePath)['name'] : filePath
-      const { canceled, filePath: filePath1 } = await remote.dialog.showSaveDialog({
+      const { canceled, filePath: filePath1 } = await ipcRenderer.invoke('show-save-dialog', {
         defaultPath: `*/${fileName}.html`,
         buttonLabel: 'Export',
       })
@@ -330,7 +330,7 @@ const App = () => {
     // handle export to pdf
     const exportPdf = async (): Promise<void> => {
       const fileName = filePath ? vmd.path.parse(filePath)['name'] : filePath
-      const { canceled, filePath: filePath1 } = await remote.dialog.showSaveDialog({
+      const { canceled, filePath: filePath1 } = await ipcRenderer.invoke('show-save-dialog', {
         defaultPath: `*/${fileName}.pdf`,
         buttonLabel: 'Export',
       })
@@ -350,8 +350,7 @@ const App = () => {
       try {
         // Check if current file has unsaved changes
         if (isTextChanged) {
-          const { remote } = window.require('electron')
-          const confirmResult = await remote.dialog.showMessageBox(remote.getCurrentWindow(), {
+          const confirmResult = await ipcRenderer.invoke('show-message-box', {
             type: 'warning',
             buttons: ['Save', 'Discard', 'Cancel'],
             defaultId: 0,
