@@ -256,6 +256,12 @@ const App = () => {
   const [isHalfPreviewMode, setHalfPreviewMode] = useState(false)
   const [isTextChanged, setTextChanged] = useState(false)
 
+  // Expose state to main process via window globals
+  useEffect(() => {
+    (window as any).__podliteHasUnsavedChanges = isTextChanged;
+    (window as any).__podliteCurrentFilePath = filePath
+  }, [isTextChanged, text, filePath])
+
   useEffect(() => {
     const fileName = filePath ? vmd.path.parse(filePath)['name'] : filePath
     vmd.setWindowTitle(`${fileName || '[new]'}${isTextChanged ? ' *' : ''}`)

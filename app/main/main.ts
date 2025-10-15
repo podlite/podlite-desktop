@@ -31,6 +31,8 @@ ipcMain.on('save-file', async (event, { content, filePath }) => {
     fs.writeFileSync(filePath, content)
     event.returnValue = 'pong'
     win.webContents.send('file-saved', { filePath })
+    // Send confirmation for window close handler
+    ipcMain.emit('file-saved-confirmation', event, { filePath })
   } else {
     const saveDialogResult = await dialog.showSaveDialog(win, {})
     if (saveDialogResult.canceled) {
@@ -38,6 +40,8 @@ ipcMain.on('save-file', async (event, { content, filePath }) => {
     }
     fs.writeFileSync(saveDialogResult.filePath, content)
     win.webContents.send('file-saved', { filePath: saveDialogResult.filePath })
+    // Send confirmation for window close handler
+    ipcMain.emit('file-saved-confirmation', event, { filePath: saveDialogResult.filePath })
   }
 })
 
