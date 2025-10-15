@@ -9,6 +9,8 @@ const join = require('path').join
 const BUG_REPORT_URL = 'https://github.com/podlite/podlite-desktop/issues'
 const HOME_PAGE = 'https://github.com/podlite/podlite-desktop'
 const RELEASE_PAGE = 'https://github.com/podlite/podlite-desktop/releases'
+const QUICK_TOUR_PAGE = 'https://podlite.org/quick-tour'
+const SPECIFICATION_PAGE = 'https://podlite.org/specification'
 
 function menuLabel(label) {
   if (process.platform === 'darwin') {
@@ -130,6 +132,19 @@ export default function setMainMenu(mainApp: App) {
           shell.openExternal(RELEASE_PAGE)
         },
       },
+      {
+        label: 'Podlite Quick Tour',
+        click(): void {
+          shell.openExternal(QUICK_TOUR_PAGE)
+        },
+      },
+      {
+        label: 'Podlite Specification',
+        click(): void {
+          shell.openExternal(SPECIFICATION_PAGE)
+        },
+      },
+
       { type: 'separator' },
       {
         label: menuLabel('&Open DevTools'),
