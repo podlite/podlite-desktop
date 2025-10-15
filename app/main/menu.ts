@@ -114,6 +114,17 @@ export default function setMainMenu(mainApp: App) {
           },
         ],
       },
+      { type: 'separator' },
+      {
+        label: menuLabel('&Close Window'),
+        accelerator: 'CmdOrCtrl+W',
+        click(_item, win): void {
+          const window = BrowserWindow.getFocusedWindow()
+          if (window !== null) {
+            window.close()
+          }
+        },
+      },
     ],
   }
 
@@ -181,14 +192,14 @@ export default function setMainMenu(mainApp: App) {
     submenu: [
       {
         label: menuLabel('&Toggle Preview'),
-        accelerator: 'CmdOrCtrl+.',
+        accelerator: 'CmdOrCtrl+/',
         click(item, win, event): void {
           if (win) win.webContents.send('view-preview-toggle')
         },
       },
       {
         label: menuLabel('&Toggle Half Preview'),
-        accelerator: 'CmdOrCtrl+,',
+        accelerator: 'CmdOrCtrl+.',
         click(item, win, event): void {
           if (win) win.webContents.send('view-halfpreview-toggle')
         },
