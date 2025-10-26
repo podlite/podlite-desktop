@@ -3,7 +3,7 @@
   "productName": "podlite",
   "author": "Aliaksandr Zahatski",
   "license": "MIT",
-  "version": "0.5.0",
+  "version": "0.6.1",
   "description": "Podite editor",
   "main": "build/main.js",
   "repository": {
@@ -36,12 +36,17 @@
     "fileAssociations": [
       {
         "ext": "pod6",
-        "name": "Pod6 Text",
+        "name": "Podlite Text",
         "role": "Editor"
       },
       {
         "ext": "rakudoc",
-        "name": "Pod6 Text",
+        "name": "Podlite Text",
+        "role": "Editor"
+      },
+      {
+        "ext": "podlite",
+        "name": "Podlite Text",
         "role": "Editor"
       }
     ],
@@ -180,7 +185,7 @@
     "@yarnpkg/sdks": "^2.6.0-rc.2",
     "copy-webpack-plugin": "^10.2.0",
     "css-loader": "^6.5.1",
-    "electron": "13.6.3",
+    "electron": "38.2.2",
     "electron-builder": "^23.6.0",
     "electron-builder-notarize": "^1.2.0",
     "electron-devtools-installer": "^3.1.1",
@@ -211,20 +216,20 @@
     "webpack-dev-server": "^4.7.2"
   },
   "dependencies": {
-    "@podlite/editor-react": "^0.0.22",
-    "@podlite/schema": "^0.0.16",
-    "@podlite/to-jsx": "^0.0.20",
+    "@podlite/editor-react": "^0.0.39",
+    "@podlite/schema": "^0.0.33",
+    "@podlite/to-jsx": "^0.0.37",
     "@types/react-router-dom": "^5.3.2",
     "about-window": "1.15.2",
-    "codemirror": "5.x",
+    "codemirror": "^6.0.2",
     "electron-is-dev": "^1.1.0",
     "electron-log": "^4.2.4",
     "electron-updater": "^4.3.4",
     "electron-util": "^0.14.2",
-    "podlite": "^0.0.29",
+    "podlite": "^0.0.46",
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "remove": "^0.1.5"
   },
-  "packageManager": "yarn@3.1.1"
+  "packageManager": "yarn@4.10.3"
 }

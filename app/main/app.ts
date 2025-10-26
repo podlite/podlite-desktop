@@ -30,7 +30,7 @@ export class App extends EventEmitter {
       // create window dd
       this.createWindow({ id: 0 })
     } else {
-      tmpstate.windows.map(async opt => this.createWindow(opt, true))
+      tmpstate.windows.map(async opt => this.openFile(opt, true))
     }
     await this.store('app.json', this.windowsPull.getState())
   }
@@ -49,6 +49,26 @@ export class App extends EventEmitter {
     return new Promise((resolve, reject) => {
       fs.writeFile(this.pathForKey(name), JSON.stringify(object), 'utf8', error => (error ? reject(error) : resolve(0)))
     })
+  }
+
+  async openFile(options: WindowConfig, isSkipSaveState: boolean = false) {
+    if (!options.filePath) {
+      return this.createWindow(options, isSkipSaveState)
+    }
+    const win = this.windowsPull.findByFilePath(options.filePath)
+    if (win && win.isExist()) {
+      return win.browserWindow.focus()
+    } else {
+      if (options.win?.webContents) {
+        const destWin = this.windowsPull.all().find(item => item.browserWindow === options.win)
+        if (!destWin) {
+          return this.createWindow(options, isSkipSaveState)
+        }
+        destWin.loadFile(options.filePath)
+      } else {
+        return this.createWindow(options, isSkipSaveState)
+      }
+    }
   }
 
   async createWindow(options: WindowConfig, isSkipSaveState: boolean = false) {
@@ -106,8 +126,8 @@ export class App extends EventEmitter {
     dialog.showOpenDialog(win, dialogOptions).then(({ filePaths }) => {
       if (!Array.isArray(filePaths) || !filePaths.length) {
         return
-      } //
-      this.createWindow({ filePath: filePaths[0] }).then()
+      }
+      this.openFile({ filePath: filePaths[0], win }).then()
     })
   }
 
@@ -126,7 +146,7 @@ export class App extends EventEmitter {
       if (!Array.isArray(filePaths) || !filePaths.length) {
         return
       } //
-      this.createWindow({ id: 0, type: 'importMarkdown', filePath: filePaths[0] }).then()
+      this.openFile({ id: 0, type: 'importMarkdown', filePath: filePaths[0] }).then()
     })
   }
 }
@@ -137,6 +157,12 @@ export class WindowsPull {
     this.windows = []
   }
 
+  findByFilePath(filePath: string) {
+    return this.windows.find(win => win.filePath === filePath)
+  }
+  getWinByBrowserWindow(win: BrowserWindow) {
+    return this.windows.find(item => item.browserWindow === win)
+  }
   getState(): { windows: Array<WindowConfig> } {
     return {
       windows:

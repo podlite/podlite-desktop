@@ -9,6 +9,8 @@ const join = require('path').join
 const BUG_REPORT_URL = 'https://github.com/podlite/podlite-desktop/issues'
 const HOME_PAGE = 'https://github.com/podlite/podlite-desktop'
 const RELEASE_PAGE = 'https://github.com/podlite/podlite-desktop/releases'
+const QUICK_TOUR_PAGE = 'https://podlite.org/quick-tour'
+const SPECIFICATION_PAGE = 'https://podlite.org/specification'
 
 function menuLabel(label) {
   if (process.platform === 'darwin') {
@@ -19,7 +21,7 @@ function menuLabel(label) {
 const openAbout = () => {
   openAboutWindow({
     icon_path: join(__dirname, 'icon.png'),
-    copyright: `Copyright (c) 2020-2024 Alexandr Zahatski, https://zahatski.com <br/><p style="text-align:center">@podlite/schema: ${version}</p>`,
+    copyright: `Copyright (c) 2020-2025 Alexandr Zahatski, https://podlite.org <br/><p style="text-align:center">@podlite/schema: ${version}</p>`,
     package_json_dir: join(__dirname, '..'),
     about_page_dir: join(__dirname, '..', 'vendors', 'about-window'),
     bug_report_url: BUG_REPORT_URL,
@@ -56,30 +58,29 @@ export default function setMainMenu(mainApp: App) {
       {
         label: menuLabel('&New'),
         accelerator: 'CmdOrCtrl+N',
-        click(model, item, win) {
+        click(item, win, event) {
           mainApp.createWindow({})
         },
       },
       {
         label: menuLabel('&Open'),
         accelerator: 'CmdOrCtrl+O',
-        click(model, item, win) {
-          //@ts-ignore
+        click(item, win, event) {
           mainApp.openFileDialog(win)
         },
       },
       {
         label: menuLabel('&Save'),
         accelerator: 'CmdOrCtrl+S',
-        click(model, item, win): void {
-          if (item) item.webContents.send('menu-file-save')
+        click(item, win, event): void {
+          if (item) win.webContents.send('menu-file-save')
         },
       },
       {
         label: menuLabel('&Save as'),
         accelerator: 'CmdOrCtrl+Shift+S',
-        click(model, item, win): void {
-          if (item) item.webContents.send('menu-file-save-as')
+        click(item, win, event): void {
+          if (item) win.webContents.send('menu-file-save-as')
         },
       },
 
@@ -89,7 +90,7 @@ export default function setMainMenu(mainApp: App) {
         submenu: [
           {
             label: menuLabel('&Markdown'),
-            click(model, item, win) {
+            click(item, win, event) {
               //@ts-ignore
               mainApp.openImportMakdownDialog(win)
             },
@@ -101,17 +102,28 @@ export default function setMainMenu(mainApp: App) {
         submenu: [
           {
             label: menuLabel('&Html'),
-            click(model, item, win) {
-              if (item) item.webContents.send('exportHtml')
+            click(item, win, event) {
+              if (win) win.webContents.send('exportHtml')
             },
           },
           {
             label: menuLabel('&Pdf'),
-            click(model, item, win) {
-              if (item) item.webContents.send('exportPdf')
+            click(item, win, event) {
+              if (win) win.webContents.send('exportPdf')
             },
           },
         ],
+      },
+      { type: 'separator' },
+      {
+        label: menuLabel('&Close Window'),
+        accelerator: 'CmdOrCtrl+W',
+        click(_item, win): void {
+          const window = BrowserWindow.getFocusedWindow()
+          if (window !== null) {
+            window.close()
+          }
+        },
       },
     ],
   }
@@ -131,12 +143,24 @@ export default function setMainMenu(mainApp: App) {
           shell.openExternal(RELEASE_PAGE)
         },
       },
+      {
+        label: 'Podlite Quick Tour',
+        click(): void {
+          shell.openExternal(QUICK_TOUR_PAGE)
+        },
+      },
+      {
+        label: 'Podlite Specification',
+        click(): void {
+          shell.openExternal(SPECIFICATION_PAGE)
+        },
+      },
+
       { type: 'separator' },
       {
         label: menuLabel('&Open DevTools'),
-        click(model, item, win) {
-          //@ts-ignore
-          item.webContents.openDevTools({ mode: 'detach' })
+        click(item, win, event) {
+          win.webContents.openDevTools({ mode: 'detach' })
         },
       },
 
@@ -168,10 +192,16 @@ export default function setMainMenu(mainApp: App) {
     submenu: [
       {
         label: menuLabel('&Toggle Preview'),
-        accelerator: 'CmdOrCtrl+/',
-        click(model, item, win): void {
-          console.log('sending view-preview-toggle')
-          if (item) item.webContents.send('view-preview-toggle')
+        accelerator: 'CmdOrCtrl+\\',
+        click(item, win, event): void {
+          if (win) win.webContents.send('view-preview-toggle')
+        },
+      },
+      {
+        label: menuLabel('&Toggle Half Preview'),
+        accelerator: 'CmdOrCtrl+.',
+        click(item, win, event): void {
+          if (win) win.webContents.send('view-halfpreview-toggle')
         },
       },
     ],

@@ -15,6 +15,7 @@ export interface WindowConfig {
   bounds?: Rectangle
   isMaximized?: boolean
   isFullScreen?: boolean
+  win?: BrowserWindow
 }
 export class Window extends EventEmitter {
   public browserWindow: BrowserWindow
@@ -33,7 +34,7 @@ export class Window extends EventEmitter {
       webPreferences: {
         preload: `${__dirname}/client-api.js`,
         nodeIntegration: true,
-        contextIsolation: false, // protect against prototype pollution
+        contextIsolation: false,
         spellcheck: true,
         webSecurity: false,
         enableRemoteModule: true,
@@ -64,24 +65,57 @@ export class Window extends EventEmitter {
     })
     const url = isDev ? devPath : prodPath
     this.browserWindow.loadURL(url)
-    /**
-    this.browserWindow.on('close', () => {
-      // mainWindow = null
-      console.log("close window: "  + this.id) //   + mainWindow.id)
-     })
-   
-    this.browserWindow.on('closed', () => {
-     // mainWindow = null
-     console.log("closed window: " ) //   + mainWindow.id)
+
+    // Handle window close event to check for unsaved changes
+    this.browserWindow.on('close', async e => {
+      console.log('window close event')
+      e.preventDefault()
+
+      // Request current state from renderer
+      const hasUnsavedChanges = await this.browserWindow.webContents.executeJavaScript(
+        'window.__podliteHasUnsavedChanges || false',
+      )
+      const currentFilePath = await this.browserWindow.webContents.executeJavaScript(
+        'window.__podliteCurrentFilePath || ""',
+      )
+
+      // Check if there are unsaved changes
+      if (hasUnsavedChanges) {
+        const { dialog } = require('electron')
+        const confirmResult = await dialog.showMessageBox(this.browserWindow, {
+          type: 'warning',
+          buttons: ['Save', 'Discard', 'Cancel'],
+          defaultId: 0,
+          cancelId: 2,
+          message: 'The current file has unsaved changes.',
+          detail: 'Do you want to save it before closing?',
+        })
+
+        if (confirmResult.response === 2) {
+          // Cancel - don't close
+          return
+        } else if (confirmResult.response === 0) {
+          // Save before closing
+          const { ipcMain } = require('electron')
+          await new Promise<void>(resolve => {
+            const saveHandler = (_event: any, data: any) => {
+              if (data.filePath === currentFilePath || !currentFilePath) {
+                ipcMain.off('file-saved-confirmation', saveHandler)
+                resolve()
+              }
+            }
+            ipcMain.on('file-saved-confirmation', saveHandler)
+            this.browserWindow.webContents.send('menu-file-save')
+          })
+        }
+        // If response === 1 (Discard), continue to close
+      }
+
+      // Close the window without triggering this handler again
+      this.browserWindow.removeAllListeners('close')
+      this.browserWindow.close()
     })
-    */
-    const sendFile = filePath => {
-      console.log('send ' + filePath)
-      this.browserWindow.webContents.send('file', {
-        content: fs.readFileSync(filePath, { encoding: 'utf8' }),
-        filePath,
-      })
-    }
+
     const importMarkdownFile = filePath => {
       this.browserWindow.webContents.send('importMarkdown', {
         content: fs.readFileSync(filePath, { encoding: 'utf8' }),
@@ -106,7 +140,9 @@ export class Window extends EventEmitter {
       switch (this.type) {
         case 'open':
           if (this.filePath) {
-            sendFile(this.filePath)
+            this.loadFile(this.filePath)
+          } else {
+            this.loadFile('')
           }
           break
         case 'importMarkdown':
@@ -122,5 +158,25 @@ export class Window extends EventEmitter {
     this.browserWindow.webContents.on('save-file', () => {
       console.log('webContents.save-file')
     })
+  }
+  loadFile(filePath: string) {
+    if (this.isExist()) {
+      if (!filePath) {
+        this.filePath = null
+        this.browserWindow.webContents.send('file', {
+          content: '',
+          filePath: '',
+        })
+      } else {
+        this.filePath = filePath
+        this.browserWindow.webContents.send('file', {
+          content: fs.readFileSync(filePath, { encoding: 'utf8' }),
+          filePath,
+        })
+      }
+    }
+  }
+  isExist() {
+    return this.browserWindow && !this.browserWindow.isDestroyed()
   }
 }

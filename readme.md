@@ -5,13 +5,18 @@
 <br/>
 <br/>
 </h1>
-<h4 align="center">The viewer and editor of [Podlite](https://podlite.org) files for Windows, Linux and Mac.</h4>
+
+<div align="center">
+
+The viewer and editor of [Podlite](https://podlite.org) files for Windows, Linux and Mac.
+
+</div>
 
 ## Screenshots
 
-![Podlite editor Screenshot](./doc/screenshot-full-page.png)
+![Podlite editor Screenshot](doc/screenshot-1-page.png)
 ![Podlite editor Screenshot](./doc/Screenshot1.png)
-![Podlite editor Screenshot](./doc/Screenshot2.png)
+![Podlite editor Screenshot](./doc/screenshot-3-page.png)
 ![Podlite editor Screenshot](./doc/Screenshot3.png)
 
 ## Get Podlite
@@ -22,13 +27,14 @@ Download the [latest release](https://github.com/podlite/podlite-desktop/release
 
 ## Features
 
-- Write in Podlite markup language
-- Preview elements (such as headers, images, math, embedded videos, todo lists...) while you type
-- Preview mode cmd-/ ( win-/ )
+- write in Podlite markup language
+- preview elements (such as headers, images, math, embedded videos, todo lists...) while you type
+- preview mode cmd-\ ( ctrl-\ )
+- half-screen preview toggle — cmd + . (ctrl + .)
 - export to html and pdf
 - import from markdown
-- make diagrams via =Diagram block
-- write in markdown via =Markdown block
+- make diagrams via `=Mermaid` block
+- write in markdown via `=markdown` block
 - And more features to come...
 
 ## Podlite blocks and extensions
@@ -54,7 +60,7 @@ Examples:
 =end markdown
 ```
 
-[Open this example in pod6.in](https://pod6.in/#p=%3Dbegin+markdown%0A%0A++%23+Cases%0A++%0A++*Write*+the+documentation+with+the+markup+you+__love__%21%0A%0A++*+item1+%0A++*+item2%0A++%09+*+%7E%7Esub+item1%7E%7E%0A+++++*+sub+item2%0A%0A%3Dend+markdown)
+[Open this example in pod6.in](https://pod6.in/#p=%3Dbegin+markdown%0A%0A++%23+Cases%0A++%0A++*Write*+the+documentation+with+the+markup+you+__love__%21%0A%0A++*+item1+%0A++*+item2%0A++%09+*+%7E%7Esub+item1%7E%7E%0A+++++*+sub+item2%0A%0A%3Den d+markdown)
 
 ### `=useReact`, `=React` - additional blocks to support the "Podlite for Web" package
 
@@ -66,11 +72,11 @@ For more information, please read the following article:
 Examples:
 
 ```
-=Toc head1, head2, head3
+=toc head1, head2, head3
 ```
 
 ```
-=for Toc :title('Table of contents')
+=for toc :title('Table of contents')
 head1, head2, head3
 ```
 
@@ -214,7 +220,7 @@ classDiagram
 [Open this example in pod6.in](https://pod6.in/#p=+%3DMermaid%0A+gantt%0A+title+Example+Gantt+diagram%0A++++dateFormat++YYYY-MM-DD%0A++++section+Team+1%0A++++Research+%26+requirements+%3Adone%2C+a1%2C+2021-04-08%2C+2021-04-10%0A++++Review+%26+documentation+%3A+after+a1%2C+20d%0A++++section+Team+2%0A++++Implementation++++++%3Acrit%2C+active%2C+2021-04-25++%2C+20d%0A++++Testing++++++%3Acrit%2C+20d)
 
 Diagrams are created by linking text labels using arrow connectors. You can choose different shapes, add labels to connectors, and style connectors and shapes.
-`=Diagram` uses Mermaid diagramming and charting tool.
+`=Mermaid` uses Mermaid diagramming and charting tool.
 [Mermaid documentation for the complete syntax](https://mermaid-js.github.io/mermaid/#/)
 
 ## Documentation
@@ -237,9 +243,70 @@ In order to keep the match between this documentation and the last release, plea
 
 ![Podlite editor Screenshot](./doc/linuxAppImage-permissions.png)
 
+## links
+
+<div align="center">
+<table border=0><tr><td valign=top><div align="center">
+
+##### specification
+
+</div>
+
+- [Source](https://github.com/podlite/podlite-specs)
+- [in HTML](https://podlite.org/specification)
+- [Discussions](https://github.com/podlite/podlite-specs/discussions)
+
+<div align="center">
+
+##### implementation
+
+</div>
+
+- [Source](https://github.com/podlite/podlite)
+- [Changelog](https://github.com/podlite/podlite/releases)
+- [Issues](https://github.com/podlite/podlite/issues)
+
+</td><td valign=top><div align="center">
+
+##### publishing system
+
+</div>
+
+- [Podlite-web](https://github.com/podlite/podlite-web)
+- [How-to article](https://zahatski.com/2022/8/23/1/start-you-own-blog-site-with-podlite-for-web)
+- [Issues](https://github.com/podlite/podlite-specs/issues)
+- [Changelog](https://github.com/podlite/podlite-web/releases)
+- [Practical case: Raku knowledge base ](https://raku-knowledge-base.podlite.org/)
+
+</td><td valign=top><div align="center">
+  
+##### desktop viewer/editor
+
+</div>
+
+- [Podlite-desktop](https://github.com/podlite/podlite-desktop)
+- [Releases](https://github.com/podlite/podlite-desktop/releases)
+- [Issues](https://github.com/podlite/podlite-desktop/issues)
+- Stores: - [Linux](https://snapcraft.io/podlite) - [Windows](https://www.microsoft.com/store/apps/9NVNT9SNQJM8) - [Mac App](https://apps.apple.com/us/app/podlite/id1526511053)
+</td><td valign=top><div align="center">
+
+##### online resurces
+
+ </div>
+
+- [Roadmap](https://podlite.org/#Roadmap)
+- [github.com/podlite](https://github.com/podlite/)&nbsp;🤩
+- [podlite.org](https://podlite.org)
+- [pod6.in](https://pod6.in/)
+- [Podlite project updates](https://podlite.org/contents)
+- [Funding the ongoing development](https://opencollective.com/podlite)
+
+</td></tr></table>
+</div>
+
 ## AUTHOR
 
-Copyright (c) 2020 - 2024 Alexandr Zahatski
+Copyright (c) 2020 - 2025 Alexandr Zahatski, https://podlite.org
 
 ## License
 

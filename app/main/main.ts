@@ -12,6 +12,15 @@ const setMainMenu = require('./menu').default
 //   app.quit();
 // }
 
+// https://github.com/electron/electron/issues/15958
+
+if (!process.mas) {
+  const gotTheLock = app.requestSingleInstanceLock()
+  if (!gotTheLock) {
+    app.quit()
+  }
+}
+
 app.commandLine.appendArgument('enable-transparent-visuals')
 app.commandLine.appendArgument('disable-gpu')
 app.disableHardwareAcceleration()
@@ -22,6 +31,8 @@ ipcMain.on('save-file', async (event, { content, filePath }) => {
     fs.writeFileSync(filePath, content)
     event.returnValue = 'pong'
     win.webContents.send('file-saved', { filePath })
+    // Send confirmation for window close handler
+    ipcMain.emit('file-saved-confirmation', event, { filePath })
   } else {
     const saveDialogResult = await dialog.showSaveDialog(win, {})
     if (saveDialogResult.canceled) {
@@ -29,6 +40,8 @@ ipcMain.on('save-file', async (event, { content, filePath }) => {
     }
     fs.writeFileSync(saveDialogResult.filePath, content)
     win.webContents.send('file-saved', { filePath: saveDialogResult.filePath })
+    // Send confirmation for window close handler
+    ipcMain.emit('file-saved-confirmation', event, { filePath: saveDialogResult.filePath })
   }
 })
 
@@ -51,6 +64,72 @@ ipcMain.on('set-title', (event, title) => {
   const win = BrowserWindow.fromWebContents(event.sender)
   win.setTitle(title)
 })
+ipcMain.on('on-open-url', async (event, url: string) => {
+  await shell.openExternal(url)
+})
+
+ipcMain.on('close-window', event => {
+  const win = BrowserWindow.fromWebContents(event.sender)
+  if (win) {
+    win.close()
+  }
+})
+
+ipcMain.on('log', (event, message) => {
+  console.log(message)
+})
+
+// Handle show-save-dialog IPC call
+ipcMain.handle('show-save-dialog', async (event, options) => {
+  const win = BrowserWindow.fromWebContents(event.sender)
+  return await dialog.showSaveDialog(win, options)
+})
+
+// Handle show-message-box IPC call
+ipcMain.handle('show-message-box', async (event, options) => {
+  const win = BrowserWindow.fromWebContents(event.sender)
+  return await dialog.showMessageBox(win, options)
+})
+
+// Handle HTML to PDF conversion
+ipcMain.handle('html-to-pdf', async (_event, { htmlData, pdfOptions }) => {
+  let pdfWindow = null
+  try {
+    const htmlEncoded = encodeURIComponent(htmlData)
+    pdfWindow = new BrowserWindow({
+      show: false,
+      webPreferences: {
+        nodeIntegration: false,
+        contextIsolation: true,
+        webSecurity: false, // Required for loading local resources (e.g. images)
+      },
+    })
+
+    // Set up event listeners BEFORE loading the URL
+    await new Promise((resolve, reject) => {
+      pdfWindow.webContents.once('did-finish-load', () => {
+        resolve(null)
+      })
+      pdfWindow.webContents.once('did-fail-load', (_event: any, errorCode: number, errorDescription: string) => {
+        reject(new Error(`Failed to load HTML: ${errorDescription} (${errorCode})`))
+      })
+      // Now load the URL
+      pdfWindow.loadURL(`data:text/html;charset=UTF-8,${htmlEncoded}`)
+    })
+    // Generate PDF
+    const buffer = await pdfWindow.webContents.printToPDF(pdfOptions)
+    return buffer
+  } catch (error) {
+    log.error('Error generating PDF:', error)
+    throw error
+  } finally {
+    // Clean up the window
+    if (pdfWindow && !pdfWindow.isDestroyed()) {
+      pdfWindow.close()
+    }
+  }
+})
+
 app.on('save-file', () => console.log('app.save-file'))
 
 app.on('window-all-closed', () => {
@@ -69,20 +148,11 @@ app.on('will-finish-launching', () => {
     if (app.isReady() === false) {
       initOpenFileQueue.push(file)
     } else {
-      mainApp.createWindow({ id: 0, filePath: file })
+      mainApp.openFile({ id: 0, filePath: file })
     }
     event.preventDefault()
   })
 })
-
-// https://github.com/electron/electron/issues/15958
-
-if (!process.mas) {
-  const gotTheLock = app.requestSingleInstanceLock()
-  if (!gotTheLock) {
-    app.quit()
-  }
-}
 
 if (process.platform === 'win32') {
   const filePath = process.argv[1]
@@ -91,7 +161,7 @@ if (process.platform === 'win32') {
 
 app.on('second-instance', (event, argv) => {
   if (argv[3]) {
-    mainApp.createWindow({ id: 0, filePath: argv[3] })
+    mainApp.openFile({ id: 0, filePath: argv[3] })
   } else {
     log.info('no argv[3]')
     // TODO::
@@ -129,7 +199,7 @@ app.on('ready', async () => {
   setMainMenu(mainApp)
   mainApp.run()
   if (initOpenFileQueue.length) {
-    initOpenFileQueue.forEach(file => mainApp.createWindow({ id: 0, filePath: file }, true))
+    initOpenFileQueue.forEach(file => mainApp.openFile({ id: 0, filePath: file }, true))
   } else {
     console.log('openFileDialog(undefined, true)')
     //  openFileInReader(undefined, undefined, true)
@@ -144,6 +214,9 @@ app.on('web-contents-created', (event, contents) => {
     event.preventDefault()
     const protocol = new URL(urlToOpen).protocol
     if (protocol === 'http:' || protocol === 'https:') {
+      await shell.openExternal(urlToOpen)
+    }
+    if (urlToOpen?.startsWith('file://')) {
       await shell.openExternal(urlToOpen)
     }
   }

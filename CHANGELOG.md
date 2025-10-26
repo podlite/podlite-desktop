@@ -1,10 +1,23 @@
 # upcoming
 
-# 0.5.0
+# 0.6.1
 
-- `=markdown` - standart block
-- text search cmd-F
-- new blocks `=Mermaid`, `=picture`
+- editor refactored and rebuilt using updated libraries
+- added syntax highlighting for Podlite markup language
+- refactored key bindings
+- refactored window open/save/new workflow
+- fixed duplicate file opening issues
+- added `=markdown` standard block support
+- added text search (`Cmd-F`)
+- added new blocks: `=Mermaid`, `=picture`
+- added ability to open URLs from editor using `L<>` links (`Cmd`/`Win` or `Ctrl` modifier)
+- added `file:` schema support in `L<>` links - opens files in new editor window
+- half-screen preview toggle — <kbd>Ctrl</kbd> + <kbd>.</kbd> / <kbd>Cmd</kbd> + <kbd>.</kbd>
+- full-screen preview toggle — <kbd>Ctrl</kbd> + <kbd>\</kbd> / <kbd>Cmd</kbd> + <kbd>\</kbd>
+- added inline text style support (bold `B<>`, italic `I<>`, code `C<>`, links `L<>`, strikethrough `O<>`) within paragraphs and table cells
+- fixed redraw issue when resizing the application window
+- improved code block visibility in CSS
+- fixed build configuration to support macOS 26 (Thaoe)
 
 # 0.4.0
 

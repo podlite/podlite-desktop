@@ -1,6 +1,6 @@
 /* global vmd:true */
 
-const { ipcRenderer, remote } = require('electron')
+const { ipcRenderer } = require('electron')
 
 const electron = {
   ipc: ipcRenderer,
@@ -9,7 +9,6 @@ const electron = {
 // no var/let/const on purpose
 vmd = Object.assign(
   {
-    test: remote.app.getPath('userData'),
     windowid: require('url')
       .parse(global.location.href)
       .query.match(/id=(\d)+/)[1],
@@ -79,6 +78,9 @@ vmd = Object.assign(
 
     onContent(callback) {
       vmd.on('md', callback)
+    },
+    onOpenUrl(content) {
+      electron.ipc.send('on-open-url', content)
     },
   },
   // electron.sharedState
