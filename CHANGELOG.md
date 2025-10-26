@@ -17,6 +17,7 @@
 - added inline text style support (bold `B<>`, italic `I<>`, code `C<>`, links `L<>`, strikethrough `O<>`) within paragraphs and table cells
 - fixed redraw issue when resizing the application window
 - improved code block visibility in CSS
+- fixed build configuration to support macOS 26 (Thaoe)
 
 # 0.4.0
 
