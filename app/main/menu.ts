@@ -192,7 +192,7 @@ export default function setMainMenu(mainApp: App) {
     submenu: [
       {
         label: menuLabel('&Toggle Preview'),
-        accelerator: 'CmdOrCtrl+/',
+        accelerator: 'CmdOrCtrl+\\',
         click(item, win, event): void {
           if (win) win.webContents.send('view-preview-toggle')
         },

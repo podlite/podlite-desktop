@@ -240,7 +240,7 @@ const prepareHTML = (text: string, filePath: string): Promise<string> => {
                 </div>
             </div>
         </div>
-        <footer id="pageFooter">Made in <a href="https://github.com/zag/podlite-desktop">podlite</a></footer>
+        <footer id="pageFooter">Made in <a href="https://github.com/podlite/podlite-desktop">podlite</a></footer>
         </body>
         </html>`
         resolve(html)
@@ -258,8 +258,8 @@ const App = () => {
 
   // Expose state to main process via window globals
   useEffect(() => {
-    (window as any).__podliteHasUnsavedChanges = isTextChanged;
-    (window as any).__podliteCurrentFilePath = filePath
+    ;(window as any).__podliteHasUnsavedChanges = isTextChanged
+    ;(window as any).__podliteCurrentFilePath = filePath
   }, [isTextChanged, text, filePath])
 
   useEffect(() => {

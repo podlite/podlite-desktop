@@ -68,6 +68,17 @@ ipcMain.on('on-open-url', async (event, url: string) => {
   await shell.openExternal(url)
 })
 
+ipcMain.on('close-window', event => {
+  const win = BrowserWindow.fromWebContents(event.sender)
+  if (win) {
+    win.close()
+  }
+})
+
+ipcMain.on('log', (event, message) => {
+  console.log(message)
+})
+
 // Handle show-save-dialog IPC call
 ipcMain.handle('show-save-dialog', async (event, options) => {
   const win = BrowserWindow.fromWebContents(event.sender)

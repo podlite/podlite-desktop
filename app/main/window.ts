@@ -106,7 +106,7 @@ export class Window extends EventEmitter {
             }
             ipcMain.on('file-saved-confirmation', saveHandler)
             this.browserWindow.webContents.send('menu-file-save')
-        })
+          })
         }
         // If response === 1 (Discard), continue to close
       }

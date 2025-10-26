@@ -14,9 +14,9 @@ The viewer and editor of [Podlite](https://podlite.org) files for Windows, Linux
 
 ## Screenshots
 
-![Podlite editor Screenshot](./doc/screenshot-full-page.png)
+![Podlite editor Screenshot](doc/screenshot-1-page.png)
 ![Podlite editor Screenshot](./doc/Screenshot1.png)
-![Podlite editor Screenshot](./doc/Screenshot2.png)
+![Podlite editor Screenshot](./doc/screenshot-3-page.png)
 ![Podlite editor Screenshot](./doc/Screenshot3.png)
 
 ## Get Podlite
@@ -27,9 +27,10 @@ Download the [latest release](https://github.com/podlite/podlite-desktop/release
 
 ## Features
 
-- Write in Podlite markup language
-- Preview elements (such as headers, images, math, embedded videos, todo lists...) while you type
-- Preview mode cmd-/ ( win-/ )
+- write in Podlite markup language
+- preview elements (such as headers, images, math, embedded videos, todo lists...) while you type
+- preview mode cmd-\ ( ctrl-\ )
+- half-screen preview toggle — cmd + . (ctrl + .)
 - export to html and pdf
 - import from markdown
 - make diagrams via `=Mermaid` block
