@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { ConverterResult } from '@podlite/editor-react'
+import { ConverterResult, EditorSessionState } from '@podlite/editor-react'
 import { Editor2 } from '@podlite/editor-react'
 import { podlite as podlite_core } from 'podlite'
 import Podlite from '@podlite/to-jsx'
@@ -255,12 +255,19 @@ const App = () => {
   const [isPreviewMode, setPreviewMode] = useState(false)
   const [isHalfPreviewMode, setHalfPreviewMode] = useState(false)
   const [isTextChanged, setTextChanged] = useState(false)
+  const [initialEditorState, setInitialEditorState] = useState<EditorSessionState | undefined>(undefined)
+  const [editorState, setEditorState] = useState<EditorSessionState>({})
 
   // Expose state to main process via window globals
   useEffect(() => {
     ;(window as any).__podliteHasUnsavedChanges = isTextChanged
     ;(window as any).__podliteCurrentFilePath = filePath
-  }, [isTextChanged, text, filePath])
+    ;(window as any).__podliteEditorState = {
+      ...editorState,
+      isPreviewMode,
+      isHalfPreviewMode,
+    }
+  }, [isTextChanged, text, filePath, editorState, isPreviewMode, isHalfPreviewMode])
 
   useEffect(() => {
     const fileName = filePath ? vmd.path.parse(filePath)['name'] : filePath
@@ -352,7 +359,7 @@ const App = () => {
 
   // desktop section - start
   useEffect(() => {
-    const handlerContent = async (_, { content, filePath: newFilePath }) => {
+    const handlerContent = async (_, { content, filePath: newFilePath, editorState: savedEditorState }) => {
       try {
         // Check if current file has unsaved changes
         if (isTextChanged) {
@@ -385,6 +392,12 @@ const App = () => {
         setFilePath(newFilePath)
         updateText(content)
         setTextChanged(false)
+        // Restore editor session state from saved state
+        if (savedEditorState) {
+          if (savedEditorState.isPreviewMode) setPreviewMode(true)
+          if (savedEditorState.isHalfPreviewMode) setHalfPreviewMode(true)
+          setInitialEditorState(savedEditorState)
+        }
       } catch (error) {
         console.error('Error in handlerContent:', error)
         // Fallback: load the new file anyway
@@ -441,6 +454,8 @@ const App = () => {
       previewWidth={isPreviewMode || isHalfPreviewMode ? (isHalfPreviewMode ? '50%' : '100%') : '0%'}
       readOnly={false}
       isFullscreen={true}
+      initialEditorState={initialEditorState}
+      onEditorStateChange={setEditorState}
     />
   )
 }

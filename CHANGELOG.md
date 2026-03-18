@@ -1,5 +1,8 @@
 # upcoming
 
+- restore editor state between sessions (cursor position, scroll, fold state, preview mode)
+- add code folding for `=begin`/`=end` blocks and `=head` sections (Ctrl-Shift-[ / Ctrl-Shift-])
+
 # 0.6.1
 
 - editor refactored and rebuilt using updated libraries

@@ -8,6 +8,14 @@ import * as path from 'path'
 const { format } = require('url')
 const isDev = require('electron-is-dev')
 
+export interface EditorSessionState {
+  cursorOffset?: number
+  scrollTop?: number
+  foldedRanges?: Array<{ from: number; to: number }>
+  isPreviewMode?: boolean
+  isHalfPreviewMode?: boolean
+}
+
 export interface WindowConfig {
   filePath?: string
   id?: number
@@ -15,6 +23,7 @@ export interface WindowConfig {
   bounds?: Rectangle
   isMaximized?: boolean
   isFullScreen?: boolean
+  editorState?: EditorSessionState
   win?: BrowserWindow
 }
 export class Window extends EventEmitter {
@@ -22,6 +31,7 @@ export class Window extends EventEmitter {
   public id: number
   public filePath: string
   public type: string
+  public editorState: EditorSessionState | undefined
 
   constructor(options: WindowConfig) {
     super()
@@ -29,6 +39,7 @@ export class Window extends EventEmitter {
     //@ts-ignore
     this.filePath = options.filePath
     this.type = options.type || 'open'
+    this.editorState = options.editorState
     const windowTitle = options.filePath ? path.parse(options.filePath)['name'] : '[new]'
     this.browserWindow = new BrowserWindow({
       webPreferences: {
@@ -172,6 +183,7 @@ export class Window extends EventEmitter {
         this.browserWindow.webContents.send('file', {
           content: fs.readFileSync(filePath, { encoding: 'utf8' }),
           filePath,
+          editorState: this.editorState,
         })
       }
     }

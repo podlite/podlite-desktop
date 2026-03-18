@@ -32,12 +32,12 @@ export class App extends EventEmitter {
     } else {
       tmpstate.windows.map(async opt => this.openFile(opt, true))
     }
-    await this.store('app.json', this.windowsPull.getState())
+    await this.store('app.json', await this.windowsPull.getState())
   }
   // call when app is closing
   async stop() {
     console.log('Save state before close')
-    await this.store('app.json', this.windowsPull.getState())
+    await this.store('app.json', await this.windowsPull.getState())
   }
 
   pathForKey(key) {
@@ -86,14 +86,15 @@ export class App extends EventEmitter {
       }
     })
     if (!isSkipSaveState) {
-      await this.store('app.json', this.windowsPull.getState())
+      await this.store('app.json', await this.windowsPull.getState())
     }
   }
 
   async closeWindow(win: Window) {
     this.windowsPull.remove(win)
-    console.log({ 'this.windowsPull.getState()': this.windowsPull.getState() })
-    await this.store('app.json', this.windowsPull.getState())
+    const state = await this.windowsPull.getState()
+    console.log({ 'this.windowsPull.getState()': state })
+    await this.store('app.json', state)
   }
 
   async load(name): Promise<{ windows: Array<WindowConfig> }> {
@@ -163,19 +164,28 @@ export class WindowsPull {
   getWinByBrowserWindow(win: BrowserWindow) {
     return this.windows.find(item => item.browserWindow === win)
   }
-  getState(): { windows: Array<WindowConfig> } {
-    return {
-      windows:
-        this.all().map(item => {
-          return {
-            id: item.id,
-            filePath: item.filePath,
-            bounds: item.browserWindow.getBounds(),
-            isMaximized: item.browserWindow.isMaximized(),
-            isFullScreen: item.browserWindow.isFullScreen(),
-          }
-        }) || [],
-    }
+  async getState(): Promise<{ windows: Array<WindowConfig> }> {
+    const windows = await Promise.all(
+      this.all().map(async item => {
+        let editorState = undefined
+        try {
+          editorState = await item.browserWindow.webContents.executeJavaScript(
+            'window.__podliteEditorState || undefined',
+          )
+        } catch (e) {
+          // Window may be closing or destroyed
+        }
+        return {
+          id: item.id,
+          filePath: item.filePath,
+          bounds: item.browserWindow.getBounds(),
+          isMaximized: item.browserWindow.isMaximized(),
+          isFullScreen: item.browserWindow.isFullScreen(),
+          editorState,
+        }
+      }),
+    )
+    return { windows }
   }
   remove(win) {
     const currentIndex = this.windows.indexOf(win)
