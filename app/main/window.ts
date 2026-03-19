@@ -32,6 +32,8 @@ export class Window extends EventEmitter {
   public filePath: string
   public type: string
   public editorState: EditorSessionState | undefined
+  private fileWatcher: fs.FSWatcher | null = null
+  private ignoreSaveUntil: number = 0
 
   constructor(options: WindowConfig) {
     super()
@@ -122,7 +124,8 @@ export class Window extends EventEmitter {
         // If response === 1 (Discard), continue to close
       }
 
-      // Close the window without triggering this handler again
+      // Clean up file watcher and close the window
+      this.unwatchFile()
       this.browserWindow.removeAllListeners('close')
       this.browserWindow.close()
     })
@@ -170,6 +173,66 @@ export class Window extends EventEmitter {
       console.log('webContents.save-file')
     })
   }
+  watchFile(filePath: string) {
+    this.unwatchFile()
+    if (!filePath) return
+
+    let debounceTimer: NodeJS.Timeout | null = null
+
+    this.fileWatcher = fs.watch(filePath, eventType => {
+      if (eventType !== 'change') return
+
+      // Ignore changes triggered by our own save (within 2 seconds)
+      if (Date.now() < this.ignoreSaveUntil) return
+
+      // Debounce rapid changes (e.g. Syncthing)
+      if (debounceTimer) clearTimeout(debounceTimer)
+      debounceTimer = setTimeout(async () => {
+        if (!this.isExist()) return
+
+        try {
+          const hasUnsavedChanges = await this.browserWindow.webContents.executeJavaScript(
+            'window.__podliteHasUnsavedChanges || false',
+          )
+
+          if (!hasUnsavedChanges) {
+            // No unsaved changes — silently reload
+            const content = fs.readFileSync(filePath, { encoding: 'utf8' })
+            this.browserWindow.webContents.send('file-changed-on-disk', { content, filePath })
+          } else {
+            // Has unsaved changes — ask user
+            const { dialog } = require('electron')
+            const result = await dialog.showMessageBox(this.browserWindow, {
+              type: 'question',
+              buttons: ['Reload', 'Keep mine'],
+              defaultId: 1,
+              message: 'File changed on disk.',
+              detail: 'The file has been modified externally. Reload and lose your changes?',
+            })
+            if (result.response === 0) {
+              const content = fs.readFileSync(filePath, { encoding: 'utf8' })
+              this.browserWindow.webContents.send('file-changed-on-disk', { content, filePath })
+            }
+          }
+        } catch (e) {
+          // Window may be closing
+        }
+      }, 300)
+    })
+  }
+
+  unwatchFile() {
+    if (this.fileWatcher) {
+      this.fileWatcher.close()
+      this.fileWatcher = null
+    }
+  }
+
+  // Call before saving to suppress self-triggered watch events
+  markSaving() {
+    this.ignoreSaveUntil = Date.now() + 2000
+  }
+
   loadFile(filePath: string) {
     if (this.isExist()) {
       if (!filePath) {
@@ -179,12 +242,19 @@ export class Window extends EventEmitter {
           filePath: '',
         })
       } else {
+        try {
+          const stat = fs.statSync(filePath)
+          if (stat.isDirectory()) return
+        } catch (e) {
+          return
+        }
         this.filePath = filePath
         this.browserWindow.webContents.send('file', {
           content: fs.readFileSync(filePath, { encoding: 'utf8' }),
           filePath,
           editorState: this.editorState,
         })
+        this.watchFile(filePath)
       }
     }
   }

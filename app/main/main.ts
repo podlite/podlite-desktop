@@ -27,6 +27,10 @@ app.disableHardwareAcceleration()
 
 ipcMain.on('save-file', async (event, { content, filePath }) => {
   const win = BrowserWindow.fromWebContents(event.sender)
+  // Mark window as saving to suppress file watcher self-trigger
+  const appWindow = mainApp.windowsPull.getWinByBrowserWindow(win)
+  if (appWindow) appWindow.markSaving()
+
   if (filePath) {
     fs.writeFileSync(filePath, content)
     event.returnValue = 'pong'

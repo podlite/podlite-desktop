@@ -2,6 +2,8 @@
 
 - restore editor state between sessions (cursor position, scroll, fold state, preview mode)
 - add code folding for `=begin`/`=end` blocks and `=head` sections (Ctrl-Shift-[ / Ctrl-Shift-])
+- auto-reload file when changed on disk (silent if no unsaved changes, dialog if unsaved)
+- fix crash when `loadFile` receives a directory path instead of a file
 
 # 0.6.1
 

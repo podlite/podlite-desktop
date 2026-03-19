@@ -412,6 +412,18 @@ const App = () => {
     }
   }, [isTextChanged, text, filePath])
 
+  // Handle external file changes (file watcher in main process)
+  useEffect(() => {
+    const handleFileChangedOnDisk = (_, { content }) => {
+      updateText(content)
+      setTextChanged(false)
+    }
+    vmd.on('file-changed-on-disk', handleFileChangedOnDisk)
+    return () => {
+      vmd.off('file-changed-on-disk', handleFileChangedOnDisk)
+    }
+  }, [])
+
   const onConvertSourceComponent = (text: string) => {
     return onConvertSource(text, filePath)
   }
