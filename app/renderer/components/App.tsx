@@ -392,12 +392,12 @@ const App = () => {
         setFilePath(newFilePath)
         updateText(content)
         setTextChanged(false)
-        // Restore editor session state from saved state
+        // Restore editor session state from saved state (or set empty to trigger focus)
         if (savedEditorState) {
           if (savedEditorState.isPreviewMode) setPreviewMode(true)
           if (savedEditorState.isHalfPreviewMode) setHalfPreviewMode(true)
-          setInitialEditorState(savedEditorState)
         }
+        setInitialEditorState(savedEditorState || {})
       } catch (error) {
         console.error('Error in handlerContent:', error)
         // Fallback: load the new file anyway
