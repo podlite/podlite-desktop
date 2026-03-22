@@ -359,7 +359,10 @@ const App = () => {
 
   // desktop section - start
   useEffect(() => {
-    const handlerContent = async (_, { content, filePath: newFilePath, editorState: savedEditorState }) => {
+    const handlerContent = async (
+      _,
+      { content, filePath: newFilePath, editorState: savedEditorState, openInPreview },
+    ) => {
       try {
         // Check if current file has unsaved changes
         if (isTextChanged) {
@@ -392,10 +395,17 @@ const App = () => {
         setFilePath(newFilePath)
         updateText(content)
         setTextChanged(false)
-        // Restore editor session state from saved state (or set empty to trigger focus)
-        if (savedEditorState) {
+
+        // Reset view mode before applying new state
+        setPreviewMode(false)
+        setHalfPreviewMode(false)
+
+        // Restore view mode: per-file saved → openInPreview setting → editor
+        if (savedEditorState && (savedEditorState.isPreviewMode || savedEditorState.isHalfPreviewMode)) {
           if (savedEditorState.isPreviewMode) setPreviewMode(true)
           if (savedEditorState.isHalfPreviewMode) setHalfPreviewMode(true)
+        } else if (openInPreview && newFilePath) {
+          setPreviewMode(true)
         }
         setInitialEditorState(savedEditorState || {})
       } catch (error) {

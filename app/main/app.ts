@@ -11,6 +11,7 @@ export class App extends EventEmitter {
   private storePath: string
   public windowsPull: WindowsPull
   public quitting: boolean
+  public openInPreview: boolean
 
   constructor() {
     super()
@@ -18,6 +19,7 @@ export class App extends EventEmitter {
     fs.mkdirSync(this.storePath, { recursive: true })
     this.windowsPull = new WindowsPull()
     this.quitting = false
+    this.openInPreview = false
     app.once('before-quit', () => {
       this.quitting = true
     })
@@ -26,18 +28,20 @@ export class App extends EventEmitter {
   async run() {
     // restore windows
     const tmpstate = (await this.load('app.json')) || { windows: [] }
+    this.openInPreview = tmpstate.openInPreview || false
     if (tmpstate.windows.length < 1 && this.windowsPull.all().length < 1) {
-      // create window dd
       this.createWindow({ id: 0 })
     } else {
       tmpstate.windows.map(async opt => this.openFile(opt, true))
     }
-    await this.store('app.json', await this.windowsPull.getState())
+    const runState = await this.windowsPull.getState()
+    await this.store('app.json', { ...runState, openInPreview: this.openInPreview })
   }
   // call when app is closing
   async stop() {
     console.log('Save state before close')
-    await this.store('app.json', await this.windowsPull.getState())
+    const state = await this.windowsPull.getState()
+    await this.store('app.json', { ...state, openInPreview: this.openInPreview })
   }
 
   pathForKey(key) {
@@ -59,12 +63,26 @@ export class App extends EventEmitter {
     if (win && win.isExist()) {
       return win.browserWindow.focus()
     } else {
+      // Restore per-file editorState from app.json if not provided
+      if (!options.editorState && options.filePath) {
+        const saved = await this.load('app.json')
+        if (saved && saved.windows) {
+          const match = saved.windows.find(w => w.filePath === options.filePath)
+          if (match && match.editorState) {
+            options.editorState = match.editorState
+          }
+        }
+      }
+      options.openInPreview =
+        options?.editorState && 'isPreviewMode' in options.editorState
+          ? options.editorState.isPreviewMode
+          : this.openInPreview
       if (options.win?.webContents) {
         const destWin = this.windowsPull.all().find(item => item.browserWindow === options.win)
         if (!destWin) {
           return this.createWindow(options, isSkipSaveState)
         }
-        destWin.loadFile(options.filePath)
+        destWin.loadFile(options.filePath, this.openInPreview)
       } else {
         return this.createWindow(options, isSkipSaveState)
       }
@@ -86,7 +104,8 @@ export class App extends EventEmitter {
       }
     })
     if (!isSkipSaveState) {
-      await this.store('app.json', await this.windowsPull.getState())
+      const createState = await this.windowsPull.getState()
+      await this.store('app.json', { ...createState, openInPreview: this.openInPreview })
     }
   }
 
@@ -94,14 +113,13 @@ export class App extends EventEmitter {
     this.windowsPull.remove(win)
     const state = await this.windowsPull.getState()
     console.log({ 'this.windowsPull.getState()': state })
-    await this.store('app.json', state)
+    await this.store('app.json', { ...state, openInPreview: this.openInPreview })
   }
 
   async load(name): Promise<{ windows: Array<WindowConfig> }> {
     const statePath = this.pathForKey(name)
     try {
       const data = fs.readFileSync(statePath, 'utf8').toString()
-      console.log({ state: data })
       return JSON.parse(data)
     } catch (e) {
       console.warn(console.warn(`Error reading state file: ${statePath}`, e.stack, e))

@@ -4,6 +4,13 @@
 - add code folding for `=begin`/`=end` blocks and `=head` sections (Ctrl-Shift-[ / Ctrl-Shift-])
 - auto-reload file when changed on disk (silent if no unsaved changes, dialog if unsaved)
 - fix crash when `loadFile` receives a directory path instead of a file
+- fix cursor not visible on new window open
+- fix fold markers appearing inside verbatim blocks (`=code`, `=comment`, `=data`)
+- add "Copy as PNG" button on WindowWrapper (`enableCopyPng` prop)
+- add "Open Files in Preview" toggle in View menu
+- per-file view mode persistence across sessions (editor/preview/split)
+- new files always open in editor mode
+- restore per-file view mode on double-click from Finder
 
 # 0.6.1
 

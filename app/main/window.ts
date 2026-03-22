@@ -24,6 +24,7 @@ export interface WindowConfig {
   isMaximized?: boolean
   isFullScreen?: boolean
   editorState?: EditorSessionState
+  openInPreview?: boolean
   win?: BrowserWindow
 }
 export class Window extends EventEmitter {
@@ -32,6 +33,7 @@ export class Window extends EventEmitter {
   public filePath: string
   public type: string
   public editorState: EditorSessionState | undefined
+  public openInPreview: boolean
   private fileWatcher: fs.FSWatcher | null = null
   private ignoreSaveUntil: number = 0
 
@@ -42,6 +44,7 @@ export class Window extends EventEmitter {
     this.filePath = options.filePath
     this.type = options.type || 'open'
     this.editorState = options.editorState
+    this.openInPreview = options.openInPreview || false
     const windowTitle = options.filePath ? path.parse(options.filePath)['name'] : '[new]'
     this.browserWindow = new BrowserWindow({
       webPreferences: {
@@ -154,7 +157,7 @@ export class Window extends EventEmitter {
       switch (this.type) {
         case 'open':
           if (this.filePath) {
-            this.loadFile(this.filePath)
+            this.loadFile(this.filePath, this.openInPreview)
           } else {
             this.loadFile('')
           }
@@ -233,7 +236,7 @@ export class Window extends EventEmitter {
     this.ignoreSaveUntil = Date.now() + 2000
   }
 
-  loadFile(filePath: string) {
+  loadFile(filePath: string, openInPreview: boolean = false) {
     if (this.isExist()) {
       if (!filePath) {
         this.filePath = null
@@ -253,6 +256,7 @@ export class Window extends EventEmitter {
           content: fs.readFileSync(filePath, { encoding: 'utf8' }),
           filePath,
           editorState: this.editorState,
+          openInPreview,
         })
         this.watchFile(filePath)
       }

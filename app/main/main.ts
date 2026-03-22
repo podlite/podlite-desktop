@@ -201,7 +201,10 @@ app.on('ready', async () => {
   })
 
   setMainMenu(mainApp)
-  mainApp.run()
+  mainApp.run().then(() => {
+    // Rebuild menu after state is loaded (openInPreview may have changed)
+    setMainMenu(mainApp)
+  })
   if (initOpenFileQueue.length) {
     initOpenFileQueue.forEach(file => mainApp.openFile({ id: 0, filePath: file }, true))
   } else {

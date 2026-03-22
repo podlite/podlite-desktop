@@ -204,6 +204,15 @@ export default function setMainMenu(mainApp: App) {
           if (win) win.webContents.send('view-halfpreview-toggle')
         },
       },
+      { type: 'separator' },
+      {
+        label: menuLabel('Open Files in Preview'),
+        type: 'checkbox',
+        checked: mainApp.openInPreview,
+        click(item): void {
+          mainApp.openInPreview = item.checked
+        },
+      },
     ],
   }
   if (!is.macos) {
