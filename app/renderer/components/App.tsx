@@ -256,18 +256,29 @@ const App = () => {
   const [isHalfPreviewMode, setHalfPreviewMode] = useState(false)
   const [isTextChanged, setTextChanged] = useState(false)
   const [initialEditorState, setInitialEditorState] = useState<EditorSessionState | undefined>(undefined)
-  const [editorState, setEditorState] = useState<EditorSessionState>({})
+  const editorStateRef = React.useRef<EditorSessionState>({})
+  const setEditorState = React.useCallback(
+    (state: EditorSessionState) => {
+      editorStateRef.current = state
+      ;(window as any).__podliteEditorState = {
+        ...state,
+        isPreviewMode,
+        isHalfPreviewMode,
+      }
+    },
+    [isPreviewMode, isHalfPreviewMode],
+  )
 
   // Expose state to main process via window globals
   useEffect(() => {
     ;(window as any).__podliteHasUnsavedChanges = isTextChanged
     ;(window as any).__podliteCurrentFilePath = filePath
     ;(window as any).__podliteEditorState = {
-      ...editorState,
+      ...editorStateRef.current,
       isPreviewMode,
       isHalfPreviewMode,
     }
-  }, [isTextChanged, text, filePath, editorState, isPreviewMode, isHalfPreviewMode])
+  }, [isTextChanged, text, filePath, isPreviewMode, isHalfPreviewMode])
 
   useEffect(() => {
     const fileName = filePath ? vmd.path.parse(filePath)['name'] : filePath
