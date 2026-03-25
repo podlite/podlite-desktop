@@ -1,5 +1,6 @@
 # upcoming
 
+- fix error when opening links from preview panel (migrate from removed Electron `new-window` event to `setWindowOpenHandler`)
 - restore editor state between sessions (cursor position, scroll, fold state, preview mode)
 - add code folding for `=begin`/`=end` blocks and `=head` sections (Ctrl-Shift-[ / Ctrl-Shift-])
 - auto-reload file when changed on disk (silent if no unsaved changes, dialog if unsaved)

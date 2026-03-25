@@ -69,7 +69,11 @@ ipcMain.on('set-title', (event, title) => {
   win.setTitle(title)
 })
 ipcMain.on('on-open-url', async (event, url: string) => {
-  await shell.openExternal(url)
+  try {
+    await shell.openExternal(url)
+  } catch (e) {
+    console.error('Failed to open URL:', url, e)
+  }
 })
 
 ipcMain.on('close-window', event => {
@@ -215,20 +219,28 @@ app.on('ready', async () => {
   update()
 })
 
-app.on('web-contents-created', (event, contents) => {
-  const handlerOpenUrl = async (event, urlToOpen) => {
-    // Prevent links or window.open from opening new windows
-    event.preventDefault()
-    const protocol = new URL(urlToOpen).protocol
-    if (protocol === 'http:' || protocol === 'https:') {
-      await shell.openExternal(urlToOpen)
-    }
-    if (urlToOpen?.startsWith('file://')) {
-      await shell.openExternal(urlToOpen)
+app.on('web-contents-created', (_event, contents) => {
+  const openUrlExternally = async (urlToOpen: string) => {
+    try {
+      const protocol = new URL(urlToOpen).protocol
+      if (protocol === 'http:' || protocol === 'https:' || protocol === 'file:') {
+        await shell.openExternal(urlToOpen)
+      }
+    } catch (e) {
+      console.error('Failed to open URL:', urlToOpen, e)
     }
   }
-  contents.on('new-window', handlerOpenUrl)
-  contents.on('will-navigate', handlerOpenUrl)
+
+  // Replaces deprecated 'new-window' event removed in Electron 22
+  contents.setWindowOpenHandler(({ url }) => {
+    openUrlExternally(url)
+    return { action: 'deny' }
+  })
+
+  contents.on('will-navigate', (event, url) => {
+    event.preventDefault()
+    openUrlExternally(url)
+  })
 })
 
 app.once('before-quit', async () => {
