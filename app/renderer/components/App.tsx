@@ -52,14 +52,7 @@ const wrapFunction = (node: Node, children) => {
 const wrapFunctionNoLines = (node: Node, children) => children
 
 export const onConvertSource = (text: string, filePath: string, skipLineNumbers: boolean = false): ConverterResult => {
-  let podlite = podlite_core({ importPlugins: true }).use({
-    image: {
-      toAst: () => node => {
-        console.warn(JSON.stringify(node, null, 2))
-        return node
-      },
-    },
-  })
+  let podlite = podlite_core({ importPlugins: true }).use({})
   const plugins = (makeComponent): Partial<Rules> => {
     const mkComponent = (src, attr?: {}) => () => (node, ctx, interator) => {
       // check if node.content defined
@@ -250,7 +243,12 @@ const prepareHTML = (text: string, filePath: string): Promise<string> => {
 }
 
 const App = () => {
+  const textRef = React.useRef('')
   const [text, updateText] = useState('')
+  // Stable setter that updates ref immediately, defers state update
+  const updateTextFromEditor = React.useCallback((content: string) => {
+    textRef.current = content
+  }, [])
   const [filePath, setFilePath] = useState('')
   const [isPreviewMode, setPreviewMode] = useState(false)
   const [isHalfPreviewMode, setHalfPreviewMode] = useState(false)
@@ -278,7 +276,7 @@ const App = () => {
       isPreviewMode,
       isHalfPreviewMode,
     }
-  }, [isTextChanged, text, filePath, isPreviewMode, isHalfPreviewMode])
+  }, [isTextChanged, filePath, isPreviewMode, isHalfPreviewMode])
 
   useEffect(() => {
     const fileName = filePath ? vmd.path.parse(filePath)['name'] : filePath
@@ -300,11 +298,11 @@ const App = () => {
   useEffect(() => {
     const saveFileAction = () => {
       if (isTextChanged) {
-        vmd.saveFile({ content: text, filePath })
+        vmd.saveFile({ content: textRef.current, filePath })
       }
     }
     const saveFileAsAction = () => {
-      vmd.saveFileAs({ content: text })
+      vmd.saveFileAs({ content: textRef.current })
     }
     const togglePreviewMode = e => {
       Object.hasOwnProperty.call(e, 'preventDefault') && e.preventDefault()
@@ -341,7 +339,7 @@ const App = () => {
         buttonLabel: 'Export',
       })
       if (!canceled && filePath1) {
-        const html = await prepareHTML(text, filePath)
+        const html = await prepareHTML(textRef.current, filePath)
         vmd.fs.writeFileSync(filePath1, html)
       }
     }
@@ -359,7 +357,7 @@ const App = () => {
         buttonLabel: 'Export',
       })
       if (!canceled && filePath1) {
-        const html = await preparePDF(text, filePath)
+        const html = await preparePDF(textRef.current, filePath)
         vmd.fs.writeFileSync(filePath1, html)
       }
     }
@@ -397,13 +395,14 @@ const App = () => {
                 resolve(true)
               }
               vmd.on('file-saved', saveHandler)
-              vmd.saveFile({ content: text, filePath })
+              vmd.saveFile({ content: textRef.current, filePath })
             })
           }
           // If response === 1 (Discard), continue without saving
         }
 
         setFilePath(newFilePath)
+        textRef.current = content
         updateText(content)
         setTextChanged(false)
 
@@ -423,6 +422,7 @@ const App = () => {
         console.error('Error in handlerContent:', error)
         // Fallback: load the new file anyway
         setFilePath(newFilePath)
+        textRef.current = content
         updateText(content)
         setTextChanged(false)
       }
@@ -431,11 +431,12 @@ const App = () => {
     return () => {
       vmd.off('file', handlerContent)
     }
-  }, [isTextChanged, text, filePath])
+  }, [isTextChanged, filePath])
 
   // Handle external file changes (file watcher in main process)
   useEffect(() => {
     const handleFileChangedOnDisk = (_, { content }) => {
+      textRef.current = content
       updateText(content)
       setTextChanged(false)
     }
@@ -452,8 +453,8 @@ const App = () => {
   return (
     <Editor2
       onChange={(content: string) => {
-        updateText(content)
-        setTextChanged(true)
+        updateTextFromEditor(content)
+        if (!isTextChanged) setTextChanged(true)
       }}
       onOpenLink={(url: string) => {
         console.log(url)

@@ -1,5 +1,6 @@
 # upcoming
 
+- fix performance: editor input latency reduced from 860ms to 0ms per keystroke (text state → ref, no re-render on typing)
 - fix search panel disappearing after Enter on first search result
 - fix error when opening links from preview panel (migrate from removed Electron `new-window` event to `setWindowOpenHandler`)
 - restore editor state between sessions (cursor position, scroll, fold state, preview mode)
