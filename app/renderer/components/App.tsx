@@ -255,6 +255,7 @@ const App = () => {
   const [isTextChanged, setTextChanged] = useState(false)
   const [initialEditorState, setInitialEditorState] = useState<EditorSessionState | undefined>(undefined)
   const editorStateRef = React.useRef<EditorSessionState>({})
+  const editorComponentRef = React.useRef<any>(null)
   const setEditorState = React.useCallback(
     (state: EditorSessionState) => {
       editorStateRef.current = state
@@ -436,9 +437,23 @@ const App = () => {
   // Handle external file changes (file watcher in main process)
   useEffect(() => {
     const handleFileChangedOnDisk = (_, { content }) => {
+      // Save cursor position before replacing text
+      const savedCursor = editorStateRef.current.cursorOffset ?? 0
+
       textRef.current = content
       updateText(content)
       setTextChanged(false)
+
+      // Restore cursor position and focus after React re-render + CodeMirror update
+      requestAnimationFrame(() => {
+        const view = editorComponentRef.current?.editor?.current?.view
+        if (view) {
+          const maxPos = view.state.doc.length
+          const clampedPos = Math.min(savedCursor, maxPos)
+          view.dispatch({ selection: { anchor: clampedPos } })
+          view.focus()
+        }
+      })
     }
     vmd.on('file-changed-on-disk', handleFileChangedOnDisk)
     return () => {
@@ -452,6 +467,7 @@ const App = () => {
 
   return (
     <Editor2
+      ref={editorComponentRef}
       onChange={(content: string) => {
         updateTextFromEditor(content)
         if (!isTextChanged) setTextChanged(true)

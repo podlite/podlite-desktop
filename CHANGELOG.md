@@ -1,19 +1,22 @@
-# upcoming
+# 0.6.2
 
-- fix performance: editor input latency reduced from 860ms to 0ms per keystroke (text state → ref, no re-render on typing)
-- fix search panel disappearing after Enter on first search result
-- fix error when opening links from preview panel (migrate from removed Electron `new-window` event to `setWindowOpenHandler`)
-- restore editor state between sessions (cursor position, scroll, fold state, preview mode)
-- add code folding for `=begin`/`=end` blocks and `=head` sections (Ctrl-Shift-[ / Ctrl-Shift-])
-- auto-reload file when changed on disk (silent if no unsaved changes, dialog if unsaved)
-- fix crash when `loadFile` receives a directory path instead of a file
-- fix cursor not visible on new window open
-- fix fold markers appearing inside verbatim blocks (`=code`, `=comment`, `=data`)
-- add "Copy as PNG" button on WindowWrapper (`enableCopyPng` prop)
-- add "Open Files in Preview" toggle in View menu
+## New
+- code folding for `=begin`/`=end` blocks and `=head` sections (Ctrl-Shift-[ / Ctrl-Shift-])
+- list continuation on Enter — auto-insert `=item` with preserved type prefix (`[ ]`, `#`)
+- Tab/Shift-Tab to change `=item` nesting level
+- auto-reload file when changed on disk (silent or with dialog)
+- "Open Files in Preview" toggle in View menu
 - per-file view mode persistence across sessions (editor/preview/split)
-- new files always open in editor mode
-- restore per-file view mode on double-click from Finder
+- restore editor state between sessions (cursor, scroll, fold state)
+- "Copy as PNG" for preview content
+
+## Fixed
+- editor input latency reduced from 860ms to near-zero per keystroke
+- search panel disappearing after Enter on first result
+- links not opening from preview panel (Electron 38 compatibility)
+- crash when opening a directory path instead of a file
+- cursor not visible on new window open
+- fold markers appearing inside verbatim blocks (`=code`, `=comment`, `=data`)
 
 # 0.6.1
 
