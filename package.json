@@ -3,7 +3,7 @@
   "productName": "podlite",
   "author": "Aliaksandr Zahatski",
   "license": "MIT",
-  "version": "0.6.1",
+  "version": "0.7.0",
   "description": "Podite editor",
   "main": "build/main.js",
   "repository": {
@@ -23,7 +23,7 @@
     "build:electron": "mkdir -p build; cp app/renderer/client-api.js  dist-assets/icon.png  build && NODE_PRESERVE_SYMLINKS=1 webpack",
     "watch": "run-p -r webpack:watch electron:start",
     "electron:start": "wait-on http-get://localhost:1124 &&  nodemon --watch build/main.js --exec \"electron .\"",
-    "electron:build": "PYTHON_PATH=/usr/local/bin/python CSC_IDENTITY_AUTO_DISCOVERY=false electron-builder build -mwl --x64 --publish=never",
+    "electron:build": "PYTHON_PATH=/usr/local/bin/python CSC_IDENTITY_AUTO_DISCOVERY=false electron-builder build -wlm --x64 --publish=never",
     "webpack:watch": "mkdir -p build ; cp app/renderer/client-api.js  dist-assets/icon.png  build  && webpack serve --config webpack.config.js  --port 1124",
     "test": "run-s parcel:build \"test:jest {@}\" --",
     "test:jest": "jest",
@@ -216,9 +216,9 @@
     "webpack-dev-server": "^4.7.2"
   },
   "dependencies": {
-    "@podlite/editor-react": "^0.0.39",
-    "@podlite/schema": "^0.0.33",
-    "@podlite/to-jsx": "^0.0.37",
+    "@podlite/editor-react": "^0.0.43",
+    "@podlite/schema": "^0.0.37",
+    "@podlite/to-jsx": "^0.0.41",
     "@types/react-router-dom": "^5.3.2",
     "about-window": "1.15.2",
     "codemirror": "^6.0.2",
@@ -226,7 +226,7 @@
     "electron-log": "^4.2.4",
     "electron-updater": "^4.3.4",
     "electron-util": "^0.14.2",
-    "podlite": "^0.0.46",
+    "podlite": "^0.0.50",
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "remove": "^0.1.5"
