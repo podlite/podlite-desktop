@@ -1,4 +1,4 @@
-# 0.6.2
+# 0.7.0
 
 ## New
 - code folding for `=begin`/`=end` blocks and `=head` sections (Ctrl-Shift-[ / Ctrl-Shift-])

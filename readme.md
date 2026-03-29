@@ -1,249 +1,157 @@
- <h1 align="center">
-<img src="https://github.com/zag/podlite-desktop/raw/master/doc/podlite-desktop.png" alt="Podlite editor logo" width="650">
-<br/> 
-  Podlite for Desktop
-<br/>
-<br/>
-</h1>
+<p align="center">
+  <img src="./doc/podlite-desktop.png" alt="Podlite Desktop" width="650">
+</p>
+<h1 align="center">Podlite Desktop</h1>
+<p align="center">block-based markup editor with live preview</p>
 
 <div align="center">
 
-The viewer and editor of [Podlite](https://podlite.org) files for Windows, Linux and Mac.
+A block-based markup editor for [Podlite](https://podlite.org) with live preview. Available on Windows, Linux and macOS.
+
+[![GitHub release](https://img.shields.io/github/v/release/zag/podlite-desktop)](https://github.com/zag/podlite-desktop/releases/latest)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Mac App Store](https://img.shields.io/badge/Mac_App_Store-available-blue)](https://apps.apple.com/us/app/podlite/id1526511053)
+[![Microsoft Store](https://img.shields.io/badge/Microsoft_Store-available-blue)](https://www.microsoft.com/store/apps/9NVNT9SNQJM8)
+[![Snap Store](https://img.shields.io/badge/Snap_Store-available-blue)](https://snapcraft.io/podlite)
 
 </div>
 
-## Screenshots
-
-![Podlite editor Screenshot](doc/screenshot-1-page.png)
-![Podlite editor Screenshot](./doc/Screenshot1.png)
-![Podlite editor Screenshot](./doc/screenshot-3-page.png)
-![Podlite editor Screenshot](./doc/Screenshot3.png)
-
 ## Get Podlite
 
-Download the [latest release](https://github.com/podlite/podlite-desktop/releases/latest) of Podlite editor here:
+Download the [latest release](https://github.com/podlite/podlite-desktop/releases/latest):
 
-### [✨ Download Podlite ✨](https://github.com/podlite/podlite-desktop/releases/latest)
+### [Download Podlite](https://github.com/podlite/podlite-desktop/releases/latest)
+
+Also available from [Mac App Store](https://apps.apple.com/us/app/podlite/id1526511053), [Microsoft Store](https://www.microsoft.com/store/apps/9NVNT9SNQJM8) and [Snap Store](https://snapcraft.io/podlite).
+
+## Smart Lists
+
+Press Enter to continue a list. Checkboxes and numbered markers carry over to the next item.
+
+![Smart Lists](doc/Smart%20Lists.gif)
+
+Tab increases nesting level. Shift+Tab decreases it. Works with plain lists, numbered lists and task lists.
+
+![Nesting Levels](doc/nesting_levels.gif)
+
+## Code Folding
+
+Collapse `=begin`/`=end` blocks and `=head` sections to navigate large documents. Fold state is preserved between sessions.
+
+![Code Folding](doc/Code_Folding.gif)
+
+## Collapsible Blocks
+
+Add `:folded` to any block to make it collapsible in preview. Use `:!folded` for expanded by default.
+
+![Folded blocks](doc/folded.gif)
 
 ## Features
 
-- write in Podlite markup language
-- preview elements (such as headers, images, math, embedded videos, todo lists...) while you type
-- preview mode cmd-\ ( ctrl-\ )
-- half-screen preview toggle — cmd + . (ctrl + .)
-- export to html and pdf
-- import from markdown
-- make diagrams via `=Mermaid` block
-- write in markdown via `=markdown` block
-- And more features to come...
+### Editor
+- smart list continuation on Enter with preserved type prefix (`[ ]`, `#`)
+- Tab / Shift+Tab to change nesting level
+- code folding for `=begin`/`=end` and `=head` sections (Ctrl+Shift+\[ / Ctrl+Shift+\])
+- near-zero input latency on large documents
+- syntax highlighting for Podlite markup
+- text search (Cmd+F / Ctrl+F)
 
-## Podlite blocks and extensions
+### Preview
+- live preview while you type
+- split view (Cmd+. / Ctrl+.)
+- full preview (Cmd+\\ / Ctrl+\\)
+- collapsible blocks with `:folded` attribute
+- export to HTML and PDF
 
-### `=markdown` - markdown block
+### Workspace
+- session restore: cursor position, scroll, folds, view mode
+- per-file view mode persistence (editor / split / preview)
+- auto-reload when file changes on disk
+- import from Markdown
 
-You can switch to write GitHub Flavored Markdown ([GFM](https://github.github.com/gfm/)).
+### Blocks and Extensions
+- `=markdown` — GitHub Flavored Markdown
+- `=Mermaid` — diagrams and charts
+- `=formula` — math formulas
+- `=picture` — images and video
+- `=toc` — table of contents
+- `=table` — tables with `:folded` support
 
-Examples:
+## Podlite Blocks
+
+### `=markdown`
+
+Switch to GitHub Flavored Markdown inside a Podlite document:
 
 ```
 =begin markdown
 
-  # Cases
+# Heading
 
-  *Write* the documentation with the markup you __love__!
+*Write* the docs with the markup you __love__!
 
-  * item1
-  * item2
-  	 * ~~sub item1~~
-     * sub item2
+* item 1
+* item 2
 
 =end markdown
 ```
 
-[Open this example in pod6.in](https://pod6.in/#p=%3Dbegin+markdown%0A%0A++%23+Cases%0A++%0A++*Write*+the+documentation+with+the+markup+you+__love__%21%0A%0A++*+item1+%0A++*+item2%0A++%09+*+%7E%7Esub+item1%7E%7E%0A+++++*+sub+item2%0A%0A%3Den d+markdown)
+[Try in pod6.in](https://pod6.in/#p=%3Dbegin+markdown%0A%0A++%23+Cases%0A++%0A++*Write*+the+documentation+with+the+markup+you+__love__%21%0A%0A++*+item1+%0A++*+item2%0A++%09+*+%7E%7Esub+item1%7E%7E%0A+++++*+sub+item2%0A%0A%3Dend+markdown)
 
-### `=useReact`, `=React` - additional blocks to support the "Podlite for Web" package
+### `=Mermaid`
 
-For more information, please read the following article:
-[Start your own blog/website with Podlite for Web](https://zahatski.com/2022/8/23/1/start-you-own-blog-site-with-podlite-for-web)
-
-### `=toc` - add Table of contents
-
-Examples:
+Render diagrams, flowcharts and sequence diagrams:
 
 ```
-=toc head1, head2, head3
+=begin Mermaid
+graph LR
+    A-->B
+    B-->C
+    C-->A
+    D-->C
+=end Mermaid
 ```
+
+![Mermaid diagram](doc/diagram-sample1.png)
+
+[Try in pod6.in](https://pod6.in/#p=%3Dbegin+Mermaid%0Agraph+LR%0A++++++++A-->B%0A++++++++B-->C%0A++++++++C-->A%0A++++++++D-->C%0A%3Dend+Mermaid) — [Mermaid syntax reference](https://mermaid.js.org/intro/)
+
+### `=toc`
+
+Generate a table of contents from headings:
 
 ```
 =for toc :title('Table of contents')
 head1, head2, head3
 ```
 
-### `=picture` - use images or video in posts
+### `=picture`
 
-Example:
-
-```
-=picture gatsby-astronaut.png
-```
+Embed images or video:
 
 ```
-=picture some-video.mp4
+=picture photo.png
+A caption for the image
 ```
-
-```
-=picture some-video.mp4
-This is a caption!
-```
-
-### `=Mermaid` - use diagrams
-
-To render beautiful graphs, sequence and Gantt diagrams and flowcharts, one can use the `=Mermaid` blocks.
-
-```
-=begin Mermaid
-graph LR
-        A-->B
-        B-->C
-        C-->A
-        D-->C
-=end Mermaid
-```
-
-![sample1](./doc/diagram-sample1.png)
-
-[Open this example in pod6.in](https://pod6.in/#p=%3Dbegin+Mermaid%0Agraph+LR%0A++++++++A-->B%0A++++++++B-->C%0A++++++++C-->A%0A++++++++D-->C%0A%3Dend+Mermaid)
-
-#### Flowchart
-
-```
-=Mermaid
-graph LR
-    A[Square Rect] -- Link text --> B((Circle))
-    A --> C(Round Rect)
-    B --> D{Rhombus}
-    C --> D
-```
-
-![Flowchart](./doc/diagram-sample2.png)
-
-[Open this example in pod6.in](https://pod6.in/#p=%3DMermaid%0Agraph+LR%0A++++A%5BSquare+Rect%5D+--+Link+text+-->+B%28%28Circle%29%29%0A++++A+-->+C%28Round+Rect%29%0A++++B+-->+D%7BRhombus%7D%0A++++C+-->+D)
-
-```
-=Mermaid
-graph TD
-   A(Coffee machine <br>not working) --> B{Machine has power?}
-   B -->|No| H(Plug in and turn on)
-   B -->|Yes| C{Out of beans or water?} -->|Yes| G(Refill beans and water)
-   C -->|No| D{Filter warning?} -->|Yes| I(Replace or clean filter)
-   D -->|No| F(Send for repair)
-```
-
-![Flowchart](./doc/diagram-sample6.png)
-
-[Open this example in pod6.in](https://pod6.in/#p=%3DMermaid%0Agraph+TD%0A+++A%28Coffee+machine+<br>not+working%29+-->+B%7BMachine+has+power%3F%7D%0A+++B+-->%7CNo%7C+H%28Plug+in+and+turn+on%29%0A+++B+-->%7CYes%7C+C%7BOut+of+beans+or+water%3F%7D+-->%7CYes%7C+G%28Refill+beans+and+water%29%0A+++C+-->%7CNo%7C+D%7BFilter+warning%3F%7D+-->%7CYes%7C+I%28Replace+or+clean+filter%29%0A+++D+-->%7CNo%7C+F%28Send+for+repair%29)
-
-#### UML sequence diagram
-
-```
-=Mermaid
-sequenceDiagram
-    autonumber
-    Student->>Admin: Can I enrol this semester?
-    loop enrolmentCheck
-        Admin->>Admin: Check previous results
-    end
-    Note right of Admin: Exam results may <br> be delayed
-    Admin-->>Student: Enrolment success
-    Admin->>Professor: Assign student to tutor
-    Professor-->>Admin: Student is assigned
-```
-
-![Flowchart](./doc/diagram-sample3.png)
-
-[Open this example in pod6.in](https://pod6.in/#p=%3DMermaid%0AsequenceDiagram%0A++++autonumber%0A++++Student->>Admin%3A+Can+I+enrol+this+semester%3F%0A++++loop+enrolmentCheck%0A++++++++Admin->>Admin%3A+Check+previous+results%0A++++end%0A++++Note+right+of+Admin%3A+Exam+results+may+<br>+be+delayed%0A++++Admin-->>Student%3A+Enrolment+success%0A++++Admin->>Professor%3A+Assign+student+to+tutor%0A++++Professor-->>Admin%3A+Student+is+assigned)
-
-#### UML class diagram
-
-```
-=Mermaid
-classDiagram
-   Person <|-- Student
-   Person <|-- Professor
-   Person : +String name
-   Person : +String phoneNumber
-   Person : +String emailAddress
-   Person: +purchaseParkingPass()
-   Address "1" <-- "0..1" Person:lives at
-   class Student{
-      +int studentNumber
-      +int averageMark
-      +isEligibleToEnrol()
-      +getSeminarsTaken()
-    }
-    class Professor{
-      +int salary
-    }
-    class Address{
-      +String street
-      +String city
-      +String state
-      +int postalCode
-      +String country
-      -validate()
-      +outputAsLabel()
-    }
-```
-
-![Flowchart](./doc/diagram-sample4.png)
-
-[Open this example in pod6.in](https://pod6.in/#p=%3DMermaid%0AclassDiagram%0A+++Person+<%7C--+Student%0A+++Person+<%7C--+Professor%0A+++Person+%3A+%2BString+name%0A+++Person+%3A+%2BString+phoneNumber%0A+++Person+%3A+%2BString+emailAddress%0A+++Person%3A+%2BpurchaseParkingPass%28%29%0A+++Address+"1"+<--+"0..1"+Person%3Alives+at%0A+++class+Student%7B%0A++++++%2Bint+studentNumber%0A++++++%2Bint+averageMark%0A++++++%2BisEligibleToEnrol%28%29%0A++++++%2BgetSeminarsTaken%28%29%0A++++%7D%0A++++class+Professor%7B%0A++++++%2Bint+salary%0A++++%7D%0A++++class+Address%7B%0A++++++%2BString+street%0A++++++%2BString+city%0A++++++%2BString+state%0A++++++%2Bint+postalCode%0A++++++%2BString+country%0A++++++-validate%28%29%0A++++++%2BoutputAsLabel%28%29%0A++++%7D)
-
-#### Gantt diagram
-
-```
- =Mermaid
- gantt
- title Example Gantt diagram
-    dateFormat  YYYY-MM-DD
-    section Team 1
-    Research & requirements :done, a1, 2021-04-08, 2021-04-10
-    Review & documentation : after a1, 20d
-    section Team 2
-    Implementation      :crit, active, 2021-04-25  , 20d
-    Testing      :crit, 20d
-```
-
-![Flowchart](./doc/diagram-sample5.png)
-
-[Open this example in pod6.in](https://pod6.in/#p=+%3DMermaid%0A+gantt%0A+title+Example+Gantt+diagram%0A++++dateFormat++YYYY-MM-DD%0A++++section+Team+1%0A++++Research+%26+requirements+%3Adone%2C+a1%2C+2021-04-08%2C+2021-04-10%0A++++Review+%26+documentation+%3A+after+a1%2C+20d%0A++++section+Team+2%0A++++Implementation++++++%3Acrit%2C+active%2C+2021-04-25++%2C+20d%0A++++Testing++++++%3Acrit%2C+20d)
-
-Diagrams are created by linking text labels using arrow connectors. You can choose different shapes, add labels to connectors, and style connectors and shapes.
-`=Mermaid` uses Mermaid diagramming and charting tool.
-[Mermaid documentation for the complete syntax](https://mermaid-js.github.io/mermaid/#/)
 
 ## Documentation
 
-- [Podlite is a lightweight block-based markup language designed for flexibility and ease of use.](https://podlite.org)
-
-- Specification of Podite: [podlite.org/specification](https://podlite.org/specification)
-
-- [A minimal, lightweight starter for creating static blogs/sites using nexjs and Podlite markup language](https://github.com/podlite/podlite-web)
-  - [Start your own blog/site with PodLite for Web](https://dev.to/zag/start-your-own-blogsite-with-podlite-for-web-h9n)
-- Podlite online editor: [Podlite online: pod6.in](https://pod6.in/)
+- [Podlite markup language](https://podlite.org)
+- [Specification](https://podlite.org/specification)
+- [Quick tour](https://podlite.org/quick-tour)
+- [Online editor: pod6.in](https://pod6.in/)
 
 ## Contributing
 
-This is an open source program. Feel free to fork and contribute.
+This is an open source project. Feel free to fork and contribute.
 
-In order to keep the match between this documentation and the last release, please contribute and pull requests on the dedicated develop branch.
+Please submit pull requests against the develop branch to keep documentation in sync with the latest release.
 
-## linux note
+## Linux Note
 
-![Podlite editor Screenshot](./doc/linuxAppImage-permissions.png)
+![AppImage permissions](doc/linuxAppImage-permissions.png)
 
-## links
+## Links
 
 <div align="center">
 <table border=0><tr><td valign=top><div align="center">
@@ -253,7 +161,7 @@ In order to keep the match between this documentation and the last release, plea
 </div>
 
 - [Source](https://github.com/podlite/podlite-specs)
-- [in HTML](https://podlite.org/specification)
+- [HTML](https://podlite.org/specification)
 - [Discussions](https://github.com/podlite/podlite-specs/discussions)
 
 <div align="center">
@@ -268,45 +176,45 @@ In order to keep the match between this documentation and the last release, plea
 
 </td><td valign=top><div align="center">
 
-##### publishing system
+##### publishing
 
 </div>
 
 - [Podlite-web](https://github.com/podlite/podlite-web)
 - [How-to article](https://zahatski.com/2022/8/23/1/start-you-own-blog-site-with-podlite-for-web)
-- [Issues](https://github.com/podlite/podlite-specs/issues)
 - [Changelog](https://github.com/podlite/podlite-web/releases)
-- [Practical case: Raku knowledge base ](https://raku-knowledge-base.podlite.org/)
 
 </td><td valign=top><div align="center">
-  
-##### desktop viewer/editor
+
+##### desktop editor
 
 </div>
 
-- [Podlite-desktop](https://github.com/podlite/podlite-desktop)
 - [Releases](https://github.com/podlite/podlite-desktop/releases)
 - [Issues](https://github.com/podlite/podlite-desktop/issues)
-- Stores: - [Linux](https://snapcraft.io/podlite) - [Windows](https://www.microsoft.com/store/apps/9NVNT9SNQJM8) - [Mac App](https://apps.apple.com/us/app/podlite/id1526511053)
+- Stores: [Mac](https://apps.apple.com/us/app/podlite/id1526511053) · [Windows](https://www.microsoft.com/store/apps/9NVNT9SNQJM8) · [Linux](https://snapcraft.io/podlite)
+
 </td><td valign=top><div align="center">
 
-##### online resurces
+##### resources
 
- </div>
+</div>
 
-- [Roadmap](https://podlite.org/#Roadmap)
-- [github.com/podlite](https://github.com/podlite/)&nbsp;🤩
 - [podlite.org](https://podlite.org)
 - [pod6.in](https://pod6.in/)
-- [Podlite project updates](https://podlite.org/contents)
-- [Funding the ongoing development](https://opencollective.com/podlite)
+- [github.com/podlite](https://github.com/podlite/)
+- [Funding](https://opencollective.com/podlite)
 
 </td></tr></table>
 </div>
 
-## AUTHOR
+<p align="center">
+  <a href="https://podlite.org"><img src="./doc/podlite-mark-mono.svg" width="80" alt="Podlite"></a>
+</p>
 
-Copyright (c) 2020 - 2025 Alexandr Zahatski, https://podlite.org
+## Author
+
+Copyright (c) 2020–2026 Alexandr Zahatski
 
 ## License
 
