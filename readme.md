@@ -2,8 +2,6 @@
   <img src="./doc/podlite-desktop.png" alt="Podlite Desktop" width="650">
 </p>
 <h1 align="center">Podlite Desktop</h1>
-<p align="center">block-based markup editor with live preview</p>
-
 <div align="center">
 
 A block-based markup editor for [Podlite](https://podlite.org) with live preview. Available on Windows, Linux and macOS.
