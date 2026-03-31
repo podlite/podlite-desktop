@@ -143,11 +143,26 @@
           "arch": [
             "x64"
           ]
+        },
+        {
+          "target": "snap",
+          "arch": [
+            "x64"
+          ]
         }
       ]
     },
     "appImage": {
       "artifactName": "Podlite-${version}.${ext}"
+    },
+    "snap": {
+      "plugs": [
+        "default",
+        "wayland"
+      ],
+      "environment": {
+        "ELECTRON_OZONE_PLATFORM_HINT": "auto"
+      }
     },
     "directories": {
       "output": "release",
