@@ -1,6 +1,7 @@
-# upcoming
+# 0.7.1
 
-- syntax highlighting for code blocks in preview
+- syntax highlighting for code blocks in preview ([#42](https://github.com/podlite/podlite-desktop/issues/42))
+- snap: add Wayland support — `wayland` plug + `ELECTRON_OZONE_PLATFORM_HINT=auto` ([#43](https://github.com/podlite/podlite-desktop/issues/43))
 
 # 0.7.0
 
