@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { ConverterResult, EditorSessionState } from '@podlite/editor-react'
+import { ConverterResult, EditorSessionState, HighlightedCode } from '@podlite/editor-react'
 import { Editor2 } from '@podlite/editor-react'
 import { podlite as podlite_core } from 'podlite'
 import Podlite from '@podlite/to-jsx'
@@ -123,6 +123,16 @@ export const onConvertSource = (text: string, filePath: string, skipLineNumbers:
           childrens,
         )
       },
+      ':code': mkComponent(({ children, key, ...node }, ctx) => (
+        <HighlightedCode node={node} keyProp={key} ctx={ctx}>
+          {children}
+        </HighlightedCode>
+      )),
+      code: mkComponent(({ children, key, ...node }, ctx) => (
+        <HighlightedCode node={node} keyProp={key} ctx={ctx}>
+          {children}
+        </HighlightedCode>
+      )),
       ':image': setFn(node => {
         // const {path} = getPathToOpen(node.src, filePath)
         // const filePathToOpen = path

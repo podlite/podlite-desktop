@@ -1,6 +1,11 @@
+# upcoming
+
+- syntax highlighting for code blocks in preview
+
 # 0.7.0
 
 ## New
+
 - code folding for `=begin`/`=end` blocks and `=head` sections (Ctrl-Shift-[ / Ctrl-Shift-])
 - list continuation on Enter — auto-insert `=item` with preserved type prefix (`[ ]`, `#`)
 - Tab/Shift-Tab to change `=item` nesting level
@@ -11,6 +16,7 @@
 - "Copy as PNG" for preview content
 
 ## Fixed
+
 - editor input latency reduced from 860ms to near-zero per keystroke
 - search panel disappearing after Enter on first result
 - links not opening from preview panel (Electron 38 compatibility)
