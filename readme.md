@@ -1,7 +1,9 @@
 <p align="center">
-  <img src="./doc/podlite-desktop.png" alt="Podlite Desktop" width="650">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="./doc/podlite-mark-desktop-dark.svg">
+    <img src="./doc/podlite-mark-desktop.svg" width="350" alt="Podlite Desktop">
+  </picture>
 </p>
-<h1 align="center">Podlite Desktop</h1>
 <div align="center">
 
 A block-based markup editor for [Podlite](https://podlite.org) with live preview. Available on Windows, Linux and macOS.
