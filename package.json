@@ -200,7 +200,7 @@
     "@yarnpkg/sdks": "^2.6.0-rc.2",
     "copy-webpack-plugin": "^10.2.0",
     "css-loader": "^6.5.1",
-    "electron": "38.2.2",
+    "electron": "39.8.5",
     "electron-builder": "^23.6.0",
     "electron-builder-notarize": "^1.2.0",
     "electron-devtools-installer": "^3.1.1",
