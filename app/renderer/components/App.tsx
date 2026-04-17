@@ -266,6 +266,16 @@ const App = () => {
   const [initialEditorState, setInitialEditorState] = useState<EditorSessionState | undefined>(undefined)
   const editorStateRef = React.useRef<EditorSessionState>({})
   const editorComponentRef = React.useRef<any>(null)
+  // Refs mirror live state for IPC listeners that are attached once (with []
+  // deps) so they read the latest value without re-attaching on every render.
+  const isTextChangedRef = React.useRef(false)
+  const filePathRef = React.useRef('')
+  const isPreviewModeRef = React.useRef(false)
+  const isHalfPreviewModeRef = React.useRef(false)
+  isTextChangedRef.current = isTextChanged
+  filePathRef.current = filePath
+  isPreviewModeRef.current = isPreviewMode
+  isHalfPreviewModeRef.current = isHalfPreviewMode
   const setEditorState = React.useCallback(
     (state: EditorSessionState) => {
       editorStateRef.current = state
@@ -300,16 +310,16 @@ const App = () => {
       setFilePath(filePath)
     }
     vmd.on('file-saved', handlerFileSaved)
-    return function cleanup() {
+    return () => {
       vmd.off('file-saved', handlerFileSaved)
     }
-  })
+  }, [])
 
   // hot keys
   useEffect(() => {
     const saveFileAction = () => {
-      if (isTextChanged) {
-        vmd.saveFile({ content: textRef.current, filePath })
+      if (isTextChangedRef.current) {
+        vmd.saveFile({ content: textRef.current, filePath: filePathRef.current })
       }
     }
     const saveFileAsAction = () => {
@@ -317,17 +327,16 @@ const App = () => {
     }
     const togglePreviewMode = e => {
       Object.hasOwnProperty.call(e, 'preventDefault') && e.preventDefault()
-      if (isHalfPreviewMode && !isPreviewMode) {
+      if (isHalfPreviewModeRef.current && !isPreviewModeRef.current) {
         setHalfPreviewMode(false)
       }
-      setPreviewMode(!isPreviewMode)
+      setPreviewMode(!isPreviewModeRef.current)
     }
     const toggleHalfPreviewMode = e => {
       Object.hasOwnProperty.call(e, 'preventDefault') && e.preventDefault()
-      setHalfPreviewMode(!isHalfPreviewMode)
+      setHalfPreviewMode(!isHalfPreviewModeRef.current)
     }
 
-    // make menu command listeners
     vmd.on('menu-file-save', saveFileAction)
     vmd.on('menu-file-save-as', saveFileAsAction)
     vmd.on('view-preview-toggle', togglePreviewMode)
@@ -339,11 +348,11 @@ const App = () => {
       vmd.off('view-preview-toggle', togglePreviewMode)
       vmd.off('view-halfpreview-toggle', toggleHalfPreviewMode)
     }
-  })
+  }, [])
 
   useEffect(() => {
-    // handle export to html
     const exportToHtml = async (): Promise<void> => {
+      const filePath = filePathRef.current
       const fileName = filePath ? vmd.path.parse(filePath)['name'] : filePath
       const { canceled, filePath: filePath1 } = await ipcRenderer.invoke('show-save-dialog', {
         defaultPath: `*/${fileName}.html`,
@@ -354,14 +363,13 @@ const App = () => {
         vmd.fs.writeFileSync(filePath1, html)
       }
     }
-
     vmd.on('exportHtml', exportToHtml)
     return () => vmd.off('exportHtml', exportToHtml)
-  })
+  }, [])
 
   useEffect(() => {
-    // handle export to pdf
     const exportPdf = async (): Promise<void> => {
+      const filePath = filePathRef.current
       const fileName = filePath ? vmd.path.parse(filePath)['name'] : filePath
       const { canceled, filePath: filePath1 } = await ipcRenderer.invoke('show-save-dialog', {
         defaultPath: `*/${fileName}.pdf`,
@@ -372,10 +380,9 @@ const App = () => {
         vmd.fs.writeFileSync(filePath1, html)
       }
     }
-
     vmd.on('exportPdf', exportPdf)
     return () => vmd.off('exportPdf', exportPdf)
-  })
+  }, [])
 
   // desktop section - start
   useEffect(() => {

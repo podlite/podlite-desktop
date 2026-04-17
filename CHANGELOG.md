@@ -1,3 +1,11 @@
+# upcoming
+
+- fix performance: attach IPC (`ipcRenderer`) listeners once per mount instead of re-attaching on every render; handlers read latest state via refs
+
+# 0.7.2
+
+- fix snap Wayland crash on Ubuntu 24.04 — enable `allowNativeWayland` to prevent `DISABLE_WAYLAND=1` injection by electron-builder ([#43](https://github.com/podlite/podlite-desktop/issues/43))
+
 # 0.7.1
 
 - syntax highlighting for code blocks in preview ([#42](https://github.com/podlite/podlite-desktop/issues/42))
