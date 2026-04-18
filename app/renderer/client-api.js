@@ -1,9 +1,10 @@
 /* global vmd:true */
 
-const { ipcRenderer } = require('electron')
+const { ipcRenderer, webUtils } = require('electron')
 
 const electron = {
   ipc: ipcRenderer,
+  webUtils,
 }
 
 // no var/let/const on purpose
@@ -81,6 +82,18 @@ vmd = Object.assign(
     },
     onOpenUrl(content) {
       electron.ipc.send('on-open-url', content)
+    },
+    showMessageBox(options) {
+      return electron.ipc.invoke('show-message-box', options)
+    },
+    getPathForFile(file) {
+      try {
+        return electron.webUtils && electron.webUtils.getPathForFile
+          ? electron.webUtils.getPathForFile(file)
+          : ''
+      } catch (_err) {
+        return ''
+      }
     },
   },
   // electron.sharedState

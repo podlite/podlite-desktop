@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { ConverterResult, EditorSessionState, HighlightedCode } from '@podlite/editor-react'
+import { ConverterResult, EditorSessionState, HighlightedCode, SaveAssetCallback } from '@podlite/editor-react'
 import { Editor2 } from '@podlite/editor-react'
 import { podlite as podlite_core } from 'podlite'
 import Podlite from '@podlite/to-jsx'
@@ -482,6 +482,75 @@ const App = () => {
     return onConvertSource(text, filePath)
   }
 
+  const saveAsset: SaveAssetCallback = React.useCallback(async (file, source) => {
+    const currentPath = filePathRef.current
+    if (!currentPath) {
+      await vmd.showMessageBox({
+        type: 'info',
+        message: 'Save the file first',
+        detail: 'Images are stored in a "media/" folder next to your document. Save this file to a location, then paste or drop the image again.',
+        buttons: ['OK'],
+      })
+      return null
+    }
+    const path = vmd.path
+    const fs = vmd.fs
+    const mediaDir = path.join(path.dirname(currentPath), 'media')
+
+    // If a dropped file already lives inside this document's media/ folder,
+    // just reference it in place — don't copy or rename. Electron 32+ removed
+    // the legacy `File.path` property; use webUtils.getPathForFile() instead.
+    if (source === 'drop') {
+      const existingPath = vmd.getPathForFile ? vmd.getPathForFile(file) : (file as { path?: string }).path
+      if (existingPath) {
+        const resolved = path.resolve(existingPath)
+        const absMediaDir = path.resolve(mediaDir)
+        const prefix = absMediaDir + path.sep
+        if (resolved === absMediaDir || resolved.startsWith(prefix)) {
+          return path.join('media', path.relative(absMediaDir, resolved))
+        }
+      }
+    }
+
+    fs.mkdirSync(mediaDir, { recursive: true })
+
+    const mimeToExt: Record<string, string> = {
+      'image/png': 'png',
+      'image/jpeg': 'jpg',
+      'image/gif': 'gif',
+      'image/webp': 'webp',
+      'image/svg+xml': 'svg',
+    }
+
+    let filename: string
+    if (source === 'paste') {
+      const now = new Date()
+      const pad = (n: number) => String(n).padStart(2, '0')
+      const stamp =
+        `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}` +
+        `-${pad(now.getHours())}${pad(now.getMinutes())}${pad(now.getSeconds())}`
+      const ext = mimeToExt[file.type] || 'png'
+      filename = `${stamp}-screenshot.${ext}`
+    } else {
+      const baseName = file.name || 'image'
+      const dot = baseName.lastIndexOf('.')
+      const stem = dot > 0 ? baseName.slice(0, dot) : baseName
+      const ext = dot > 0 ? baseName.slice(dot + 1) : mimeToExt[file.type] || 'bin'
+      let candidate = `${stem}.${ext}`
+      let n = 2
+      while (fs.existsSync(path.join(mediaDir, candidate))) {
+        candidate = `${stem}-${n}.${ext}`
+        n++
+      }
+      filename = candidate
+    }
+
+    const fullPath = path.join(mediaDir, filename)
+    const buffer = Buffer.from(await file.arrayBuffer())
+    fs.writeFileSync(fullPath, buffer)
+    return path.join('media', filename)
+  }, [])
+
   return (
     <Editor2
       ref={editorComponentRef}
@@ -523,6 +592,7 @@ const App = () => {
       isFullscreen={true}
       initialEditorState={initialEditorState}
       onEditorStateChange={setEditorState}
+      onSaveAsset={saveAsset}
     />
   )
 }
