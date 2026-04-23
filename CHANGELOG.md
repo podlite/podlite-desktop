@@ -2,6 +2,7 @@
 
 - add inline image paste and drag-drop — clipboard images and dropped files save to a `media/` folder next to the current document and insert `=picture media/<name>`; dropping a file that already lives in that folder references it in place without copying
 - fix performance: attach IPC (`ipcRenderer`) listeners once per mount instead of re-attaching on every render; handlers read latest state via refs
+- fix external-edit reload after atomic writes — watch the parent directory instead of the file, so tmp+rename edits (IDE autosave, sync tools) reattach cleanly and the editor picks up the new content
 
 # 0.7.2
 

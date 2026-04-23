@@ -182,8 +182,14 @@ export class Window extends EventEmitter {
 
     let debounceTimer: NodeJS.Timeout | null = null
 
-    this.fileWatcher = fs.watch(filePath, eventType => {
-      if (eventType !== 'change') return
+    // Watch the parent directory, not the file itself. Atomic writes
+    // (tmp + rename) replace the target's inode; a file-level watcher
+    // stays bound to the dangling inode and silently stops firing.
+    const dir = path.dirname(filePath)
+    const base = path.basename(filePath)
+
+    this.fileWatcher = fs.watch(dir, (_eventType, changedName) => {
+      if (changedName && changedName !== base) return
 
       // Ignore changes triggered by our own save (within 2 seconds)
       if (Date.now() < this.ignoreSaveUntil) return
