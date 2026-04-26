@@ -185,11 +185,24 @@ export class Window extends EventEmitter {
     // Watch the parent directory, not the file itself. Atomic writes
     // (tmp + rename) replace the target's inode; a file-level watcher
     // stays bound to the dangling inode and silently stops firing.
+    //
+    // Recursive mode lets us notice when files referenced by `=include`
+    // (under any subdirectory of the document root) change on disk. The
+    // renderer's include cache invalidates per-path so live preview stays
+    // in sync with externally edited dependencies.
     const dir = path.dirname(filePath)
     const base = path.basename(filePath)
 
-    this.fileWatcher = fs.watch(dir, (_eventType, changedName) => {
-      if (changedName && changedName !== base) return
+    this.fileWatcher = fs.watch(dir, { recursive: true }, (_eventType, changedName) => {
+      if (!changedName) return
+
+      // Other-file change → notify renderer so it can invalidate its
+      // =include cache for that path. No reload of the current document.
+      if (changedName !== base) {
+        const absPath = path.resolve(dir, changedName)
+        this.browserWindow.webContents.send('include-target-changed', { absPath })
+        return
+      }
 
       // Ignore changes triggered by our own save (within 2 seconds)
       if (Date.now() < this.ignoreSaveUntil) return

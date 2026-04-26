@@ -51,7 +51,14 @@ const wrapFunction = (node: Node, children) => {
 
 const wrapFunctionNoLines = (node: Node, children) => children
 
-export const onConvertSource = (text: string, filePath: string, skipLineNumbers: boolean = false): ConverterResult => {
+type IncludeReader = (path: string, baseDir?: string) => string | null
+
+export const onConvertSource = (
+  text: string,
+  filePath: string,
+  skipLineNumbers: boolean = false,
+  includeReader?: IncludeReader,
+): ConverterResult => {
   let podlite = podlite_core({ importPlugins: true }).use({})
   const plugins = (makeComponent): Partial<Rules> => {
     const mkComponent = (src, attr?: {}) => () => (node, ctx, interator) => {
@@ -170,7 +177,13 @@ export const onConvertSource = (text: string, filePath: string, skipLineNumbers:
   //@ts-ignore
   return {
     result: (
-      <Podlite plugins={plugins} wrapElement={skipLineNumbers ? wrapFunctionNoLines : wrapFunction} tree={asAst} />
+      <Podlite
+        plugins={plugins}
+        wrapElement={skipLineNumbers ? wrapFunctionNoLines : wrapFunction}
+        tree={asAst}
+        includeReader={includeReader}
+        includeBaseDir={filePath ? require('path').dirname(filePath) : undefined}
+      />
     ),
     errors: asAst.errors,
   }
@@ -478,8 +491,59 @@ const App = () => {
     }
   }, [])
 
+  // Cache for resolved =include sources, keyed by absolute path. Each entry
+  // stores the source text and the mtime observed when read. On every
+  // resolution we stat the file: if mtime is unchanged we serve from cache,
+  // otherwise we re-read. fs.statSync is fast enough for per-render checks
+  // and saves the larger cost of re-parsing the included document.
+  const includeCacheRef = React.useRef<Map<string, { source: string; mtime: number }>>(new Map())
+  const [includeChangeVersion, setIncludeChangeVersion] = useState(0)
+
+  // Clear cache whenever the active file changes. Stale entries from a
+  // previous document should not bleed into the new one.
+  React.useEffect(() => {
+    includeCacheRef.current.clear()
+  }, [filePath])
+
+  // Listen for filesystem changes to files referenced by =include. The
+  // main process emits this event from the recursive directory watcher
+  // around the active document. We invalidate the cache entry for the
+  // changed path and bump the version so the preview re-renders.
+  React.useEffect(() => {
+    const handler = (_evt: unknown, payload: { absPath?: string } | undefined) => {
+      const absPath = payload?.absPath
+      if (!absPath) return
+      if (!includeCacheRef.current.has(absPath)) return
+      includeCacheRef.current.delete(absPath)
+      setIncludeChangeVersion(v => v + 1)
+    }
+    vmd.on('include-target-changed', handler)
+    return () => {
+      vmd.off('include-target-changed', handler)
+    }
+  }, [])
+
+  const includeReader: IncludeReader = React.useCallback((targetPath, baseDir) => {
+    try {
+      const path = require('path')
+      const fs = require('fs')
+      const absPath = path.isAbsolute(targetPath)
+        ? targetPath
+        : path.resolve(baseDir ?? '.', targetPath)
+      const stat = fs.statSync(absPath)
+      const mtime = stat.mtimeMs
+      const cached = includeCacheRef.current.get(absPath)
+      if (cached && cached.mtime === mtime) return cached.source
+      const source = fs.readFileSync(absPath, 'utf8')
+      includeCacheRef.current.set(absPath, { source, mtime })
+      return source
+    } catch {
+      return null
+    }
+  }, [])
+
   const onConvertSourceComponent = (text: string) => {
-    return onConvertSource(text, filePath)
+    return onConvertSource(text, filePath, false, includeReader)
   }
 
   const saveAsset: SaveAssetCallback = React.useCallback(async (file, source) => {
