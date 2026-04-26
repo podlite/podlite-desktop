@@ -52,12 +52,14 @@ const wrapFunction = (node: Node, children) => {
 const wrapFunctionNoLines = (node: Node, children) => children
 
 type IncludeReader = (path: string, baseDir?: string) => string | null
+type ExpandPaths = (pattern: string, baseDir?: string) => string[]
 
 export const onConvertSource = (
   text: string,
   filePath: string,
   skipLineNumbers: boolean = false,
   includeReader?: IncludeReader,
+  expandPaths?: ExpandPaths,
 ): ConverterResult => {
   let podlite = podlite_core({ importPlugins: true }).use({})
   const plugins = (makeComponent): Partial<Rules> => {
@@ -183,6 +185,7 @@ export const onConvertSource = (
         tree={asAst}
         includeReader={includeReader}
         includeBaseDir={filePath ? require('path').dirname(filePath) : undefined}
+        expandPaths={expandPaths}
       />
     ),
     errors: asAst.errors,
@@ -497,24 +500,53 @@ const App = () => {
   // otherwise we re-read. fs.statSync is fast enough for per-render checks
   // and saves the larger cost of re-parsing the included document.
   const includeCacheRef = React.useRef<Map<string, { source: string; mtime: number }>>(new Map())
+  // Cache for glob expansion results, keyed by `baseDir|pattern`. Walking
+  // the filesystem is the slowest step in =include resolution; the same
+  // glob is otherwise re-evaluated on every preview re-render (parent
+  // state changes, scroll, etc.), which stalls the initial load. Cache
+  // is cleared on file open and on watcher events so newly created or
+  // deleted files are picked up.
+  const expandCacheRef = React.useRef<Map<string, string[]>>(new Map())
   const [includeChangeVersion, setIncludeChangeVersion] = useState(0)
 
-  // Clear cache whenever the active file changes. Stale entries from a
+  // Clear caches whenever the active file changes. Stale entries from a
   // previous document should not bleed into the new one.
   React.useEffect(() => {
     includeCacheRef.current.clear()
+    expandCacheRef.current.clear()
   }, [filePath])
 
   // Listen for filesystem changes to files referenced by =include. The
   // main process emits this event from the recursive directory watcher
-  // around the active document. We invalidate the cache entry for the
-  // changed path and bump the version so the preview re-renders.
+  // around the active document.
+  //
+  // Only Podlite-shaped files (`.podlite`, `.pod6`, `.md`) can become
+  // include targets, so non-text changes don't trigger preview rerenders.
+  // We invalidate the matching cache entry (defensive: any path whose
+  // resolved absolute form equals the event's absPath) and always bump
+  // the version when an applicable file changes — `includeReader` then
+  // re-stat's during the render and serves the cached source if mtime
+  // is unchanged, so the cost of a forced re-render is one stat per
+  // active include.
   React.useEffect(() => {
+    const path = require('path')
     const handler = (_evt: unknown, payload: { absPath?: string } | undefined) => {
       const absPath = payload?.absPath
       if (!absPath) return
-      if (!includeCacheRef.current.has(absPath)) return
-      includeCacheRef.current.delete(absPath)
+      const ext = path.extname(absPath).toLowerCase()
+      if (!['.podlite', '.pod6', '.md', '.markdown'].includes(ext)) return
+      const target = path.resolve(absPath)
+      for (const k of Array.from(includeCacheRef.current.keys())) {
+        if (path.resolve(k) === target) includeCacheRef.current.delete(k)
+      }
+      // The expansion cache holds lists of files that match a glob; a
+      // newly created or deleted file changes those lists, so flush it.
+      expandCacheRef.current.clear()
+      // Bump the version unconditionally: a file that previously had no
+      // cache entry (e.g. a brand-new file matching a glob pattern) won't
+      // be picked up unless we re-render. The mtime check inside
+      // includeReader keeps the cost of forced re-renders to one stat
+      // per active include.
       setIncludeChangeVersion(v => v + 1)
     }
     vmd.on('include-target-changed', handler)
@@ -542,8 +574,100 @@ const App = () => {
     }
   }, [])
 
+  const expandPaths: ExpandPaths = React.useCallback((pattern, baseDir) => {
+    const cacheKey = `${baseDir ?? ''}|${pattern}`
+    const cached = expandCacheRef.current.get(cacheKey)
+    if (cached) return cached
+    try {
+      const path = require('path')
+      const fs = require('fs')
+      const absRoot = path.isAbsolute(pattern)
+        ? path.parse(pattern).root
+        : path.resolve(baseDir ?? '.')
+
+      // Convert a glob to a RegExp anchored to a normalised forward-slash path.
+      //   **/   →  (?:.*/)?     zero or more directory segments
+      //   **    →  .*           any chars including /
+      //   *     →  [^/]*        any chars within a segment
+      //   ?     →  [^/]         single char within a segment
+      const globToRe = (g: string): RegExp => {
+        let re = ''
+        let i = 0
+        while (i < g.length) {
+          const c = g[i]
+          const next = g[i + 1]
+          if (c === '*' && next === '*' && g[i + 2] === '/') {
+            re += '(?:.*/)?'
+            i += 3
+          } else if (c === '*' && next === '*') {
+            re += '.*'
+            i += 2
+          } else if (c === '*') {
+            re += '[^/]*'
+            i += 1
+          } else if (c === '?') {
+            re += '[^/]'
+            i += 1
+          } else if (/[\\^$.()+|{}[\]]/.test(c)) {
+            re += '\\' + c
+            i += 1
+          } else {
+            re += c
+            i += 1
+          }
+        }
+        return new RegExp(`^${re}$`)
+      }
+
+      const normalize = (p: string) => p.replace(/\\/g, '/').replace(/^\.\//, '')
+      const targetGlob = path.isAbsolute(pattern)
+        ? normalize(pattern)
+        : normalize(path.resolve(baseDir ?? '.', pattern)).replace(normalize(absRoot) + '/', '')
+      const rx = globToRe(targetGlob)
+
+      // Walk only the smallest subtree that could possibly match — the
+      // segments preceding the first glob character. For
+      // `00-DayByDay/2026/04/*.podlite` this is `00-DayByDay/2026/04/`,
+      // which avoids descending into thousands of unrelated files in a
+      // large knowledge base.
+      const segments = targetGlob.split('/')
+      let fixedDepth = 0
+      for (let i = 0; i < segments.length - 1; i++) {
+        if (/[*?[]/.test(segments[i])) break
+        fixedDepth++
+      }
+      const fixedPrefix = segments.slice(0, fixedDepth).join('/')
+      const walkRoot = fixedPrefix ? path.join(absRoot, fixedPrefix) : absRoot
+
+      const matches: string[] = []
+      const walk = (dir: string) => {
+        let entries: any[]
+        try {
+          entries = fs.readdirSync(dir, { withFileTypes: true })
+        } catch {
+          return
+        }
+        for (const entry of entries) {
+          if (entry.name.startsWith('.')) continue
+          const full = path.join(dir, entry.name)
+          if (entry.isDirectory()) {
+            walk(full)
+          } else if (entry.isFile()) {
+            const rel = normalize(path.relative(absRoot, full))
+            if (rx.test(rel)) matches.push(full)
+          }
+        }
+      }
+      walk(walkRoot)
+      expandCacheRef.current.set(cacheKey, matches)
+      return matches
+    } catch {
+      return []
+    }
+  }, [])
+
   const onConvertSourceComponent = (text: string) => {
-    return onConvertSource(text, filePath, false, includeReader)
+    return onConvertSource(text, filePath, false, includeReader, expandPaths)
   }
 
   const saveAsset: SaveAssetCallback = React.useCallback(async (file, source) => {
