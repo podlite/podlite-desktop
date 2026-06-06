@@ -334,7 +334,10 @@ const App = () => {
   // hot keys
   useEffect(() => {
     const saveFileAction = () => {
-      if (isTextChangedRef.current) {
+      // Trigger save when there are unsaved edits OR when the document is
+      // untitled (no path yet). For an untitled doc the main-process save
+      // handler falls back to a Save-As dialog so the user can name it.
+      if (isTextChangedRef.current || !filePathRef.current) {
         vmd.saveFile({ content: textRef.current, filePath: filePathRef.current })
       }
     }
