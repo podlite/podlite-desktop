@@ -1,10 +1,33 @@
 # upcoming
 
-- add inline image paste and drag-drop — clipboard images and dropped files save to a `media/` folder next to the current document and insert `=picture media/<name>`; dropping a file that already lives in that folder references it in place without copying
-- fix performance: attach IPC (`ipcRenderer`) listeners once per mount instead of re-attaching on every render; handlers read latest state via refs
-- fix external-edit reload after atomic writes — watch the parent directory instead of the file, so tmp+rename edits (IDE autosave, sync tools) reattach cleanly and the editor picks up the new content
-- resolve `=include file:X` in preview at render time — reads the source via `fs.readFileSync` against the current document's directory, with an in-memory cache keyed by absolute path and `mtime` so unchanged files are served from cache. Recursive directory watcher invalidates cache entries and re-renders the preview when an included file changes externally
-- glob patterns in `=include` (e.g. `=include file:00-DayByDay/**/*term-*.podlite | defn`) expand to a concrete list of files via a depth-bounded directory walk that skips dotfiles. The walker starts from the longest fixed prefix of the pattern, so non-recursive globs do not traverse the whole document tree
+## New
+
+- inline image paste and drag-drop — clipboard images and dropped files save to a `media/` folder next to the current document and insert `=picture media/<name>`; dropping a file that already lives in that folder references it in place without copying
+- `=include` resolves in the preview at render time — fs reader against current document's directory with `mtime` cache; recursive watcher invalidates cache and re-renders when included files change externally
+- glob patterns in `=include` (e.g. `=include file:**/*.podlite | defn`) expand via depth-bounded directory walk, skipping dotfiles
+- automatic numbering for `:numbered` headings — renders as `N.M.K.` prefix; respects `=config head1 :numbered` defaults and `:!numbered` per-block override
+
+## Fixed
+
+- double window on launch when opening a file from Finder or by drag-onto-icon ([#57](https://github.com/podlite/podlite-desktop/issues/57))
+- `File → Open` no longer replaces the currently-open document — opens the new file in a fresh window; empty untitled windows still accept the opened file in place ([#56](https://github.com/podlite/podlite-desktop/issues/56))
+- `Cmd+S` on an untitled document now opens the Save-As dialog instead of doing nothing ([#55](https://github.com/podlite/podlite-desktop/issues/55))
+- `=picture` rendering in the preview pane — the previous `file:///` protocol handler stripped the leading slash; absolute and relative-to-document paths both display correctly ([#58](https://github.com/podlite/podlite-desktop/issues/58))
+- external-edit reload after atomic writes (IDE autosave, sync tools) — watch the parent directory instead of the file
+- performance: attach IPC listeners once per mount instead of every render
+
+## Spec conformance (via `@podlite/*` libs rebuild)
+
+- `:folded` on `=head` now folds the whole section recursively, including headings inside `=begin nested`/`=defn`/etc.
+- `=config` block preconfiguration (`=config head1 :folded`, `=config code :lang<python>`) is now applied at render time — previously parsed but ignored
+- single-letter `=alias` identifiers (`=alias X foo` → `A<X>`) now accepted per spec
+- `=alias` no longer leaks state into the next `=begin`/`=end` block's syntax highlighting
+- `=TITLE`/`=NAME`/`=SYNOPSIS`/`=Diagram` and other semantic/custom blocks in abbreviated form recognised by the editor highlighter
+- `=row`, `=cell`, `=data-table`, `=boundary`, `=set`, `G<>`, `:masked` recognised in the editor highlighter (spec v2.0)
+
+## Acknowledgements
+
+Several of this release's fixes started as a detailed bug report by [@schueani](https://github.com/schueani) in [#53](https://github.com/podlite/podlite-desktop/issues/53) — thanks for the careful diagnosis and follow-up.
 
 # 0.7.2
 

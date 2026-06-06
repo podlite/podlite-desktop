@@ -46,27 +46,36 @@ Add `:folded` to any block to make it collapsible in preview. Use `:!folded` for
 
 ![Folded blocks](doc/folded.gif)
 
+## Images: Drag-Drop or Paste
+
+Drop an image from Finder onto the editor, or paste a clipboard image with Cmd+V. The file is saved to a `media/` folder next to the document and an `=picture media/<name>` line is inserted at the cursor. A file already living in `media/` is referenced in place without copying.
+
+![Drag-drop and paste](doc/drag-drop.gif)
+
 ## Features
 
 ### Editor
 - smart list continuation on Enter with preserved type prefix (`[ ]`, `#`)
 - Tab / Shift+Tab to change nesting level
 - code folding for `=begin`/`=end` and `=head` sections (Ctrl+Shift+\[ / Ctrl+Shift+\])
+- image drag-drop and clipboard paste — auto-inserts `=picture media/<name>`
 - near-zero input latency on large documents
-- syntax highlighting for Podlite markup
+- syntax highlighting for Podlite markup, including semantic blocks (`=TITLE`, `=NAME`, `=Diagram`)
 - text search (Cmd+F / Ctrl+F)
 
 ### Preview
 - live preview while you type
 - split view (Cmd+. / Ctrl+.)
 - full preview (Cmd+\\ / Ctrl+\\)
-- collapsible blocks with `:folded` attribute
+- collapsible blocks with `:folded` attribute and recursive folding for headings
+- automatic heading numbering with `:numbered` and `=config head1 :numbered`
+- `=include` resolved at render time, with a file watcher that refreshes the preview when included files change
 - export to HTML and PDF
 
 ### Workspace
 - session restore: cursor position, scroll, folds, view mode
 - per-file view mode persistence (editor / split / preview)
-- auto-reload when file changes on disk
+- auto-reload when file changes on disk — including atomic-write edits from IDEs and sync tools
 - import from Markdown
 
 ### Blocks and Extensions
@@ -75,7 +84,8 @@ Add `:folded` to any block to make it collapsible in preview. Use `:!folded` for
 - `=formula` — math formulas
 - `=picture` — images and video
 - `=toc` — table of contents
-- `=table` — tables with `:folded` support
+- `=table`, `=row`, `=cell`, `=data-table` — structured and CSV/TSV-sourced tables with `:folded` support
+- `=config` — block preconfiguration (defaults applied to every block of a type)
 
 ## Podlite Blocks
 
