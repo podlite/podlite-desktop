@@ -27,12 +27,8 @@ const getPathToOpen = (filepath, parentDocPath) => {
   }
   const path = require('path')
   const docDirPath = path.dirname(parentDocPath)
-  return {
-    isRemote,
-    path: path.isAbsolute(filepath)
-      ? `file://${filepath}`
-      : 'file:///' + path.normalize(path.join(docDirPath, filepath)),
-  }
+  const absolutePath = path.isAbsolute(filepath) ? filepath : path.normalize(path.join(docDirPath, filepath))
+  return { isRemote, path: `file://${absolutePath}` }
 }
 
 // wrap all elements and add line link info

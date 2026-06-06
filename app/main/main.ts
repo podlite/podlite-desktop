@@ -2,6 +2,7 @@ import { App } from './app'
 import update from './update'
 import log from 'electron-log'
 import { protocol, shell } from 'electron'
+import { fileURLToPath } from 'url'
 
 const fs = require('fs')
 const { BrowserWindow, app, ipcMain, dialog } = require('electron')
@@ -200,8 +201,16 @@ app.on('ready', async () => {
   }
 
   protocol.registerFileProtocol('file', (request, callback) => {
-    const pathname = decodeURI(request.url.replace('file:///', ''))
-    callback(pathname)
+    // fileURLToPath handles percent-encoding and the POSIX/Windows path forms
+    // correctly. The previous `replace('file:///', '')` stripped the leading
+    // slash for absolute URLs (preview rendered `<img src="file:///…">` as a
+    // relative path and the image went missing).
+    try {
+      callback(fileURLToPath(request.url))
+    } catch (e) {
+      log.error('file:// resolve failed', request.url, e)
+      callback({ error: -2 } as any)
+    }
   })
 
   setMainMenu(mainApp)
