@@ -25,12 +25,12 @@ export class App extends EventEmitter {
     })
   }
 
-  async run() {
+  async run(hasQueuedFiles: boolean = false) {
     // restore windows
     const tmpstate = (await this.load('app.json')) || { windows: [] }
     this.openInPreview = tmpstate.openInPreview || false
     if (tmpstate.windows.length < 1 && this.windowsPull.all().length < 1) {
-      this.createWindow({ id: 0 })
+      if (!hasQueuedFiles) this.createWindow({ id: 0 })
     } else {
       tmpstate.windows.map(async opt => this.openFile(opt, true))
     }

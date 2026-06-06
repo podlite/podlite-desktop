@@ -205,7 +205,10 @@ app.on('ready', async () => {
   })
 
   setMainMenu(mainApp)
-  mainApp.run().then(() => {
+  // When files are queued (launched-with-file / dragged-onto-icon),
+  // skip creation of a default blank window — the queued files take the slot.
+  // Session-restore from app.json still proceeds so existing user windows are not lost.
+  mainApp.run(initOpenFileQueue.length > 0).then(() => {
     // Rebuild menu after state is loaded (openInPreview may have changed)
     setMainMenu(mainApp)
   })
