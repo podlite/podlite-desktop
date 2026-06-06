@@ -72,7 +72,10 @@
       ],
       "category": "public.app-category.productivity",
       "hardenedRuntime": true,
-      "entitlements": "./node_modules/electron-builder-notarize/entitlements.mac.inherit.plist"
+      "entitlements": "./node_modules/electron-builder-notarize/entitlements.mac.inherit.plist",
+      "extendInfo": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "dmg": {
       "icon": "dist-assets/dmg-icon.icns",
