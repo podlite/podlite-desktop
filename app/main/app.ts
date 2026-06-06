@@ -82,6 +82,12 @@ export class App extends EventEmitter {
         if (!destWin) {
           return this.createWindow(options, isSkipSaveState)
         }
+        // File → Open from a window that already holds a document opens the new
+        // file in a fresh window rather than replacing the current one
+        // (one-window-per-document; tabs are a separate feature).
+        if (destWin.filePath) {
+          return this.createWindow(options, isSkipSaveState)
+        }
         destWin.loadFile(options.filePath, this.openInPreview)
       } else {
         return this.createWindow(options, isSkipSaveState)
