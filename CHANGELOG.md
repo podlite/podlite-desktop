@@ -1,4 +1,10 @@
-# upcoming
+# 0.8.1
+
+## Fixed
+
+- `=Mermaid` block no longer crashes the live preview while you type — the renderer now handles empty/transient block content gracefully
+
+# 0.8.0
 
 ## New
 
