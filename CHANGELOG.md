@@ -1,5 +1,7 @@
 # upcoming
 
+# 0.8.2
+
 ## Fixed
 
 - file watcher no longer crashes the app when the OS denies recursive directory watching (Mac App Store sandbox, iCloud Drive folders, Windows AppX) — auto-reload silently disables for that document instead ([#60](https://github.com/podlite/podlite-desktop/issues/60))
