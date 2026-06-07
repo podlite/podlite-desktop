@@ -193,13 +193,13 @@ export class Window extends EventEmitter {
     const dir = path.dirname(filePath)
     const base = path.basename(filePath)
 
-    this.fileWatcher = fs.watch(dir, { recursive: true }, (_eventType, changedName) => {
+    const handler = (_eventType: string, changedName: string | Buffer | null) => {
       if (!changedName) return
 
       // Other-file change → notify renderer so it can invalidate its
       // =include cache for that path. No reload of the current document.
       if (changedName !== base) {
-        const absPath = path.resolve(dir, changedName)
+        const absPath = path.resolve(dir, changedName as string)
         this.browserWindow.webContents.send('include-target-changed', { absPath })
         return
       }
@@ -240,6 +240,19 @@ export class Window extends EventEmitter {
           // Window may be closing
         }
       }, 300)
+    }
+
+    try {
+      this.fileWatcher = fs.watch(dir, { recursive: true }, handler)
+    } catch (err) {
+      console.warn('file watcher unavailable; auto-reload disabled:', (err as Error).message)
+      this.fileWatcher = null
+      return
+    }
+
+    this.fileWatcher.on('error', err => {
+      console.warn('file watcher error; auto-reload disabled:', err.message)
+      this.unwatchFile()
     })
   }
 
