@@ -1,5 +1,9 @@
 # upcoming
 
+## Changed
+
+- macOS distribution ships separate arm64 and x64 builds; Apple Silicon users get native performance instead of running through Rosetta 2
+
 # 0.8.2
 
 ## Fixed
