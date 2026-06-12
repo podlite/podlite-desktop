@@ -50,6 +50,28 @@ const wrapFunctionNoLines = (node: Node, children) => children
 type IncludeReader = (path: string, baseDir?: string) => string | null
 type ExpandPaths = (pattern: string, baseDir?: string) => string[]
 
+const InlineImage: React.FC<{ src: string; alt?: string }> = ({ src, alt }) => {
+  const [resolvedSrc, setResolvedSrc] = useState(src)
+  useEffect(() => {
+    setResolvedSrc(src)
+    if (!src.startsWith('file://')) return
+    let cancelled = false
+    const path = src.replace(/^file:\/\//, '')
+    ipcRenderer
+      .invoke('read-media-as-base64', path)
+      .then((dataUrl: string | null) => {
+        if (!cancelled && dataUrl) setResolvedSrc(dataUrl)
+      })
+      .catch(() => {
+        /* keep original src so the broken-image icon shows */
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [src])
+  return <img src={resolvedSrc} alt={alt} />
+}
+
 export const onConvertSource = (
   text: string,
   filePath: string,
@@ -139,9 +161,6 @@ export const onConvertSource = (
         </HighlightedCode>
       )),
       ':image': setFn(node => {
-        // const {path} = getPathToOpen(node.src, filePath)
-        // const filePathToOpen = path
-
         if (node.src.match(/(mp4|mov)$/)) {
           return mkComponent(() => (
             <div className="video shadow">
@@ -153,7 +172,7 @@ export const onConvertSource = (
             </div>
           ))
         } else {
-          return mkComponent(({ key }) => <img key={key} src={node.src} alt={node.alt} />)
+          return mkComponent(({ key }) => <InlineImage key={key} src={node.src} alt={node.alt} />)
         }
       }),
     }

@@ -4,6 +4,10 @@
 
 - macOS distribution ships separate arm64 and x64 builds; Apple Silicon users get native performance instead of running through Rosetta 2
 
+## Fixed
+
+- `=picture` now renders in the live preview on the Mac App Store build — image bytes are read in the main process and inlined as a base64 data URL, so the renderer doesn't depend on `file://` access that the sandbox denies for sibling files
+
 # 0.8.2
 
 ## Fixed

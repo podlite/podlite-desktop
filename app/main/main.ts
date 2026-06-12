@@ -88,6 +88,30 @@ ipcMain.on('log', (event, message) => {
   console.log(message)
 })
 
+const MEDIA_MIME: Record<string, string> = {
+  png: 'image/png',
+  jpg: 'image/jpeg',
+  jpeg: 'image/jpeg',
+  gif: 'image/gif',
+  svg: 'image/svg+xml',
+  webp: 'image/webp',
+  bmp: 'image/bmp',
+  ico: 'image/x-icon',
+  avif: 'image/avif',
+}
+
+ipcMain.handle('read-media-as-base64', async (_event, absPath: string) => {
+  try {
+    const ext = absPath.split('.').pop()?.toLowerCase() || ''
+    const mime = MEDIA_MIME[ext] || 'application/octet-stream'
+    const buffer = await fs.promises.readFile(absPath)
+    return `data:${mime};base64,${buffer.toString('base64')}`
+  } catch (err) {
+    log.warn('read-media-as-base64 failed:', absPath, (err as Error).message)
+    return null
+  }
+})
+
 // Handle show-save-dialog IPC call
 ipcMain.handle('show-save-dialog', async (event, options) => {
   const win = BrowserWindow.fromWebContents(event.sender)
