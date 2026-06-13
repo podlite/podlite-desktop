@@ -1,5 +1,7 @@
 # upcoming
 
+# 0.8.3
+
 ## Changed
 
 - macOS distribution ships separate arm64 and x64 builds; Apple Silicon users get native performance instead of running through Rosetta 2
@@ -7,6 +9,8 @@
 ## Fixed
 
 - `=picture` now renders in the live preview on the Mac App Store build — image bytes are read in the main process and inlined as a base64 data URL, so the renderer doesn't depend on `file://` access that the sandbox denies for sibling files
+- numbered lists from `=config item1 :numbered` — items now render as an ordered list (`1.` `2.` `3.`) instead of bullets ([#61](https://github.com/podlite/podlite-desktop/issues/61))
+- `=code` blocks with `:lang<…>` attribute are syntax-highlighted in the live preview, matching the editor pane. Inline formatting codes inside `=code` (when `:allow<…>` is set) layer on top — `B<…>` becomes bold, `I<…>` becomes italic, `C<…>` becomes inline code, with the highlighter's colors preserved underneath ([#62](https://github.com/podlite/podlite-desktop/issues/62))
 
 # 0.8.2
 

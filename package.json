@@ -3,7 +3,7 @@
   "productName": "podlite",
   "author": "Aliaksandr Zahatski",
   "license": "MIT",
-  "version": "0.8.2",
+  "version": "0.8.3",
   "description": "Podite editor",
   "main": "build/main.js",
   "repository": {
@@ -71,11 +71,17 @@
       "target": [
         {
           "target": "dmg",
-          "arch": ["x64", "arm64"]
+          "arch": [
+            "x64",
+            "arm64"
+          ]
         },
         {
           "target": "zip",
-          "arch": ["x64", "arm64"]
+          "arch": [
+            "x64",
+            "arm64"
+          ]
         }
       ],
       "category": "public.app-category.productivity",
@@ -245,9 +251,9 @@
     "webpack-dev-server": "^4.7.2"
   },
   "dependencies": {
-    "@podlite/editor-react": "^0.0.52",
-    "@podlite/schema": "^0.0.46",
-    "@podlite/to-jsx": "^0.0.50",
+    "@podlite/editor-react": "^0.0.53",
+    "@podlite/schema": "^0.0.47",
+    "@podlite/to-jsx": "^0.0.51",
     "@types/react-router-dom": "^5.3.2",
     "about-window": "1.15.2",
     "codemirror": "^6.0.2",
@@ -255,7 +261,7 @@
     "electron-log": "^4.2.4",
     "electron-updater": "^4.3.4",
     "electron-util": "^0.14.2",
-    "podlite": "^0.0.59",
+    "podlite": "^0.0.60",
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "remove": "^0.1.5"
