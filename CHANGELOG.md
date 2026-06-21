@@ -1,5 +1,7 @@
 # upcoming
 
+- bump transitive deps: lodash, follow-redirects, serialize-javascript, tmp, postcss, shell-quote, js-yaml, tar, @tootallnate/once
+
 # 0.8.3
 
 ## Changed
