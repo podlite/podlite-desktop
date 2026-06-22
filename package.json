@@ -17,7 +17,11 @@
   "scripts": {
     "start": "run-s build watch",
     "clean": "rm -rf build release .cache",
-    "release": "run-s build \"electron:build {@}\" --",
+    "release": "yarn clean && yarn build && electron-builder build --mac dmg zip --win nsis zip --linux AppImage --publish=never",
+    "release:mas": "yarn clean && yarn build && cp -r assets/* build/ && electron-builder build --mac mas --universal --publish=never",
+    "release:appx": "yarn clean && yarn build && cp -r assets/appx build/ && electron-builder build --win appx --publish=never",
+    "release:snap": "yarn clean && yarn build && electron-builder build --linux snap --publish=never",
+    "release:dev": "PYTHON_PATH=/usr/local/bin/python CSC_IDENTITY_AUTO_DISCOVERY=false electron-builder build -mwl --publish=never",
     "build": "run-s 'build:*'",
     "build:clean": "run-s clean",
     "build:electron": "mkdir -p build; cp app/renderer/client-api.js  dist-assets/icon.png  build && NODE_PRESERVE_SYMLINKS=1 webpack",
