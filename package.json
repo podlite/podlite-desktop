@@ -246,7 +246,7 @@
     "tslint-react": "^4.0.0",
     "typescript": "^3.5.2",
     "wait-on": "^6.0.0",
-    "webpack": "^5.65.0",
+    "webpack": "^5.76",
     "webpack-cli": "^4.9.1",
     "webpack-dev-server": "^4.7.2"
   },

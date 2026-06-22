@@ -1,6 +1,7 @@
 # upcoming
 
 - bump transitive deps: lodash, follow-redirects, serialize-javascript, tmp, postcss, shell-quote, js-yaml, tar, @tootallnate/once
+- bump webpack to ^5.76 (resolves cross-realm object access advisory)
 
 # 0.8.3
 
