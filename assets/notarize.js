@@ -23,14 +23,14 @@ exports.default = async function notarizing(context) {
   const teamId = process.env.APPLE_TEAM_ID
 
   if (!appleApiKey || !appleApiKeyId || !appleApiIssuer) {
-    console.warn('notarize: skipped — APPLE_API_KEY / APPLE_API_KEY_ID / APPLE_API_ISSUER not set')
+    console.warn('notarize: skipped (APPLE_API_KEY / APPLE_API_KEY_ID / APPLE_API_ISSUER not set)')
     return
   }
 
   const appName = context.packager.appInfo.productFilename
   const appPath = `${appOutDir}/${appName}.app`
 
-  console.log(`notarize: submitting ${appPath} via notarytool…`)
+  console.log(`notarize: submitting ${appPath} via notarytool`)
   await notarize({
     tool: 'notarytool',
     appPath,
