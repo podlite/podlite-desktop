@@ -259,7 +259,7 @@
     "codemirror": "^6.0.2",
     "electron-is-dev": "^1.1.0",
     "electron-log": "^4.2.4",
-    "electron-updater": "^4.3.4",
+    "electron-updater": "^6.8",
     "electron-util": "^0.14.2",
     "podlite": "^0.0.60",
     "react": "17.0.2",

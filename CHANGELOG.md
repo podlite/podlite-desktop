@@ -3,6 +3,7 @@
 - bump transitive deps: lodash, follow-redirects, serialize-javascript, tmp, postcss, shell-quote, js-yaml, tar, @tootallnate/once
 - bump webpack to ^5.76 (resolves cross-realm object access advisory)
 - bump electron to 39.8.5 (resolves four use-after-free / command-line switch injection advisories)
+- bump electron-updater to 6.8 (resolves windows code-signing bypass advisory)
 
 # 0.8.3
 
