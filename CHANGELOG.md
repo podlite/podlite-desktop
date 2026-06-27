@@ -1,9 +1,21 @@
 # upcoming
 
-- bump transitive deps: lodash, follow-redirects, serialize-javascript, tmp, postcss, shell-quote, js-yaml, tar, @tootallnate/once
-- bump webpack to ^5.76 (resolves cross-realm object access advisory)
+# 0.8.4
+
+## Fixed
+
+- `=boundary` no longer crashes the live preview — the renderer was passing children to a `<hr>` element, which React 18+ rejects on void-element tags. The bare directive (`=boundary`), the abbreviated form with inline content (`=boundary Text`), and `=boundary :caption(…)` all render as a void `<hr/>` now ([#70](https://github.com/podlite/podlite-desktop/issues/70))
+- `=Mermaid` diagrams render again on the current mermaid release — the diagram plugin moved off the deprecated callback `render` and `init` APIs that started failing on mermaid 11
+
+## Security
+
 - bump electron to 39.8.5 (resolves four use-after-free / command-line switch injection advisories)
 - bump electron-updater to 6.8 (resolves windows code-signing bypass advisory)
+- bump webpack to ^5.76 (resolves cross-realm object access advisory)
+- bump transitive deps: lodash, follow-redirects, serialize-javascript, tmp, postcss, shell-quote, js-yaml, tar, @tootallnate/once
+
+## Changed
+
 - replace electron-builder-notarize with @electron/notarize using notarytool (the deprecated altool path no longer accepts submissions)
 
 # 0.8.3
