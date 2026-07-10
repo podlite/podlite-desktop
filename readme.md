@@ -8,13 +8,17 @@
 
 A block-based markup editor for [Podlite](https://podlite.org) with live preview. Available on Windows, Linux and macOS.
 
-[![GitHub release](https://img.shields.io/github/v/release/zag/podlite-desktop)](https://github.com/zag/podlite-desktop/releases/latest)
+[![GitHub release](https://img.shields.io/github/v/release/podlite/podlite-desktop)](https://github.com/podlite/podlite-desktop/releases/latest)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Mac App Store](https://img.shields.io/badge/Mac_App_Store-available-blue)](https://apps.apple.com/us/app/podlite/id1526511053)
 [![Microsoft Store](https://img.shields.io/badge/Microsoft_Store-available-blue)](https://www.microsoft.com/store/apps/9NVNT9SNQJM8)
 [![Snap Store](https://img.shields.io/badge/Snap_Store-available-blue)](https://snapcraft.io/podlite)
 
 </div>
+
+<p align="center">
+  <img src="doc/Screenshot3.png" alt="Podlite Desktop: source and live preview side by side" width="900">
+</p>
 
 ## Get Podlite
 
