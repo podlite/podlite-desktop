@@ -1,5 +1,7 @@
 # upcoming
 
+- open Markdown files (`.md`, `.markdown`, `.mkdn`, `.mkd`, `.mdown`) and render them as Markdown in the preview; added file associations so double-click and drag-and-drop open them
+
 # 0.8.4
 
 ## Fixed

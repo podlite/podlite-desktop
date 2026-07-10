@@ -72,6 +72,11 @@ const InlineImage: React.FC<{ src: string; alt?: string }> = ({ src, alt }) => {
   return <img src={resolvedSrc} alt={alt} />
 }
 
+const MARKDOWN_EXTENSIONS = ['.md', '.markdown', '.mkdn', '.mkd', '.mdown']
+
+const isMarkdownPath = (filePath: string): boolean =>
+  MARKDOWN_EXTENSIONS.includes(require('path').extname(filePath || '').toLowerCase())
+
 export const onConvertSource = (
   text: string,
   filePath: string,
@@ -177,7 +182,7 @@ export const onConvertSource = (
       }),
     }
   }
-  let tree = podlite.parse(text)
+  let tree = isMarkdownPath(filePath) ? podlite.parse(text, { mode: 'md' }) : podlite.parse(text)
   const { interator: astTree, ...astResult } = podlite.toAstResult(tree)
   // process ast tree by converting paths to absolute
   const rules = {
@@ -291,6 +296,7 @@ const App = () => {
     textRef.current = content
   }, [])
   const [filePath, setFilePath] = useState('')
+  const [fileType, setFileType] = useState<'podlite' | 'markdown'>('podlite')
   const [isPreviewMode, setPreviewMode] = useState(false)
   const [isHalfPreviewMode, setHalfPreviewMode] = useState(false)
   const [isTextChanged, setTextChanged] = useState(false)
@@ -422,7 +428,7 @@ const App = () => {
   useEffect(() => {
     const handlerContent = async (
       _,
-      { content, filePath: newFilePath, editorState: savedEditorState, openInPreview },
+      { content, filePath: newFilePath, fileType: newFileType, editorState: savedEditorState, openInPreview },
     ) => {
       try {
         // Check if current file has unsaved changes
@@ -454,6 +460,7 @@ const App = () => {
         }
 
         setFilePath(newFilePath)
+        setFileType(newFileType || 'podlite')
         textRef.current = content
         updateText(content)
         setTextChanged(false)
@@ -474,6 +481,7 @@ const App = () => {
         console.error('Error in handlerContent:', error)
         // Fallback: load the new file anyway
         setFilePath(newFilePath)
+        setFileType(newFileType || 'podlite')
         textRef.current = content
         updateText(content)
         setTextChanged(false)

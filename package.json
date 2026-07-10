@@ -52,6 +52,36 @@
         "ext": "podlite",
         "name": "Podlite Text",
         "role": "Editor"
+      },
+      {
+        "ext": "md",
+        "name": "Markdown",
+        "role": "Editor",
+        "mimeType": "text/markdown"
+      },
+      {
+        "ext": "markdown",
+        "name": "Markdown",
+        "role": "Editor",
+        "mimeType": "text/markdown"
+      },
+      {
+        "ext": "mkdn",
+        "name": "Markdown",
+        "role": "Editor",
+        "mimeType": "text/markdown"
+      },
+      {
+        "ext": "mkd",
+        "name": "Markdown",
+        "role": "Editor",
+        "mimeType": "text/markdown"
+      },
+      {
+        "ext": "mdown",
+        "name": "Markdown",
+        "role": "Editor",
+        "mimeType": "text/markdown"
       }
     ],
     "files": [

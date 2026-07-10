@@ -8,6 +8,11 @@ import * as path from 'path'
 const { format } = require('url')
 const isDev = require('electron-is-dev')
 
+const MARKDOWN_EXTENSIONS = ['.md', '.markdown', '.mkdn', '.mkd', '.mdown']
+
+const fileTypeFromPath = (filePath: string): 'podlite' | 'markdown' =>
+  MARKDOWN_EXTENSIONS.includes(path.extname(filePath).toLowerCase()) ? 'markdown' : 'podlite'
+
 export interface EditorSessionState {
   cursorOffset?: number
   scrollTop?: number
@@ -275,6 +280,7 @@ export class Window extends EventEmitter {
         this.browserWindow.webContents.send('file', {
           content: '',
           filePath: '',
+          fileType: 'podlite',
         })
       } else {
         try {
@@ -287,6 +293,7 @@ export class Window extends EventEmitter {
         this.browserWindow.webContents.send('file', {
           content: fs.readFileSync(filePath, { encoding: 'utf8' }),
           filePath,
+          fileType: fileTypeFromPath(filePath),
           editorState: this.editorState,
           openInPreview,
         })
