@@ -120,7 +120,7 @@
       "entitlements": "./build/entitlements.mas.plist",
       "gatekeeperAssess": false,
       "entitlementsInherit": "./build/entitlements.mas.inherit.plist",
-      "provisioningProfile": "build/podlite_provision.provisionprofile"
+      "provisioningProfile": "build/podlite_mac_store.provisionprofile"
     },
     "win": {
       "publisherName": "Aliaksandr Zahatski",
