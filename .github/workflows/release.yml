@@ -1,0 +1,183 @@
+name: Release
+
+# Triggered by pushing a version tag v<version>. The version in package.json is
+# the single source of truth and must match the tag. workflow_dispatch stays as a
+# manual fallback.
+#
+# Scope: the direct-download channel (dmg/zip, nsis/zip, AppImage) plus the
+# electron-updater manifests. Store submissions (Mac App Store, Microsoft Store,
+# Snap) are not built here — they stay on the local scripts.
+#
+# Two runners: macOS signs and notarizes the mac build (Apple tooling is
+# macOS-only); the Linux runner builds the AppImage and cross-builds the unsigned
+# Windows installer (electron-builder bundles nsis, so no Wine is needed).
+#
+# Runner targets are repo variables so they can flip to a self-hosted machine
+# without editing this file. This is a public repo, so GitHub-hosted runners are
+# free — the defaults need no setup:
+#   MACOS_RUNNER (default macos-latest)
+#   LINUX_RUNNER (default ubuntu-latest)
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+  workflow_dispatch:
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  # Verify the manifest version matches the tag, then open a draft release the
+  # build jobs publish their artifacts into. Creating the draft once here avoids
+  # the build jobs racing to create the same release.
+  prepare:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Verify tag matches version
+        if: github.ref_type == 'tag'
+        run: |
+          set -euo pipefail
+          VERSION=$(node -p "require('./package.json').version")
+          TAG=${GITHUB_REF_NAME#v}
+          if [ "$VERSION" != "$TAG" ]; then
+            echo "Tag $GITHUB_REF_NAME does not match package.json version $VERSION." >&2
+            exit 1
+          fi
+
+      - name: Open draft release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          VERSION=$(node -p "require('./package.json').version")
+          TAG="v$VERSION"
+          if ! gh release view "$TAG" >/dev/null 2>&1; then
+            gh release create "$TAG" --draft --title "$TAG" --notes "Build in progress…"
+          fi
+
+  # macOS: signed with the Developer ID cert and notarized via the App Store
+  # Connect API key (the assets/notarize.js afterSign hook reads the APPLE_* env).
+  # electron-builder imports MAC_CERTS (base64 .p12) into a temporary keychain, so
+  # this works the same on a hosted or a self-hosted runner.
+  build-mac:
+    needs: prepare
+    runs-on: ${{ fromJSON(vars.MACOS_RUNNER || '["macos-latest"]') }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: corepack enable
+      - run: yarn install --immutable
+
+      - name: Write notarization API key
+        env:
+          API_KEY_P8: ${{ secrets.API_KEY }}
+        run: printf '%s' "$API_KEY_P8" > "$RUNNER_TEMP/apple_api_key.p8"
+
+      - name: Build, sign, notarize, publish
+        env:
+          CSC_LINK: ${{ secrets.MAC_CERTS }}
+          CSC_KEY_PASSWORD: ${{ secrets.MAC_CERTS_PASSWORD }}
+          APPLE_API_KEY: ${{ runner.temp }}/apple_api_key.p8
+          APPLE_API_KEY_ID: ${{ secrets.API_KEY_ID }}
+          APPLE_API_ISSUER: ${{ secrets.API_KEY_ISSUER_ID }}
+          APPLE_TEAM_ID: N5Q5DQ2LZJ
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          yarn build
+          npx electron-builder --mac dmg zip -p always
+
+  # Linux + Windows on one runner. The AppImage is native; the Windows installer
+  # is cross-built here (nsis needs no Wine, only signing would). Windows is
+  # unsigned for now, so it is best-effort — a failure does not block the release.
+  # Forcing --x64 keeps Windows on x64 regardless of the runner's own arch.
+  build-linux-win:
+    needs: prepare
+    runs-on: ${{ fromJSON(vars.LINUX_RUNNER || '["ubuntu-latest"]') }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: corepack enable
+      - run: yarn install --immutable
+      - run: yarn build
+
+      - name: Build and publish Linux
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npx electron-builder --linux AppImage -p always
+
+      - name: Build and publish Windows (unsigned, best-effort)
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npx electron-builder --win nsis zip --x64 -p always
+
+  # Set the release notes from the changelog, attach the third-party notices, mark
+  # a suffixed version as a prerelease, then publish the draft. A suffixed version
+  # (0.9.0-beta.1, -rc, -alpha) is not marked Latest, so stable clients that poll
+  # /releases/latest never pull it.
+  finalize:
+    needs: [build-mac, build-linux-win]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: corepack enable
+      - run: yarn install --immutable
+
+      - name: Resolve release notes
+        run: |
+          set -euo pipefail
+          VERSION=$(node -p "require('./package.json').version")
+          NOTES=notes.md
+
+          if [ -f "release-notes/v$VERSION.podlite" ]; then
+            npx --yes podlite convert "release-notes/v$VERSION.podlite" --to md -o "$NOTES"
+          elif [ -f "release-notes/v$VERSION.md" ]; then
+            cp "release-notes/v$VERSION.md" "$NOTES"
+          else
+            # The section for this version, falling back to the "upcoming" section
+            # (used by an alpha built before the heading is renamed).
+            awk -v v="$VERSION" '$0 ~ "^# " v "([ \t]|$)" {f=1; next} /^# / {f=0} f' CHANGELOG.md > "$NOTES"
+            if [ ! -s "$NOTES" ]; then
+              awk '/^# upcoming/ {f=1; next} /^# / {f=0} f' CHANGELOG.md > "$NOTES"
+            fi
+          fi
+          if [ -f release-notes/header.md ]; then
+            { cat release-notes/header.md; printf '\n\n'; cat "$NOTES"; } > body.md
+          else
+            cp "$NOTES" body.md
+          fi
+
+      - name: Third-party notices
+        run: |
+          set -euo pipefail
+          npx --yes generate-license-file --input package.json \
+            --output THIRD-PARTY-NOTICES.md --overwrite
+
+      - name: Publish release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          VERSION=$(node -p "require('./package.json').version")
+          TAG="v$VERSION"
+          gh release upload "$TAG" THIRD-PARTY-NOTICES.md --clobber
+          case "$VERSION" in
+            *-*) gh release edit "$TAG" --notes-file body.md --draft=false --prerelease ;;
+            *)   gh release edit "$TAG" --notes-file body.md --draft=false --latest ;;
+          esac
