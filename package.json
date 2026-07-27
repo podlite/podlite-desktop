@@ -3,7 +3,7 @@
   "productName": "podlite",
   "author": "Aliaksandr Zahatski",
   "license": "MIT",
-  "version": "0.8.4",
+  "version": "0.9.0-alpha.1",
   "description": "Podite editor",
   "main": "build/main.js",
   "repository": {
