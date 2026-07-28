@@ -92,7 +92,9 @@ jobs:
           APPLE_API_KEY: ${{ runner.temp }}/apple_api_key.p8
           APPLE_API_KEY_ID: ${{ secrets.API_KEY_ID }}
           APPLE_API_ISSUER: ${{ secrets.API_KEY_ISSUER_ID }}
-          APPLE_TEAM_ID: N5Q5DQ2LZJ
+          # No APPLE_TEAM_ID: with API-key notarization the team comes from the
+          # issuer. Setting it makes @electron/notarize see two credential sets
+          # (API key + password) and refuse.
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           yarn build
