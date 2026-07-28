@@ -98,7 +98,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           yarn build
-          npx electron-builder --mac dmg zip -p always
+          npx electron-builder --mac dmg zip --x64 --arm64 -p always
 
       # Windows is cross-built on the macOS runner. electron-builder needs no Wine
       # here (Wine is only required to build Windows targets on Linux), and this

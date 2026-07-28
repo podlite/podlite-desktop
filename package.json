@@ -3,7 +3,7 @@
   "productName": "podlite",
   "author": "Aliaksandr Zahatski",
   "license": "MIT",
-  "version": "0.9.0-alpha.3",
+  "version": "0.9.0-alpha.4",
   "description": "Podite editor",
   "main": "build/main.js",
   "repository": {
@@ -23,7 +23,7 @@
     "release:snap": "yarn clean && yarn build && electron-builder build --linux snap --publish=never",
     "release:dev": "PYTHON_PATH=/usr/local/bin/python CSC_IDENTITY_AUTO_DISCOVERY=false electron-builder build -mwl --publish=never",
     "release:ship": "bash scripts/release-ship.sh",
-    "release:ci-mac": "yarn clean && yarn build && electron-builder --mac dmg zip --publish=never",
+    "release:ci-mac": "yarn clean && yarn build && electron-builder --mac dmg zip --x64 --arm64 --publish=never",
     "release:ci-win": "yarn clean && yarn build && electron-builder --win nsis zip --publish=never",
     "release:ci-linux": "yarn clean && yarn build && electron-builder --linux AppImage --publish=never",
     "build": "run-s 'build:*'",
