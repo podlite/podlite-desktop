@@ -47,8 +47,8 @@ git tag -d v<version>
 
 ## Runners
 
-Two jobs: `build-mac` (macOS, for signing and notarization) and `build-linux-win`
-(Linux, which builds the AppImage and cross-builds the unsigned Windows installer).
+Two jobs: `build-mac` (macOS — signs and notarizes the mac build and cross-builds
+the unsigned Windows installer) and `build-linux` (Linux — the AppImage).
 `runs-on` reads a repo variable, so each can flip to a self-hosted machine without
 editing the workflow (Settings → Actions → Variables).
 
@@ -79,11 +79,10 @@ repo.
 
 ## Notes on the Windows build
 
-The Windows installer is cross-built on the Linux runner (`--win nsis zip --x64`).
-electron-builder bundles nsis, so no Wine is needed and a dedicated Windows runner
-is not required. It is unsigned for now: fresh installs show a SmartScreen prompt,
-and electron-updater may reject the unsigned package on auto-update. The Windows
-step is best-effort — a failure there does not block the macOS and Linux release.
-To sign later, add a code-signing cert and enable electron-builder's Windows
-signing; osslsigncode runs on the Linux runner, so still no Windows machine is
-needed.
+The Windows installer is cross-built on the macOS runner (`--win nsis zip --x64`).
+electron-builder needs no Wine on macOS to build Windows targets (Wine is only
+required for that on Linux), so no dedicated Windows runner is needed. It is
+unsigned for now: fresh installs show a SmartScreen prompt, and electron-updater
+may reject the unsigned package on auto-update. The Windows step is best-effort — a
+failure there does not block the macOS and Linux release. To sign later, add a
+code-signing cert and enable electron-builder's Windows signing.
