@@ -768,6 +768,7 @@ const App = () => {
   return (
     <Editor2
       ref={editorComponentRef}
+      language={fileType}
       onChange={(content: string) => {
         updateTextFromEditor(content)
         if (!isTextChanged) setTextChanged(true)
