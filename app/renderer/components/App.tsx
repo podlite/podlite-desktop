@@ -1,11 +1,18 @@
 import * as React from 'react'
-import { ConverterResult, EditorSessionState, HighlightedCode, SaveAssetCallback } from '@podlite/editor-react'
+import {
+  ConverterResult,
+  EditorSessionState,
+  HighlightedCode,
+  IPodliteEditor,
+  PodliteEditorRef,
+  SaveAssetCallback,
+} from '@podlite/editor-react'
 import { Editor2 } from '@podlite/editor-react'
 import { podlite as podlite_core } from 'podlite'
-import Podlite from '@podlite/to-jsx'
+import Podlite, { WrapElement } from '@podlite/to-jsx'
 const { ipcRenderer } = window.require('electron')
 import { useEffect, useState } from 'react'
-import { Rules, makeInterator, Node, getTextContentFromNode, PodliteDocument, setFn } from '@podlite/schema'
+import { Rules, makeInterator, Node, PodNode, getTextContentFromNode, PodliteDocument, setFn } from '@podlite/schema'
 
 import { PODLITE_CSS } from '../utils/export-html'
 import './App.css'
@@ -31,21 +38,29 @@ const getPathToOpen = (filepath, parentDocPath) => {
   return { isRemote, path: `file://${absolutePath}` }
 }
 
+// the editor is typed as a plain function component, so ref is not part of its
+// props; this puts it back without loosening the rest
+const EditorWithRef = Editor2 as React.ComponentType<IPodliteEditor & { ref?: React.Ref<PodliteEditorRef> }>
+
+// a node may be a bare string, and not every block carries a location
+const lineOf = (node: PodNode): number | undefined =>
+  typeof node === 'object' && node !== null && 'location' in node ? node.location?.start?.line : undefined
+
 // wrap all elements and add line link info
-const wrapFunction = (node: Node, children) => {
-  if (node?.location?.start?.line) {
-    const line = node.location.start.line
+const wrapFunction: WrapElement = (node, children) => {
+  const line = lineOf(node)
+  if (line) {
     return (
       <div key={line} className="line-src" data-line={line} id={`line-${line}`}>
         {children}
       </div>
     )
   } else {
-    return children
+    return <>{children}</>
   }
 }
 
-const wrapFunctionNoLines = (node: Node, children) => children
+const wrapFunctionNoLines: WrapElement = (_node, children) => <>{children}</>
 
 type IncludeReader = (path: string, baseDir?: string) => string | null
 type ExpandPaths = (pattern: string, baseDir?: string) => string[]
@@ -766,7 +781,7 @@ const App = () => {
   }, [])
 
   return (
-    <Editor2
+    <EditorWithRef
       ref={editorComponentRef}
       language={fileType}
       onChange={(content: string) => {

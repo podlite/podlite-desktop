@@ -32,7 +32,7 @@
     "watch": "run-p -r webpack:watch electron:start",
     "electron:start": "wait-on http-get://localhost:1124 &&  nodemon --watch build/main.js --exec \"electron .\"",
     "webpack:watch": "mkdir -p build ; cp app/renderer/client-api.js  dist-assets/icon.png  build  && webpack serve --config webpack.config.js  --port 1124",
-    "test": "run-s parcel:build \"test:jest {@}\" --",
+    "test": "run-s \"test:jest {@}\" --",
     "test:jest": "jest",
     "format": "npx prettier --write '**/*.{js,jsx,ts,tsx,json,md,mjs}'",
     "lint": "tslint app/**/*.ts{,x}"
@@ -293,9 +293,9 @@
     "webpack-dev-server": "^4.7.2"
   },
   "dependencies": {
-    "@podlite/editor-react": "^0.0.62",
-    "@podlite/schema": "^0.0.56",
-    "@podlite/to-jsx": "^0.0.60",
+    "@podlite/editor-react": "^0.0.64",
+    "@podlite/schema": "^0.0.58",
+    "@podlite/to-jsx": "^0.0.62",
     "@types/react-router-dom": "^5.3.2",
     "about-window": "1.15.2",
     "codemirror": "^6.0.2",
@@ -303,12 +303,13 @@
     "electron-log": "^4.2.4",
     "electron-updater": "^6.8.9",
     "electron-util": "^0.14.2",
-    "podlite": "^0.0.69",
+    "podlite": "^0.0.71",
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "remove": "^0.1.5"
   },
   "resolutions": {
+    "@babel/runtime": "7.29.7",
     "@codemirror/state": "6.7.1",
     "@codemirror/view": "6.43.8",
     "@codemirror/language": "6.12.4",
