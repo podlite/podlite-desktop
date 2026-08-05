@@ -1,0 +1,242 @@
+=TITLE Changelog
+
+=begin pod :released-in<upcoming>
+=head2 Upcoming
+
+=item pass the file type to the editor, so a Markdown file is highlighted as Markdown and a Podlite file as Podlite
+=item open Markdown files (C<.md>, C<.markdown>, C<.mkdn>, C<.mkd>, C<.mdown>) and render them as Markdown in the preview; added file associations so double-click and drag-and-drop open them
+
+=end pod
+
+=begin pod :released-in<0.8.4>
+=head2 0.8.4
+
+=head3 Fixed
+
+=item C<=boundary> no longer crashes the live preview — the renderer was passing children to a C«<hr>» element, which React 18+ rejects on void-element tags. The bare directive (C<=boundary>), the abbreviated form with inline content (C<=boundary Text>), and C<=boundary :caption(…)> all render as a void C«<hr/>» now (L<#70|https://github.com/podlite/podlite-desktop/issues/70>)
+=item C<=Mermaid> diagrams render again on the current mermaid release — the diagram plugin moved off the deprecated callback C<render> and C<init> APIs that started failing on mermaid 11
+
+=head3 Security
+
+=item bump electron to 39.8.5 (resolves four use-after-free / command-line switch injection advisories)
+=item bump electron-updater to 6.8 (resolves windows code-signing bypass advisory)
+=item bump webpack to ^5.76 (resolves cross-realm object access advisory)
+=item bump transitive deps: lodash, follow-redirects, serialize-javascript, tmp, postcss, shell-quote, js-yaml, tar, @tootallnate/once
+
+=head3 Changed
+
+=item replace electron-builder-notarize with @electron/notarize using notarytool (the deprecated altool path no longer accepts submissions)
+
+=end pod
+
+=begin pod :released-in<0.8.3>
+=head2 0.8.3
+
+=head3 Changed
+
+=item macOS distribution ships separate arm64 and x64 builds; Apple Silicon users get native performance instead of running through Rosetta 2
+
+=head3 Fixed
+
+=item C<=picture> now renders in the live preview on the Mac App Store build — image bytes are read in the main process and inlined as a base64 data URL, so the renderer doesn't depend on C<file://> access that the sandbox denies for sibling files
+=item numbered lists from C<=config item1 :numbered> — items now render as an ordered list (C<1.> C<2.> C<3.>) instead of bullets (L<#61|https://github.com/podlite/podlite-desktop/issues/61>)
+=item C<=code> blocks with C«:lang<…>» attribute are syntax-highlighted in the live preview, matching the editor pane. Inline formatting codes inside C<=code> (when C«:allow<…>» is set) layer on top — C«B<…>» becomes bold, C«I<…>» becomes italic, C«C<…>» becomes inline code, with the highlighter's colors preserved underneath (L<#62|https://github.com/podlite/podlite-desktop/issues/62>)
+
+=end pod
+
+=begin pod :released-in<0.8.2>
+=head2 0.8.2
+
+=head3 Fixed
+
+=item file watcher no longer crashes the app when the OS denies recursive directory watching (Mac App Store sandbox, iCloud Drive folders, Windows AppX) — auto-reload silently disables for that document instead (L<#60|https://github.com/podlite/podlite-desktop/issues/60>)
+
+=end pod
+
+=begin pod :released-in<0.8.1>
+=head2 0.8.1
+
+=head3 Fixed
+
+=item C<=Mermaid> block no longer crashes the live preview while you type — the renderer now handles empty/transient block content gracefully
+
+=end pod
+
+=begin pod :released-in<0.8.0>
+=head2 0.8.0
+
+=head3 New
+
+=item inline image paste and drag-drop — clipboard images and dropped files save to a C<media/> folder next to the current document and insert C«=picture media/<name>»; dropping a file that already lives in that folder references it in place without copying
+=item C<=include> resolves in the preview at render time — fs reader against current document's directory with C<mtime> cache; recursive watcher invalidates cache and re-renders when included files change externally
+=item glob patterns in C<=include> (e.g. C<=include file:**/*.podlite | defn>) expand via depth-bounded directory walk, skipping dotfiles
+=item automatic numbering for C<:numbered> headings — renders as C<N.M.K.> prefix; respects C<=config head1 :numbered> defaults and C<:!numbered> per-block override
+
+=head3 Fixed
+
+=item double window on launch when opening a file from Finder or by drag-onto-icon (L<#57|https://github.com/podlite/podlite-desktop/issues/57>)
+=item C<File → Open> no longer replaces the currently-open document — opens the new file in a fresh window; empty untitled windows still accept the opened file in place (L<#56|https://github.com/podlite/podlite-desktop/issues/56>)
+=item C<Cmd+S> on an untitled document now opens the Save-As dialog instead of doing nothing (L<#55|https://github.com/podlite/podlite-desktop/issues/55>)
+=item C<=picture> rendering in the preview pane — the previous C<file:///> protocol handler stripped the leading slash; absolute and relative-to-document paths both display correctly (L<#58|https://github.com/podlite/podlite-desktop/issues/58>)
+=item external-edit reload after atomic writes (IDE autosave, sync tools) — watch the parent directory instead of the file
+=item performance: attach IPC listeners once per mount instead of every render
+
+=head3 Spec conformance (via `@podlite/*` libs rebuild)
+
+=item C<:folded> on C<=head> now folds the whole section recursively, including headings inside C<=begin nested>/C<=defn>/etc.
+=item C<=config> block preconfiguration (C<=config head1 :folded>, C«=config code :lang<python>») is now applied at render time — previously parsed but ignored
+=item single-letter C<=alias> identifiers (C<=alias X foo> → C«A<X>») now accepted per spec
+=item C<=alias> no longer leaks state into the next C<=begin>/C<=end> block's syntax highlighting
+=item C<=TITLE>/C<=NAME>/C<=SYNOPSIS>/C<=Diagram> and other semantic/custom blocks in abbreviated form recognised by the editor highlighter
+=item C<=row>, C<=cell>, C<=data-table>, C<=boundary>, C<=set>, C«G<>», C<:masked> recognised in the editor highlighter (spec v2.0)
+
+=head3 Acknowledgements
+
+Several of this release's fixes started as a detailed bug report by L<@schueani|https://github.com/schueani> in L<#53|https://github.com/podlite/podlite-desktop/issues/53> — thanks for the careful diagnosis and follow-up.
+
+=end pod
+
+=begin pod :released-in<0.7.2>
+=head2 0.7.2
+
+=item fix snap Wayland crash on Ubuntu 24.04 — enable C<allowNativeWayland> to prevent C<DISABLE_WAYLAND=1> injection by electron-builder (L<#43|https://github.com/podlite/podlite-desktop/issues/43>)
+
+=end pod
+
+=begin pod :released-in<0.7.1>
+=head2 0.7.1
+
+=item syntax highlighting for code blocks in preview (L<#42|https://github.com/podlite/podlite-desktop/issues/42>)
+=item snap: add Wayland support — C<wayland> plug + C<ELECTRON_OZONE_PLATFORM_HINT=auto> (L<#43|https://github.com/podlite/podlite-desktop/issues/43>)
+
+=end pod
+
+=begin pod :released-in<0.7.0>
+=head2 0.7.0
+
+=head3 New
+
+=item code folding for C<=begin>/C<=end> blocks and C<=head> sections (Ctrl-Shift-[ / Ctrl-Shift-])
+=item list continuation on Enter — auto-insert C<=item> with preserved type prefix (C<[ ]>, C<#>)
+=item Tab/Shift-Tab to change C<=item> nesting level
+=item auto-reload file when changed on disk (silent or with dialog)
+=item "Open Files in Preview" toggle in View menu
+=item per-file view mode persistence across sessions (editor/preview/split)
+=item restore editor state between sessions (cursor, scroll, fold state)
+=item "Copy as PNG" for preview content
+
+=head3 Fixed
+
+=item editor input latency reduced from 860ms to near-zero per keystroke
+=item search panel disappearing after Enter on first result
+=item links not opening from preview panel (Electron 38 compatibility)
+=item crash when opening a directory path instead of a file
+=item cursor not visible on new window open
+=item fold markers appearing inside verbatim blocks (C<=code>, C<=comment>, C<=data>)
+
+=end pod
+
+=begin pod :released-in<0.6.1>
+=head2 0.6.1
+
+=item editor refactored and rebuilt using updated libraries
+=item added syntax highlighting for Podlite markup language
+=item refactored key bindings
+=item refactored window open/save/new workflow
+=item fixed duplicate file opening issues
+=item added C<=markdown> standard block support
+=item added text search (C<Cmd-F>)
+=item added new blocks: C<=Mermaid>, C<=picture>
+=item added ability to open URLs from editor using C«L<>» links (C<Cmd>/C<Win> or C<Ctrl> modifier)
+=item added C<file:> schema support in C«L<>» links - opens files in new editor window
+=item half-screen preview toggle — C<Ctrl> + C<.> / C<Cmd> + C<.>
+=item full-screen preview toggle — C<Ctrl> + C<\> / C<Cmd> + C<\>
+=item added inline text style support (bold C«B<>», italic C«I<>», code C«C<>», links C«L<>», strikethrough C«O<>») within paragraphs and table cells
+=item fixed redraw issue when resizing the application window
+=item improved code block visibility in CSS
+=item fixed build configuration to support macOS 26 (Thaoe)
+
+=end pod
+
+=begin pod :released-in<0.4.0>
+=head2 0.4.0
+
+=item support C<=useReact>, C<=React> blocks
+=item C<=Markdown> - markdown block
+=item enhance code snippets, add markdown suggestions
+=item fix C<=Image> .mov, .mp4 files
+=item fix styles
+
+=end pod
+
+=begin pod :released-in<0.3.0>
+=head2 0.3.0
+
+=item =Toc - table of contents block.
+=item add :caption support for =Images and =Diagrams
+=item =Image block now supports :link and formatting codes in caption.
+
+=end pod
+
+=begin pod :released-in<0.2.1>
+=head2 0.2.1
+
+=item fix save menu #22
+=item add "New", "Save As" menu items
+=item add View menu with Preview toggle
+=item add "Release notes" reference
+
+=end pod
+
+=begin pod :released-in<0.2.0>
+=head2 0.2.0
+
+=item directive suggestions
+=item pod6 snippets 🏷
+
+=end pod
+
+=begin pod :released-in<0.1.0>
+=head2 0.1.0
+
+=item save windows state between app restarts
+=item open external url in browser
+=item update export to html
+=item add export to pdf
+=item fix show assets from disk
+=item add =Diagram component
+=item switch to using shared podlite library
+=item refactor main app
+=item fix macos and windows distributions
+=item use flexible application windows size
+
+=end pod
+
+=begin pod :released-in<0.0.3>
+=head2 0.0.3
+
+=item supports local video ( i.e. .mp4 files) for =Image
+=item update pod6 lib to ver 0.28
+=item add import from markdown
+=item add export to html
+
+=end pod
+
+=begin pod :released-in<0.0.2>
+=head2 0.0.2
+
+=item use pod mode by default for .pod6, .rakudoc (#3)
+=item enhance user interface
+=item add distribution for Mac
+=item add auto update for Podlite app
+=item open Podlite as editor for pod6's files
+=item adopt app's menu for windows and mac
+
+=end pod
+
+=begin pod :released-in<0.0.1>
+=head2 0.0.1
+
+=item Initial release
+
+=end pod

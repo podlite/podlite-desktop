@@ -12,8 +12,12 @@ they stay on the local scripts (`yarn release:mas`, `yarn release:appx`,
 ## Cutting a release
 
 1. Bump `version` in `package.json`.
-2. In `CHANGELOG.md`, rename the `# upcoming` heading to `# <version> — <date>`
-   and add a fresh empty `# upcoming` on top for the next cycle.
+2. In `CHANGELOG.podlite`, change the top container's `:released-in<upcoming>` to
+   `:released-in<version>` and its `=head2 Upcoming` to `=head2 <version> — <date>`,
+   then add a fresh empty `upcoming` container above it for the next cycle.
+   For a release worth more than a changelog section, copy
+   `release-notes/TEMPLATE.podlite` to `release-notes/v<version>.podlite` and write
+   the highlights — the workflow prefers it and pulls the section in via `=include`.
 3. Commit both.
 4. Tag and push:
 

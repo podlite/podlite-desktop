@@ -144,29 +144,28 @@ jobs:
       - run: corepack enable
       - run: yarn install --immutable
 
+      # The release body is the branded header over a per-version wrapper when one
+      # exists, else the changelog section for this version. Notes render with the
+      # podlite the app itself bundles, so the tool never drifts from the release.
       - name: Resolve release notes
         run: |
           set -euo pipefail
           VERSION=$(node -p "require('./package.json').version")
           NOTES=notes.md
+          PODLITE=node_modules/.bin/podlite
 
           if [ -f "release-notes/v$VERSION.podlite" ]; then
-            npx --yes podlite convert "release-notes/v$VERSION.podlite" --to md -o "$NOTES"
-          elif [ -f "release-notes/v$VERSION.md" ]; then
-            cp "release-notes/v$VERSION.md" "$NOTES"
-          else
-            # The section for this version, falling back to the "upcoming" section
-            # (used by an alpha built before the heading is renamed).
-            awk -v v="$VERSION" '$0 ~ "^# " v "([ \t]|$)" {f=1; next} /^# / {f=0} f' CHANGELOG.md > "$NOTES"
-            if [ ! -s "$NOTES" ]; then
-              awk '/^# upcoming/ {f=1; next} /^# / {f=0} f' CHANGELOG.md > "$NOTES"
+            "$PODLITE" convert "release-notes/v$VERSION.podlite" --to md -o "$NOTES"
+            if grep -q ':released-in<' "$NOTES"; then
+              echo "release-notes/v$VERSION.podlite kept an unresolved =include" >&2
+              exit 1
             fi
-          fi
-          if [ -f release-notes/header.md ]; then
-            { cat release-notes/header.md; printf '\n\n'; cat "$NOTES"; } > body.md
           else
-            cp "$NOTES" body.md
+            # an alpha is built before the Upcoming heading is renamed, so fall back to it
+            "$PODLITE" query "pod[:released-in<$VERSION>]" CHANGELOG.podlite --to md --quiet --fail-on-empty > "$NOTES" ||
+              "$PODLITE" query 'pod[:released-in<upcoming>]' CHANGELOG.podlite --to md --quiet > "$NOTES"
           fi
+          { cat release-notes/header.md; printf '\n\n'; cat "$NOTES"; } > body.md
 
       - name: Third-party notices
         run: |

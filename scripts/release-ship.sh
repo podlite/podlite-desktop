@@ -8,7 +8,8 @@
 #
 # Optional env:
 #   RELEASE_NOTES_FILE  path to file with GitHub release notes
-#                       (default: extract '# upcoming' section from CHANGELOG.md)
+#                       (default: the release-notes wrapper for this version, else
+#                        the matching section of CHANGELOG.podlite)
 
 set -uo pipefail
 
@@ -41,15 +42,29 @@ log "preflight OK; shipping v${VERSION} (dry-run=${DRY_RUN})"
 run yarn release \
   || log "WARN: build had failures; check release/ for surviving artifacts"
 
-# Resolve release notes
+# Resolve release notes from the same sources the CI release uses: a per-version
+# wrapper if there is one, else the changelog section for this version.
 NOTES_ARG="--notes \"release ${TAG}\""
 NOTES_FILE="${RELEASE_NOTES_FILE:-}"
+PODLITE=node_modules/.bin/podlite
 if [[ -n "$NOTES_FILE" && -f "$NOTES_FILE" ]]; then
   NOTES_ARG="--notes-file $NOTES_FILE"
-elif [[ -f CHANGELOG.md ]]; then
+elif [[ -x "$PODLITE" && -f CHANGELOG.podlite ]]; then
   TMP_NOTES=$(mktemp -t release-notes)
-  awk '/^# upcoming/{flag=1; next} /^# /{flag=0} flag' CHANGELOG.md | sed '/./,$!d' > "$TMP_NOTES"
-  [[ -s "$TMP_NOTES" ]] && NOTES_ARG="--notes-file $TMP_NOTES"
+  if [[ -f "release-notes/${TAG}.podlite" ]]; then
+    "$PODLITE" convert "release-notes/${TAG}.podlite" --to md -o "$TMP_NOTES"
+  else
+    "$PODLITE" query "pod[:released-in<${VERSION}>]" CHANGELOG.podlite --to md --quiet --fail-on-empty > "$TMP_NOTES" ||
+      "$PODLITE" query 'pod[:released-in<upcoming>]' CHANGELOG.podlite --to md --quiet > "$TMP_NOTES"
+  fi
+  if [[ -s "$TMP_NOTES" ]]; then
+    if [[ -f release-notes/header.md ]]; then
+      BODY="${TMP_NOTES}.body"
+      { cat release-notes/header.md; printf '\n\n'; cat "$TMP_NOTES"; } > "$BODY"
+      TMP_NOTES="$BODY"
+    fi
+    NOTES_ARG="--notes-file $TMP_NOTES"
+  fi
 fi
 
 # Upload to GitHub Release (artifacts that exist)

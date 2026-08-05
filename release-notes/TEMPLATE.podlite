@@ -1,0 +1,32 @@
+=begin comment
+Per-version release notes wrapper. To use: copy this to release-notes/vX.Y.Z.podlite,
+set the version in the hero URLs and in the =include selector, and write Highlights.
+The branded header (release-notes/header.md) and the download assets are added by the
+release workflow, so do not repeat them here. Use =head1, not =TITLE (convert renders
+=TITLE as a literal "# TITLE"). Raw HTML passes straight through, so the <picture> block
+gives a light and dark hero. Put the two PNGs in release-notes/assets/vX.Y.Z/; the
+release workflow uploads them as assets of the vX.Y.Z release, which is what these URLs
+point to. A code span holding angle brackets goes in guillemets, C«:lang<js>» — the
+doubled-angle form leaks its delimiters into the rendered text.
+
+Without a wrapper the workflow falls back to the CHANGELOG section for this version,
+which is enough for a patch release.
+=end comment
+=begin pod
+<p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="https://github.com/podlite/podlite-desktop/releases/download/vX.Y.Z/hero-dark.png"><img src="https://github.com/podlite/podlite-desktop/releases/download/vX.Y.Z/hero-light.png" alt="Podlite X.Y.Z" width="900"></picture></p>
+
+=head1 Highlights
+
+One or two sentences on the theme of this release, then a few of the biggest items.
+
+=head1 What's new
+
+=include file:../CHANGELOG.podlite | pod[:released-in<X.Y.Z>]
+
+=head1 Install
+
+Download for macOS, Windows or Linux below, or get it from the
+L<Mac App Store|https://apps.apple.com/us/app/podlite/id1526511053>,
+L<Microsoft Store|https://www.microsoft.com/store/apps/9NVNT9SNQJM8> or
+L<Snap Store|https://snapcraft.io/podlite>.
+=end pod
