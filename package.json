@@ -308,5 +308,11 @@
     "react-dom": "17.0.2",
     "remove": "^0.1.5"
   },
+  "resolutions": {
+    "@codemirror/state": "6.7.1",
+    "@codemirror/view": "6.43.8",
+    "@codemirror/language": "6.12.4",
+    "@lezer/common": "1.5.2"
+  },
   "packageManager": "yarn@4.10.3"
 }
