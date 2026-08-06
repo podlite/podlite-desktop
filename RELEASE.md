@@ -18,8 +18,12 @@ they stay on the local scripts (`yarn release:mas`, `yarn release:appx`,
    For a release worth more than a changelog section, copy
    `release-notes/TEMPLATE.podlite` to `release-notes/v<version>.podlite` and write
    the highlights — the workflow prefers it and pulls the section in via `=include`.
-3. Commit both.
-4. Tag and push:
+3. For images in the notes, put them in `release-notes/assets/v<version>/` and link
+   them at `https://github.com/podlite/podlite-desktop/releases/download/v<version>/<file>`.
+   The workflow uploads everything from that folder as assets of the same release,
+   so the links resolve once it is published and nothing lands in the repo tree.
+4. Commit both.
+5. Tag and push:
 
    ```
    git tag v<version>

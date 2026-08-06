@@ -181,6 +181,10 @@ jobs:
           VERSION=$(node -p "require('./package.json').version")
           TAG="v$VERSION"
           gh release upload "$TAG" THIRD-PARTY-NOTICES.md --clobber
+          # images the notes link to, uploaded as assets of this same release
+          if compgen -G "release-notes/assets/$TAG/*" > /dev/null; then
+            gh release upload "$TAG" release-notes/assets/"$TAG"/* --clobber
+          fi
           case "$VERSION" in
             *-*) gh release edit "$TAG" --notes-file body.md --draft=false --prerelease ;;
             *)   gh release edit "$TAG" --notes-file body.md --draft=false --latest ;;
