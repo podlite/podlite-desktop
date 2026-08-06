@@ -1,0 +1,24 @@
+=begin pod
+
+=head1 Highlights
+
+Markdown files are first-class in this release: open one and the editor
+highlights it as Markdown, the preview renders it as Markdown, and a
+double-click or a drop opens it straight away.
+
+The editor also reads a Podlite document as a tree now instead of line by line.
+Every markup code gets its colour, a section name reads apart from a block name
+you brought in yourself, and the settings inside a markdown fence are coloured
+the same way in a C<.podlite> file and in a C<.md> one.
+
+=head1 What's new
+
+=include file:../CHANGELOG.podlite | pod[:released-in<0.9.0>]
+
+=head1 Install
+
+Download for macOS, Windows or Linux below, or get it from the
+L<Mac App Store|https://apps.apple.com/us/app/podlite/id1526511053>,
+L<Microsoft Store|https://www.microsoft.com/store/apps/9NVNT9SNQJM8> or
+L<Snap Store|https://snapcraft.io/podlite>.
+=end pod

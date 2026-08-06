@@ -6,6 +6,10 @@
 =item pass the file type to the editor, so a Markdown file is highlighted as Markdown and a Podlite file as Podlite
 =item open Markdown files (C<.md>, C<.markdown>, C<.mkdn>, C<.mkd>, C<.mdown>) and render them as Markdown in the preview; added file associations so double-click and drag-and-drop open them
 =item the editor reads the document as a tree now: every markup code is coloured, section names and your own block names read apart from standard ones, settings inside a markdown fence are coloured, and C«G<>» content shows as a covered strip that opens under the caret
+=item find and replace in the editor, from a panel at the top
+=item a block that fails to render no longer blanks the preview — it degrades to a small placeholder and the rest of the page stays
+=item render the C«W<>» contextual link, entity codes inside an inline C«C<>» code, and a table written inside a cell as a grid
+=item recognise the C<=set> directive, which passes settings to the block that follows it
 
 =end pod
 
