@@ -1,0 +1,98 @@
+=begin pod :id<showcase> :toc
+
+=TITLE Podlite highlighting showcase
+
+=begin SYNOPSIS
+A section name like SYNOPSIS or SEE-ALSO reads in its own colour, apart from a
+standard block and apart from a name you brought in yourself.
+=end SYNOPSIS
+
+=head1 Block names come in four kinds
+
+=begin nested
+A standard block: C<=head>, C<=item>, C<=code>, C<=table>, C<=nested>.
+=end nested
+
+=begin Image :caption('a name the author brought in')
+podlite-mark-desktop.svg
+=end Image
+
+=for Diagram :caption('another one')
+graph TD; A-->B;
+
+=head1 Markup codes
+
+Basic text: B<bold>, I<italic>, U<underlined>, C<inline code>, O<struck out>.
+
+Links: L<the project site|https://podlite.org> and a contextual backlink
+W<markup codes|defn:markup-code>. The part after the bar reads apart from the text.
+
+Entities and verbatim: E<copy> E<lt>angle brackets E<gt>, V<no B<markup> here>,
+S<spaces   are   kept>.
+
+Marks for the reader: X<index entry>, N<a footnote>, H<above the line>,
+J<below the line>, Z<this one never reaches the page>.
+
+Typed text: K<what you type>, T<what the screen shows>, R<a stand-in value>.
+
+Hidden until published: G<this strip stays covered, the caret opens it>.
+
+=alias PRODUCT Podlite Desktop
+An alias resolves at render time: A<PRODUCT>.
+
+=head1 Settings and their delimiters
+
+=for para :id<delims> :lang<en> :caption('quoted value') :tags<a b> :!toc
+A value in angle brackets, in quotes, a list, and a negated setting — each
+delimiter reads as a value, and a hyphenated name stays whole.
+
+=set :caption('a caption for the block that follows')
+=begin code :lang<js>
+// code inside a block is coloured by the language its settings name
+const podlite = require('podlite')
+const tree = podlite().parse('=head1 Hello')
+console.log(tree.type)
+=end code
+
+=head1 Markdown inside Podlite
+
+=begin markdown
+The body of this block is read as **Markdown**, and a fence inside it keeps its
+own highlighting:
+
+```python
+def greet(name: str) -> str:
+    return f"hello, {name}"
+```
+=end markdown
+
+=head1 Tables and data
+
+=begin table :caption('what each delimiter carries')
+ Written        | Read as        | Note
+ ===============|================|=====================
+ :key<a b>      | list           | whitespace separates
+ :key<a,b>      | string         | a comma stays
+ :key('a b')    | string         | quotes keep it whole
+ :key{:a, :b}   | map            | option form
+=end table
+
+=begin data :key<sales> :mime-type('text/csv')
+month,units
+january,120
+february,143
+=end data
+
+=head1 Lists
+
+=item first item with B<markup> on the marker line
+=item second item
+=item2 a nested one
+
+=for item :prio<high>
+an item carrying a setting
+
+=defn markup-code
+A pair of a letter and a delimiter that marks a piece of text.
+
+=end pod
