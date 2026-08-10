@@ -293,9 +293,9 @@
     "webpack-dev-server": "^4.7.2"
   },
   "dependencies": {
-    "@podlite/editor-react": "^0.0.64",
-    "@podlite/schema": "^0.0.58",
-    "@podlite/to-jsx": "^0.0.62",
+    "@podlite/editor-react": "^0.0.66",
+    "@podlite/schema": "^0.0.60",
+    "@podlite/to-jsx": "^0.0.64",
     "@types/react-router-dom": "^5.3.2",
     "about-window": "1.15.2",
     "codemirror": "^6.0.2",
@@ -303,7 +303,7 @@
     "electron-log": "^4.2.4",
     "electron-updater": "^6.8.9",
     "electron-util": "^0.14.2",
-    "podlite": "^0.0.71",
+    "podlite": "^0.0.73",
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "remove": "^0.1.5"
