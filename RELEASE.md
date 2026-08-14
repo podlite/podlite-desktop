@@ -5,9 +5,14 @@ builds the direct-download channel for macOS, Windows, and Linux, signs and
 notarizes the macOS build, generates the third-party notices, and publishes a
 GitHub Release with the electron-updater manifests attached.
 
-Store submissions (Mac App Store, Microsoft Store, Snap) are **not** part of CI —
-they stay on the local scripts (`yarn release:mas`, `yarn release:appx`,
-`yarn release:snap`, `yarn release:ship`).
+Store packages (Mac App Store `.pkg`, Snap, Microsoft Store `.appx`) are built by
+the same run, but they are attached to the **run artifacts**, not to the release
+page — none of them installs for anyone outside its store, so on a release page
+they would only collect confused downloads. Submitting them stays local: see
+[Store submissions](#store-submissions).
+
+Each store build is best-effort. A missing secret or a store-only signing problem
+leaves that package out and does not hold up the direct-download release.
 
 ## Cutting a release
 

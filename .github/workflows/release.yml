@@ -8,10 +8,20 @@ name: Release
 # reaches users until the build has been checked: while the release is a draft
 # the update manifests are unreachable and installed apps see no update.
 #
-# Two runners: macOS builds the signed and notarized mac dmg/zip and cross-builds
+# Three runners: macOS builds the signed and notarized mac dmg/zip and cross-builds
 # the unsigned Windows installer (electron-builder needs no Wine on macOS — Wine is
-# only required to build Windows targets on Linux); the Linux runner builds the
-# AppImage.
+# only required to build Windows targets on Linux); Linux builds the AppImage; the
+# Windows runner exists for one thing, the AppX package, which needs makeappx from
+# the Windows SDK.
+#
+# What lands where: the direct-download files (dmg/zip, nsis/zip, AppImage) and the
+# update manifests go to the release page. The store packages (pkg, snap, appx) go
+# to the run artifacts instead — they do not install for anyone outside the store,
+# so on a release page they would only collect confused downloads. Submitting them
+# is a local step, see RELEASE.md.
+#
+# Every store build is best-effort: none of them may hold up the direct-download
+# release.
 #
 # Actions are pinned to a commit, not a tag: a tag can be moved to other code by
 # whoever owns the action, and the mac job holds the signing cert and the
@@ -20,8 +30,9 @@ name: Release
 # Runner targets are repo variables so they can flip to a self-hosted machine
 # without editing this file. This is a public repo, so GitHub-hosted runners are
 # free — the defaults need no setup:
-#   MACOS_RUNNER (default macos-latest)
-#   LINUX_RUNNER (default ubuntu-latest)
+#   MACOS_RUNNER   (default macos-latest)
+#   LINUX_RUNNER   (default ubuntu-latest)
+#   WINDOWS_RUNNER (default windows-latest)
 on:
   push:
     tags:
@@ -115,6 +126,35 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npx electron-builder --win nsis zip --x64 -p always
 
+      # The store build is signed with a different pair than the one above — Apple
+      # Distribution for the app, 3rd Party Mac Developer Installer for the pkg — so
+      # it carries its own secret. assets/notarize.js returns early here: the
+      # platform is mas, not darwin, and the store notarizes on its side.
+      # Best-effort: a missing secret or a store-only signing problem must not stop
+      # the direct-download release.
+      - name: Build the Mac App Store package (best-effort)
+        continue-on-error: true
+        env:
+          CSC_LINK: ${{ secrets.MAS_CERTS }}
+          CSC_KEY_PASSWORD: ${{ secrets.MAS_CERTS_PASSWORD }}
+        run: |
+          set -euo pipefail
+          if [ -z "${CSC_LINK:-}" ]; then
+            echo "MAS_CERTS is empty — skipping the Mac App Store package" >&2
+            exit 0
+          fi
+          cp -r assets/* build/
+          npx electron-builder --mac mas --universal --publish=never
+
+      - name: Collect the Mac App Store package
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: store-mac
+          path: release/*.pkg
+          retention-days: 30
+          if-no-files-found: ignore
+
   # Linux AppImage on a native Linux runner.
   build-linux:
     needs: prepare
@@ -132,6 +172,58 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npx electron-builder --linux AppImage -p always
+
+      # Snap for the store. Best-effort while this is unproven on a hosted runner:
+      # snapd there is awkward, and electron-builder 23 still targets core18, which
+      # is out of support.
+      - name: Build the Snap package (best-effort)
+        continue-on-error: true
+        run: |
+          set -euo pipefail
+          sudo snap install snapcraft --classic
+          npx electron-builder --linux snap --publish=never
+
+      - name: Collect the Snap package
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: store-linux
+          path: release/*.snap
+          retention-days: 30
+          if-no-files-found: ignore
+
+  # AppX for the Microsoft Store. This is the one target that needs a real Windows
+  # machine: the package is assembled by makeappx from the Windows SDK, which the
+  # hosted image already carries. The plain Windows installer is cross-built on the
+  # macOS runner above and does not come through here.
+  build-windows-store:
+    needs: prepare
+    continue-on-error: true
+    runs-on: ${{ fromJSON(vars.WINDOWS_RUNNER || '["windows-latest"]') }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 20
+      - run: corepack enable
+      - run: yarn install --immutable
+      - run: yarn build
+
+      - name: Build the AppX package
+        shell: bash
+        run: |
+          set -euo pipefail
+          cp -r assets/appx build/
+          npx electron-builder --win appx --publish=never
+
+      - name: Collect the AppX package
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: store-windows
+          path: release/*.appx
+          retention-days: 30
+          if-no-files-found: ignore
 
   # Set the release notes from the changelog, attach the third-party notices, mark
   # a suffixed version as a prerelease, then publish the draft. A suffixed version
@@ -203,5 +295,12 @@ jobs:
             echo
             echo '```'
             echo "$PUBLISH"
+            echo '```'
+            echo
+            echo "Store packages are in this run's artifacts, not on the release page."
+            echo "To fetch and submit them:"
+            echo
+            echo '```'
+            echo "yarn release:stores $VERSION"
             echo '```'
           } >> "$GITHUB_STEP_SUMMARY"
