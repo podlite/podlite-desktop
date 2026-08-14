@@ -4,14 +4,18 @@ name: Release
 # the single source of truth and must match the tag. workflow_dispatch stays as a
 # manual fallback.
 #
-# Scope: the direct-download channel (dmg/zip, nsis/zip, AppImage) plus the
-# electron-updater manifests. Store submissions (Mac App Store, Microsoft Store,
-# Snap) are not built here — they stay on the local scripts.
+# The release is left as a draft. Publishing it is a manual step, so nothing
+# reaches users until the build has been checked: while the release is a draft
+# the update manifests are unreachable and installed apps see no update.
 #
 # Two runners: macOS builds the signed and notarized mac dmg/zip and cross-builds
 # the unsigned Windows installer (electron-builder needs no Wine on macOS — Wine is
 # only required to build Windows targets on Linux); the Linux runner builds the
 # AppImage.
+#
+# Actions are pinned to a commit, not a tag: a tag can be moved to other code by
+# whoever owns the action, and the mac job holds the signing cert and the
+# publishing token. Dependabot raises the pins, see .github/dependabot.yml.
 #
 # Runner targets are repo variables so they can flip to a self-hosted machine
 # without editing this file. This is a public repo, so GitHub-hosted runners are
@@ -38,8 +42,8 @@ jobs:
   prepare:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: 20
 
@@ -73,8 +77,8 @@ jobs:
     needs: prepare
     runs-on: ${{ fromJSON(vars.MACOS_RUNNER || '["macos-latest"]') }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: 20
       - run: corepack enable
@@ -116,8 +120,8 @@ jobs:
     needs: prepare
     runs-on: ${{ fromJSON(vars.LINUX_RUNNER || '["ubuntu-latest"]') }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: 20
       - run: corepack enable
@@ -137,8 +141,8 @@ jobs:
     needs: [build-mac, build-linux]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: 20
       - run: corepack enable
@@ -173,7 +177,7 @@ jobs:
           npx --yes generate-license-file --input package.json \
             --output THIRD-PARTY-NOTICES.md --overwrite
 
-      - name: Publish release
+      - name: Finish the draft
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -186,6 +190,18 @@ jobs:
             gh release upload "$TAG" release-notes/assets/"$TAG"/* --clobber
           fi
           case "$VERSION" in
-            *-*) gh release edit "$TAG" --notes-file body.md --draft=false --prerelease ;;
-            *)   gh release edit "$TAG" --notes-file body.md --draft=false --latest ;;
+            *-*) gh release edit "$TAG" --notes-file body.md --prerelease
+                 PUBLISH="gh release edit $TAG --draft=false" ;;
+            *)   gh release edit "$TAG" --notes-file body.md
+                 PUBLISH="gh release edit $TAG --draft=false --latest" ;;
           esac
+          {
+            echo "### $TAG is ready as a draft"
+            echo
+            echo "While it stays a draft the update manifests are not reachable, so"
+            echo "installed apps see nothing. Check the assets, install the build, then:"
+            echo
+            echo '```'
+            echo "$PUBLISH"
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"

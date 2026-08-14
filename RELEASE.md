@@ -31,8 +31,17 @@ they stay on the local scripts (`yarn release:mas`, `yarn release:appx`,
    ```
 
 The tag push starts the workflow. It verifies the tag matches `package.json`,
-builds each OS, publishes into a draft release, sets the notes from the changelog
-section, and publishes.
+builds each OS into a draft release, and sets the notes from the changelog section.
+
+6. **The release stays a draft.** Check the assets, install the build, then publish:
+
+   ```
+   gh release edit v<version> --draft=false --latest
+   ```
+
+   A draft is not served to installed apps: the update manifests sit behind the
+   same visibility as the release, so nothing ships until this command runs. The
+   workflow prints it in the run summary.
 
 A suffixed version (`0.9.0-alpha.1`, `-beta`, `-rc`) is published as a
 prerelease — it is not marked Latest, so clients polling `/releases/latest` do not

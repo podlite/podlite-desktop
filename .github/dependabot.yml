@@ -1,0 +1,9 @@
+version: 2
+updates:
+  # Actions in the release workflow are pinned to a commit. Without this the pins
+  # would freeze and stop receiving fixes; Dependabot raises the commit and keeps
+  # the version comment in step.
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
