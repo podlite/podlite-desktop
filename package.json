@@ -22,7 +22,6 @@
     "release:appx": "yarn clean && yarn build && cp -r assets/appx build/ && electron-builder build --win appx --publish=never",
     "release:snap": "yarn clean && yarn build && electron-builder build --linux snap --publish=never",
     "release:dev": "PYTHON_PATH=/usr/local/bin/python CSC_IDENTITY_AUTO_DISCOVERY=false electron-builder build -mwl --publish=never",
-    "release:ship": "bash scripts/release-ship.sh",
     "release:ci-mac": "yarn clean && yarn build && electron-builder --mac dmg zip --x64 --arm64 --publish=never",
     "release:ci-win": "yarn clean && yarn build && electron-builder --win nsis zip --publish=never",
     "release:ci-linux": "yarn clean && yarn build && electron-builder --linux AppImage --publish=never",
@@ -35,7 +34,8 @@
     "test": "run-s \"test:jest {@}\" --",
     "test:jest": "jest",
     "format": "npx prettier --write '**/*.{js,jsx,ts,tsx,json,md,mjs}'",
-    "lint": "tslint app/**/*.ts{,x}"
+    "lint": "tslint app/**/*.ts{,x}",
+    "release:stores": "bash scripts/release-stores.sh"
   },
   "build": {
     "productName": "podlite",

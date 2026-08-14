@@ -17,7 +17,7 @@ A block-based markup editor for [Podlite](https://podlite.org) with live preview
 </div>
 
 <p align="center">
-  <img src="doc/Screenshot3.png" alt="Podlite Desktop: source and live preview side by side" width="900">
+  <img src="https://raw.githubusercontent.com/podlite/podlite-desktop/master/doc/Screenshot3.png" alt="Podlite Desktop: source and live preview side by side" width="900">
 </p>
 
 ## Get Podlite
@@ -32,29 +32,29 @@ Also available from [Mac App Store](https://apps.apple.com/us/app/podlite/id1526
 
 Press Enter to continue a list. Checkboxes and numbered markers carry over to the next item.
 
-![Smart Lists](doc/Smart%20Lists.gif)
+![Smart Lists](https://raw.githubusercontent.com/podlite/podlite-desktop/master/doc/Smart%20Lists.gif)
 
 Tab increases nesting level. Shift+Tab decreases it. Works with plain lists, numbered lists and task lists.
 
-![Nesting Levels](doc/nesting_levels.gif)
+![Nesting Levels](https://raw.githubusercontent.com/podlite/podlite-desktop/master/doc/nesting_levels.gif)
 
 ## Code Folding
 
 Collapse `=begin`/`=end` blocks and `=head` sections to navigate large documents. Fold state is preserved between sessions.
 
-![Code Folding](doc/Code_Folding.gif)
+![Code Folding](https://raw.githubusercontent.com/podlite/podlite-desktop/master/doc/Code_Folding.gif)
 
 ## Collapsible Blocks
 
 Add `:folded` to any block to make it collapsible in preview. Use `:!folded` for expanded by default.
 
-![Folded blocks](doc/folded.gif)
+![Folded blocks](https://raw.githubusercontent.com/podlite/podlite-desktop/master/doc/folded.gif)
 
 ## Images: Drag-Drop or Paste
 
 Drop an image from Finder onto the editor, or paste a clipboard image with Cmd+V. The file is saved to a `media/` folder next to the document and an `=picture media/<name>` line is inserted at the cursor. A file already living in `media/` is referenced in place without copying.
 
-![Drag-drop and paste](doc/drag-drop.gif)
+![Drag-drop and paste](https://raw.githubusercontent.com/podlite/podlite-desktop/master/doc/drag-drop.gif)
 
 ## Features
 
@@ -126,7 +126,7 @@ graph LR
 =end Mermaid
 ```
 
-![Mermaid diagram](doc/diagram-sample1.png)
+![Mermaid diagram](https://raw.githubusercontent.com/podlite/podlite-desktop/master/doc/diagram-sample1.png)
 
 [Try in pod6.in](https://pod6.in/#p=%3Dbegin+Mermaid%0Agraph+LR%0A++++++++A-->B%0A++++++++B-->C%0A++++++++C-->A%0A++++++++D-->C%0A%3Dend+Mermaid) — [Mermaid syntax reference](https://mermaid.js.org/intro/)
 
@@ -163,7 +163,7 @@ Please submit pull requests against the develop branch to keep documentation in 
 
 ## Linux Note
 
-![AppImage permissions](doc/linuxAppImage-permissions.png)
+![AppImage permissions](https://raw.githubusercontent.com/podlite/podlite-desktop/master/doc/linuxAppImage-permissions.png)
 
 ## Links
 

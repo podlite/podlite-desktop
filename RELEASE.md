@@ -57,6 +57,37 @@ pull it. Use one for the first end-to-end test:
 git tag v0.9.0-alpha.1 && git push origin v0.9.0-alpha.1
 ```
 
+## Store submissions
+
+The release run leaves the store packages in its artifacts. To fetch and submit
+them:
+
+```
+yarn release:stores 0.9.0     # defaults to the version in package.json
+yarn release:stores --dry-run # show what would happen
+```
+
+The script finds the run for the tag, downloads whichever store artifacts exist
+into `release-stores/v<version>/`, uploads the snap to the Snap Store, and prints
+what is left: Transporter for the Mac App Store package, Partner Center for the
+AppX. Store credentials stay on this machine.
+
+When a store package is missing from the run, build it locally instead:
+`yarn release:mas`, `yarn release:appx`, `yarn release:snap`.
+
+## Security releases
+
+A release that closes a vulnerability ships two sets of notes, not one:
+
+- **On the release page at publish time** — a short line, no detail:
+  "Security and stability update." The same wording goes into the store listings.
+- **Three to five days later**, once the update has reached the stores and most
+  installs — the full list of what was fixed, edited into the same release.
+
+Keep the detailed text in `release-notes/v<version>-detail.md` until then. While
+most people are still on the vulnerable build, a precise list of what was wrong is
+a set of instructions for whoever wants to use it.
+
 ## Rollback
 
 Delete the release and tag, fix, retag:
