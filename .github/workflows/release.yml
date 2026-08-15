@@ -137,13 +137,17 @@ jobs:
         env:
           CSC_LINK: ${{ secrets.MAS_CERTS }}
           CSC_KEY_PASSWORD: ${{ secrets.MAS_CERTS_PASSWORD }}
+          # The provisioning profile is kept out of the tree by .gitignore, so it
+          # arrives as a secret and is written next to the other build assets.
+          MAS_PROFILE: ${{ secrets.MAS_PROVISION_PROFILE }}
         run: |
           set -euo pipefail
-          if [ -z "${CSC_LINK:-}" ]; then
-            echo "MAS_CERTS is empty — skipping the Mac App Store package" >&2
+          if [ -z "${CSC_LINK:-}" ] || [ -z "${MAS_PROFILE:-}" ]; then
+            echo "MAS_CERTS or MAS_PROVISION_PROFILE is empty — skipping the Mac App Store package" >&2
             exit 0
           fi
           cp -r assets/* build/
+          printf '%s' "$MAS_PROFILE" | base64 --decode > build/podlite_mac_store.provisionprofile
           npx electron-builder --mac mas --universal --publish=never
 
       - name: Collect the Mac App Store package
@@ -209,12 +213,12 @@ jobs:
       - run: yarn install --immutable
       - run: yarn build
 
+      # No asset copying: assets/appx has been an empty folder since 2020, git does
+      # not carry empty folders, and electron-builder falls back to its own tile
+      # images anyway.
       - name: Build the AppX package
         shell: bash
-        run: |
-          set -euo pipefail
-          cp -r assets/appx build/
-          npx electron-builder --win appx --publish=never
+        run: npx electron-builder --win appx --publish=never
 
       - name: Collect the AppX package
         if: always()

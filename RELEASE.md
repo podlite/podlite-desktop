@@ -125,7 +125,18 @@ the local build.
 | `API_KEY` | App Store Connect API key (`.p8` contents), used for notarization |
 | `API_KEY_ID` | API key id |
 | `API_KEY_ISSUER_ID` | API key issuer id |
+| `MAS_CERTS` | base64 of the Mac App Store `.p12` — Apple Distribution plus 3rd Party Mac Developer Installer |
+| `MAS_CERTS_PASSWORD` | password for that `.p12` |
+| `MAS_PROVISION_PROFILE` | base64 of `podlite_mac_store.provisionprofile`; the file itself is kept out of the tree by `.gitignore`, so the run writes it from here |
 | `WINDOWS_CERTS`, `WINDOWS_CERTS_PASSWORD` | Windows code-signing cert — not wired in yet; Windows ships unsigned until a current cert is added |
+
+The Mac App Store secrets are a different pair from `MAC_CERTS`: that one signs the
+direct download, these sign the store build. Both are needed, neither replaces the
+other. The profile expires — check its date before a release:
+
+```
+security cms -D -i assets/podlite_mac_store.provisionprofile | grep -A1 ExpirationDate
+```
 
 `GITHUB_TOKEN` is provided automatically and is enough to publish releases in this
 repo.
