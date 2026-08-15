@@ -6,7 +6,7 @@
 =end pod
 
 =begin pod :released-in<0.9.0>
-=head2 0.9.0 — 2026-08-14
+=head3 0.9.0
 
 =item pass the file type to the editor, so a Markdown file is highlighted as Markdown and a Podlite file as Podlite
 =item open Markdown files (C<.md>, C<.markdown>, C<.mkdn>, C<.mkd>, C<.mdown>) and render them as Markdown in the preview; added file associations so double-click and drag-and-drop open them

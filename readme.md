@@ -6,7 +6,7 @@
 </p>
 <div align="center">
 
-A block-based markup editor for [Podlite](https://podlite.org) with live preview. Available on Windows, Linux and macOS.
+A block-based markup editor for [Podlite](https://podlite.org) with live preview, Markdown included. Available on Windows, Linux and macOS.
 
 [![GitHub release](https://img.shields.io/github/v/release/podlite/podlite-desktop)](https://github.com/podlite/podlite-desktop/releases/latest)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
@@ -17,7 +17,7 @@ A block-based markup editor for [Podlite](https://podlite.org) with live preview
 </div>
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/podlite/podlite-desktop/master/doc/Screenshot3.png" alt="Podlite Desktop: source and live preview side by side" width="900">
+  <img src="https://raw.githubusercontent.com/podlite/podlite-desktop/master/doc/markdown-highlighting.png" alt="Podlite Desktop: a Markdown file, highlighted source on the left, rendered preview on the right" width="900">
 </p>
 
 ## Get Podlite

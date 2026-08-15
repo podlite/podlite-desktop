@@ -272,7 +272,8 @@ jobs:
             "$PODLITE" query "pod[:released-in<$VERSION>]" CHANGELOG.podlite --to md --quiet --fail-on-empty > "$NOTES" ||
               "$PODLITE" query 'pod[:released-in<upcoming>]' CHANGELOG.podlite --to md --quiet > "$NOTES"
           fi
-          { cat release-notes/header.md; printf '\n\n'; cat "$NOTES"; } > body.md
+          { cat release-notes/header.md; printf '\n\n'; cat "$NOTES"
+            [ -f release-notes/footer.md ] && { printf '\n\n'; cat release-notes/footer.md; }; } > body.md
 
       - name: Third-party notices
         run: |

@@ -13,9 +13,9 @@ standard block and apart from a name you brought in yourself.
 A standard block: C<=head>, C<=item>, C<=code>, C<=table>, C<=nested>.
 =end nested
 
-=begin Image :caption('a name the author brought in')
+=begin picture :caption('a name the author brought in')
 podlite-mark-desktop.svg
-=end Image
+=end picture
 
 =for Diagram :caption('another one')
 graph TD; A-->B;

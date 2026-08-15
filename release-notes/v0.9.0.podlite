@@ -1,24 +1,24 @@
 =begin pod
 
-=head1 Highlights
+<p align="center"><img src="https://raw.githubusercontent.com/podlite/podlite-desktop/v0.9.0/release-notes/assets/v0.9.0/hero-v0.9.0.png" alt="Podlite Desktop 0.9.0" width="900"></p>
 
-Markdown files are first-class in this release: open one and the editor
-highlights it as Markdown, the preview renders it as Markdown, and a
-double-click or a drop opens it straight away.
+=head3 Markdown, first class
 
-The editor also reads a Podlite document as a tree now instead of line by line.
-Every markup code gets its colour, a section name reads apart from a block name
-you brought in yourself, and the settings inside a markdown fence are coloured
-the same way in a C<.podlite> file and in a C<.md> one.
+Open a C<.md> file and the editor highlights it as Markdown, the preview renders
+it as Markdown, and a double-click or a drop opens it straight away. Podlite
+takes Markdown in, so this is the same editor, not a second mode.
 
-=head1 What's new
+<p align="center"><img src="https://raw.githubusercontent.com/podlite/podlite-desktop/v0.9.0/doc/markdown-highlighting.png" alt="A Markdown file: highlighted source on the left, rendered preview on the right" width="900"></p>
+
+=head3 The document, read as a tree
+
+Highlighting no longer works line by line. Every markup code gets its colour, a
+section name reads apart from a block name you brought in yourself, the settings
+inside a markdown fence are coloured the same way in a C<.podlite> file and in a
+C<.md> one, and C«G<>» content shows as a covered strip that opens under the caret.
+
+<p align="center"><img src="https://raw.githubusercontent.com/podlite/podlite-desktop/v0.9.0/doc/podlite-highlighting.png" alt="A Podlite document: every markup code coloured, preview on the right" width="900"></p>
 
 =include file:../CHANGELOG.podlite | pod[:released-in<0.9.0>]
 
-=head1 Install
-
-Download for macOS, Windows or Linux below, or get it from the
-L<Mac App Store|https://apps.apple.com/us/app/podlite/id1526511053>,
-L<Microsoft Store|https://www.microsoft.com/store/apps/9NVNT9SNQJM8> or
-L<Snap Store|https://snapcraft.io/podlite>.
 =end pod

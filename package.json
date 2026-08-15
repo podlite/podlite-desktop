@@ -4,7 +4,7 @@
   "author": "Aliaksandr Zahatski",
   "license": "MIT",
   "version": "0.9.0",
-  "description": "Podite editor",
+  "description": "Podlite markup editor with live preview; Markdown files open natively",
   "main": "build/main.js",
   "repository": {
     "type": "git",
