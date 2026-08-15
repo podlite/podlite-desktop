@@ -149,19 +149,20 @@ jobs:
           cp -r assets/* build/
           printf '%s' "$MAS_PROFILE" | base64 --decode > build/podlite_mac_store.provisionprofile
           npx electron-builder --mac mas --universal --publish=never
+          # electron-builder writes the package one level down, in release/mas-<arch>/.
+          # Copy it out so the artifact holds the file itself and not a folder.
+          mkdir -p store-out
+          cp release/*.pkg release/*/*.pkg store-out/ 2>/dev/null || true
+          ls -la store-out/
 
-      # The pkg lands one level down, in release/mas-<arch>/: electron-builder signs
-      # the store app with the target folder as its output dir and writes the
-      # flattened package next to it. Both globs are kept in case a later version
-      # puts it back in the root.
+      # Named after the tag so a package downloaded months later still says which
+      # release it belongs to. The zip holds the .pkg itself, at the root.
       - name: Collect the Mac App Store package
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
-          name: store-mac
-          path: |
-            release/*.pkg
-            release/**/*.pkg
+          name: podlite-${{ github.ref_name }}-mac-appstore
+          path: store-out/*.pkg
           retention-days: 30
           if-no-files-found: ignore
 
@@ -197,7 +198,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
-          name: store-linux
+          name: podlite-${{ github.ref_name }}-linux-snap
           path: release/*.snap
           retention-days: 30
           if-no-files-found: ignore
@@ -230,7 +231,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
-          name: store-windows
+          name: podlite-${{ github.ref_name }}-windows-appx
           path: release/*.appx
           retention-days: 30
           if-no-files-found: ignore

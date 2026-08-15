@@ -47,13 +47,22 @@ fi
 log "run ${RUN_ID} for ${TAG}"
 
 mkdir -p "$OUT"
-for name in store-mac store-linux store-windows; do
-  if gh run download "$RUN_ID" -n "$name" -D "$OUT" 2>/dev/null; then
-    log "got ${name}"
-  else
-    log "no ${name} in this run — that store was skipped or its build failed"
-  fi
+# Artifacts carry the tag in their name since 0.9.1; the short names are what
+# earlier runs used.
+for store in mac-appstore linux-snap windows-appx; do
+  got=0
+  for name in "podlite-${TAG}-${store}" "store-${store%%-*}"; do
+    if gh run download "$RUN_ID" -n "$name" -D "$OUT" 2>/dev/null; then
+      log "got ${name}"
+      got=1
+      break
+    fi
+  done
+  [[ $got -eq 1 ]] || log "no ${store} in this run — that store was skipped or its build failed"
 done
+# Older runs kept the pkg inside a folder; flatten so the paths below hold files.
+find "$OUT" -mindepth 2 -type f \( -name '*.pkg' -o -name '*.snap' -o -name '*.appx' \) \
+  -exec mv {} "$OUT"/ \; 2>/dev/null || true
 
 shopt -s nullglob
 PKG=("$OUT"/*.pkg)
