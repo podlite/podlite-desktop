@@ -150,12 +150,18 @@ jobs:
           printf '%s' "$MAS_PROFILE" | base64 --decode > build/podlite_mac_store.provisionprofile
           npx electron-builder --mac mas --universal --publish=never
 
+      # The pkg lands one level down, in release/mas-<arch>/: electron-builder signs
+      # the store app with the target folder as its output dir and writes the
+      # flattened package next to it. Both globs are kept in case a later version
+      # puts it back in the root.
       - name: Collect the Mac App Store package
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: store-mac
-          path: release/*.pkg
+          path: |
+            release/*.pkg
+            release/**/*.pkg
           retention-days: 30
           if-no-files-found: ignore
 
